@@ -1,0 +1,259 @@
+﻿@page
+@model MWSManagement.Pages.Reports.DailySalesReportModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Daily Sales Report";
+}
+
+<div class="row">
+    <div class="col-12">
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-invoice-dollar mr-1"></i>
+                        Daily Sales Report
+                    </h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Store</label>
+                            <select name="StoreId" class="form-control" asp-for="StoreId">
+                                <option value="">-- All Stores --</option>
+                                @foreach (var store in Model.Stores)
+                                {
+                                    <option value="@store.Value"
+                                            selected="@(store.Value == Model.StoreId)">
+                                        @store.Text
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Terminal</label>
+                            <input name="TerminalId" class="form-control" value="@Model.TerminalId" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Transaction ID</label>
+                            <input name="TransId" class="form-control" value="@Model.TransId" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Receipt ID</label>
+                            <input name="ReceiptId" class="form-control" value="@Model.ReceiptId" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>Start Date</label>
+                            <input name="StartDate" type="date" class="form-control"
+                                   value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label>End Date</label>
+                            <input name="EndDate" type="date" class="form-control"
+                                   value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <label>Type</label>
+                            <select name="Type" class="form-control">
+                                <option value="0" selected="@(Model.Type == 0)">Cancel</option>
+                                <option value="1" selected="@(Model.Type == 1)">Return</option>
+                                <option value="2" selected="@(Model.Type == 2)">Sale</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search mr-1"></i> Run Report
+                    </button>
+
+                    <button type="button" class="btn btn-danger" onclick="downloadPdf()">
+                        <i class="fas fa-file-pdf mr-1"></i> Export PDF
+                    </button>
+
+                    <button type="button" class="btn btn-success" onclick="downloadExcel()">
+                        <i class="fas fa-file-excel mr-1"></i> Export Excel
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="card card-secondary card-outline mt-3">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-table mr-1"></i>Transactions List</h3>
+            </div>
+            <div class="card-body">
+                @if (!Model.HasSearched)
+                {
+                    <p class="text-muted p-2">Select filters above and click Run Report.</p>
+                }
+                else if (!Model.ReportData.Any())
+                {
+                    <div class="alert alert-warning m-2">No transaction data found for selected criteria.</div>
+                }
+                else
+                {
+                    <div id="Grid"></div>
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function buildQuery() {
+            const params = new URLSearchParams();
+            params.append('storeId', document.getElementsByName('StoreId')[0].value);
+            params.append('terminalId', document.getElementsByName('TerminalId')[0].value);
+            params.append('transId', document.getElementsByName('TransId')[0].value || '');
+            params.append('receiptId', document.getElementsByName('ReceiptId')[0].value || '');
+            params.append('startDate', document.getElementsByName('StartDate')[0].value);
+            params.append('endDate', document.getElementsByName('EndDate')[0].value);
+            params.append('type', document.getElementsByName('Type')[0].value);
+            return params.toString();
+        }
+
+        function downloadPdf() {
+            window.open(`http://localhost:5045/reports/daily-sales/pdf?${buildQuery()}`, '_blank');
+        }
+
+        function downloadExcel() {
+            window.open(`http://localhost:5045/reports/daily-sales/excel?${buildQuery()}`, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            @if (Model.HasSearched && Model.ReportData.Any())
+            {
+                    <text>
+                    // Safely serialize the server side array list to browser JSON
+                    var localData = @Html.Raw(Json.Serialize(Model.ReportData));
+
+                    var grid = new ej.grids.Grid({
+                        dataSource: localData,
+                        allowFiltering: true,
+                        allowSorting: true,
+                        allowGrouping: true,
+                        allowTextWrap: true,
+                        allowResizing: true,
+                        allowPaging: true,
+                        allowSelection: true,
+                        allowExcelExport: true,
+
+                        filterSettings: { type: 'CheckBox' },
+
+                        pageSettings: {
+                            currentPage: 1,
+                            pageSize: 20,
+                            pageSizes: ["10", "20", "50", "100", "All"]
+                        },
+
+                        selectionSettings: {
+                            persistSelection: true,
+                            type: 'Single'
+                        },
+
+                        // autoFit: true,
+                            width: '100%',
+                        showColumnMenu: true,
+                        gridLines: 'Both',
+
+                        columns: [
+                            {
+                                field: 'transactionId', // camelCase matches the JSON property serialized by ASP.NET Core
+                                isPrimaryKey: true,
+                                headerText: 'Transaction ID',
+                                width: 240
+                            },
+                            {
+                                field: 'receiptId',
+                                headerText: 'Receipt ID',
+                                width: 200
+                            },
+                            {
+                                field: 'store',
+                                headerText: 'Store',
+                                width: 120,
+                                textAlign: 'Center'
+                            },
+                            {
+                                field: 'terminal',
+                                headerText: 'Terminal',
+                                width: 130,
+                                textAlign: 'Center'
+                            },
+                            {
+                                field: 'staff',
+                                headerText: 'Staff',
+                                width: 120,
+                                textAlign: 'Center'
+                            },
+                            {
+                                field: 'transDate',
+                                headerText: 'Date',
+                                width: 140,
+                                type: 'date',
+                                format: 'dd/MM/yyyy',
+                                textAlign: 'Center'
+                            },
+                            {
+                                field: 'transTime_Formatted',
+                                headerText: 'Time',
+                                width: 120,
+                                textAlign: 'Center'
+                            },
+                            {
+                                field: 'paymentAmount',
+                                headerText: 'Payment Amount',
+                                width: 180,
+                                type: 'number',
+                                textAlign: 'Right',
+                                format: 'N3'
+                            },
+                            {
+                                field: 'loyaltyCardId',
+                                headerText: 'Member ID',
+                                width: 180
+                            }
+                        ],
+
+                        toolbar: [
+                            'ExcelExport',
+                            'Search'
+                        ],
+
+                        dataBound: function () {
+                            //grid.autoFitColumns();
+                        },
+
+                        toolbarClick: (args) => {
+                            if (args.item.id === 'Grid_excelexport') {
+                                grid.excelExport();
+                            }
+                        },
+
+                        actionFailure: (args) => {
+                            console.error(args);
+                        }
+                    });
+
+                    grid.appendTo('#Grid');
+                    </text>
+            }
+        });
+    </script>
+}

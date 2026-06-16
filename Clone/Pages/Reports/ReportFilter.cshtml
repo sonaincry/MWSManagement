@@ -1,0 +1,52 @@
+﻿
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Indotalent.Pages.Reports.ReportFilterViewModel
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div class="row align-items-end g-2">
+
+        <div class="col-md-3">
+            <label class="form-label">Store</label>
+            <select name="StoreId" class="form-control">
+                @if (Model?.StoreOptions != null)
+                {
+                    foreach (var opt in Model.StoreOptions)
+                    {
+                        <option value="@opt.Value"
+                                selected="@(opt.Value == Model.StoreId)">
+                            @opt.Text
+                        </option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Staff</label>
+            <input type="text"
+                   name="StaffKeyword"
+                   class="form-control"
+                   value="@Model.StaffKeyword"
+                   placeholder="Staff ID or Staff Name" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">From Date</label>
+            <input type="date" name="StartDate" class="form-control"
+                   value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">To Date</label>
+            <input type="date" name="EndDate" class="form-control"
+                   value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-search mr-1"></i> Run Report
+            </button>
+        </div>
+
+    </div>
+</form>

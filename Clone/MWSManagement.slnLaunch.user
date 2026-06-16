@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "MWSManagement.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\Report\\Report.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

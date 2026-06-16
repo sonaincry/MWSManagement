@@ -1,0 +1,245 @@
+﻿@page "{rowGuid?}"
+@using Indotalent.Models.Enums
+@model Indotalent.Pages.Companies.AspNetCompanyFormModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    var statusMessage = Model.StatusMessage;
+    Model.StatusMessage = string.Empty;
+}
+
+<div class="form-card">
+    <form id="formMain" method="post" novalidate="">
+        <input type="hidden" asp-for="@Model.AspNetCompanyForm.Id" />
+        <input type="hidden" asp-for="@Model.AspNetCompanyForm.RowGuid" />
+        <div class="form-card-body">
+
+            <p class="small-italic-left">General</p>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Name" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.Name" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.TimeZone" class="form-label"></label>
+                            <select asp-for="@Model.AspNetCompanyForm.TimeZone" asp-items="@Model.TimeZoneLookup" class="form-control">
+                                <option value="">-- Select TimeZone --</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Currency" class="form-label"></label>
+                            <select asp-for="@Model.AspNetCompanyForm.Currency" asp-items="@Model.CurrencyLookup" class="form-control">
+                                <option value="">-- Select Currency --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Description" class="form-label"></label>
+                            <textarea asp-for="@Model.AspNetCompanyForm.Description" class="form-control" rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+
+            <p class="small-italic-left">Address</p>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Street" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.Street" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.ZipCode" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.ZipCode" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.City" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.City" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Country" class="form-label"></label>
+                            <select asp-for="@Model.AspNetCompanyForm.Country" asp-items="@Model.CountryLookup" class="form-control">
+                                <option value="">-- Select Country --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.State" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.State" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </fieldset>
+
+
+            <p class="small-italic-left">Communications</p>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.PhoneNumber" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.PhoneNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.EmailAddress" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.EmailAddress" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.FaxNumber" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.FaxNumber" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Website" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.Website" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.WhatsApp" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.WhatsApp" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </fieldset>
+
+
+            <p class="small-italic-left">Social Media</p>
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.LinkedIn" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.LinkedIn" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Facebook" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.Facebook" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.TwitterX" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.TwitterX" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.Instagram" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.Instagram" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="@Model.AspNetCompanyForm.TikTok" class="form-label"></label>
+                            <input asp-for="@Model.AspNetCompanyForm.TikTok" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </fieldset>
+
+        </div>
+        <div class="form-card-footer">
+            <button type="submit" id="btnSubmit" class="e-btn e-control @(Model.Action == "delete" ? "e-danger" : "")">@(Model.Action == "delete" ? "Delete" : "Submit")</button>
+        </div>
+
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            
+
+            showStatusMessage('@statusMessage');
+
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Name');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Description');
+            new ej.dropdowns.DropDownList({ allowFiltering: true }, '#AspNetCompanyForm_TimeZone');
+            new ej.dropdowns.DropDownList({ allowFiltering: true }, '#AspNetCompanyForm_Currency');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Street');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_City');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_State');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_ZipCode');
+            new ej.dropdowns.DropDownList({ allowFiltering: true }, '#AspNetCompanyForm_Country');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_PhoneNumber');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_FaxNumber');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_WhatsApp');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_EmailAddress');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Website');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_LinkedIn');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Facebook');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_TwitterX');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_Instagram');
+            new ej.inputs.TextBox({}, '#AspNetCompanyForm_TikTok');
+            new ej.buttons.Button({ isPrimary: true }, '#btnSubmit');
+
+            var validationOptions = {
+                rules: {
+                    'AspNetCompanyForm.Name': { required: true },
+                    'AspNetCompanyForm.Currency': { required: true },
+                    'AspNetCompanyForm.TimeZone': { required: true }
+                }
+            }
+
+            var formValidator = new ej.inputs.FormValidator('#formMain', validationOptions);
+            var formElement = document.getElementById('formMain');
+            formElement.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (formValidator.validate()) {
+                    formElement.submit();
+                }
+            })
+
+        });
+    </script>
+}
