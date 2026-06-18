@@ -6,6 +6,7 @@ using Indotalent.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
+using MWSManagement.Models.DTOs;
 using YamlDotNet.Core.Tokens;
 
 namespace Indotalent.Data
@@ -34,6 +35,9 @@ namespace Indotalent.Data
 
         public DbSet<UnitOfMeasureDto> UnitOfMeasureDto { get; set; } = default!;
 
+        public DbSet<LookupItem> LookupItem { get; set; } = default!;
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Crucial: This configures the underlying Identity tables (AspNetUsers, AspNetUserRoles, etc.)
@@ -61,6 +65,9 @@ namespace Indotalent.Data
             {
                 entity.HasNoKey();
             });
+
+
+            modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new AspNetCompanyConfiguration());
             modelBuilder.ApplyConfiguration(new LogAnalyticConfiguration());

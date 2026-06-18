@@ -1,6 +1,7 @@
 ﻿using Indotalent.Data;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.Models.DTOs;
+using Dapper;
 
 namespace MWSManagement.Applications.Lookups
 {
@@ -24,9 +25,11 @@ namespace MWSManagement.Applications.Lookups
                 JOIN DIRPARTYTABLE dpt ON dpt.RECID = oct.OMOPERATINGUNITID
                 ORDER BY dpt.NAME";
 
-            return await _context.Database
-                .SqlQueryRaw<LookupItem>(sql)
-                .ToListAsync();
+            // Get the open DB connection and execute via Dapper
+            var conn = _context.Database.GetDbConnection();
+
+            var result = await conn.QueryAsync<LookupItem>(sql);
+            return result.ToList();
         }
     }
 }

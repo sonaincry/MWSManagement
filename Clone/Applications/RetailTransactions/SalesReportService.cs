@@ -48,7 +48,7 @@ namespace Indotalent.Services
                 .SqlQueryRaw<SalesByDateReportDTO>(sql,
                     new SqlParameter("@bi_ChannelId", channelId),
                     new SqlParameter("@dt_StartDate", startDate.Date),
-                    new SqlParameter("@dt_EndDate",   endDate.Date),
+                    new SqlParameter("@dt_EndDate", endDate.Date),
                     new SqlParameter("@nvc_UserId", (object?)userId ?? DBNull.Value))
                 .ToListAsync();
         }
@@ -83,28 +83,35 @@ namespace Indotalent.Services
         }
 
         public async Task<List<DetailTransactionReportDTO>> GetRetailTransactionsAsync(
-            string? transactionId,
-            string? receiptId,
-            string? store,
-            string? terminal,
-            DateTime? startDate,
-            DateTime? endDate,
-            int? type)
+    string? transactionId,
+    string? receiptId,
+    string? store,
+    string? terminal,
+    DateTime? startDate,
+    DateTime? endDate,
+    int? type)
         {
-            var sql = "EXEC [dbo].[sp_GetRetailTransactions] " +
-                      "@TransactionID, @ReceiptID, @Store, @Terminal, @TransDateFrom, @TransDateTo, @Type";
 
-            return await _context.Database
-                .SqlQueryRaw<DetailTransactionReportDTO>(sql,
-                    new SqlParameter("@TransactionID", (object?)transactionId ?? DBNull.Value),
-                    new SqlParameter("@ReceiptID", (object?)receiptId ?? DBNull.Value),
-                    new SqlParameter("@Store", (object?)store ?? DBNull.Value),
-                    new SqlParameter("@Terminal", (object?)terminal ?? DBNull.Value),
-                    new SqlParameter("@TransDateFrom", startDate.HasValue ? startDate.Value.ToString("yyyy-MM-dd") : DBNull.Value),
-                    new SqlParameter("@TransDateTo", endDate.HasValue ? endDate.Value.ToString("yyyy-MM-dd") : DBNull.Value),
-                    new SqlParameter("@Type", (object?)type ?? DBNull.Value))
-                .ToListAsync();
+            var conn = _context.Database.GetDbConnection();
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@TransactionID", string.IsNullOrWhiteSpace(transactionId) ? null : transactionId);
+            parameters.Add("@ReceiptID", string.IsNullOrWhiteSpace(receiptId) ? null : receiptId);
+            parameters.Add("@Store", string.IsNullOrWhiteSpace(store) ? null : store);
+            parameters.Add("@Terminal", string.IsNullOrWhiteSpace(terminal) ? null : terminal);
+            parameters.Add("@TransDateFrom", startDate?.ToString("yyyy-MM-dd"));
+            parameters.Add("@TransDateTo", endDate?.ToString("yyyy-MM-dd"));
+            parameters.Add("@Type", type);
+
+
+            var result = await conn.QueryAsync<DetailTransactionReportDTO>(
+                "[dbo].[sp_GetRetailTransactions]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return result.ToList();
         }
     }
-
+    
 }

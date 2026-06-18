@@ -55,6 +55,7 @@ C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\bin\Debug\net7.0\runtimes\
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.csproj.AssemblyReference.cache
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\rpswa.dswa.cache.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.Reports.DailyReport.resources
+C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.Reports.StaffReport.resources
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.csproj.GenerateResource.cache
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.AssemblyInfoInputs.cache
@@ -62,6 +63,7 @@ C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.As
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.csproj.CoreCompileInputs.cache
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.sourcelink.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\rjimswa.dswa.cache.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\rjsmrazor.dswa.cache.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\rjsmcshtml.dswa.cache.json
@@ -71,12 +73,10 @@ C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\staticweb
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\staticwebassets.development.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\staticwebassets.build.endpoints.json
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\swae.build.ex.cache
-C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.csproj.Up2Date
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.dll
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\refint\Report.dll
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.pdb
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.genruntimeconfig.cache
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\ref\Report.dll
-C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.Reports.StaffReport.resources
-C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.sourcelink.json
+C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\staticwebassets.upToDateCheck.txt

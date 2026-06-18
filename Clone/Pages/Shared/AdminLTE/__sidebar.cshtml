@@ -273,12 +273,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
+                        @* <li class="nav-item">
                             <a asp-page="/Reports/SalesByDateReport" class="nav-link @(currentPageFolderName.Equals("SalesByDateReport") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Daily Sale Report</p>
                             </a>
-                        </li>
+                        </li> *@
                         <li class="nav-item">
                             <a asp-page="/Reports/SalesByStaffReport" class="nav-link @(currentPageFolderName.Equals("SalesByStaffReport") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
@@ -288,7 +288,7 @@
                         <li class="nav-item">
                             <a asp-page="/Reports/DailySalesReport" class="nav-link @(currentPageFolderName.Equals("DailySalesReport") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Daily Report</p>
+                                <p>Daily Sales Report</p>
                             </a>
                         </li>
                     </ul>
