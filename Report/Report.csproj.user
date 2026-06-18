@@ -8,5 +8,8 @@
     <Compile Update="Reports\DailyReport.cs">
       <SubType>XtraReport</SubType>
     </Compile>
+    <Compile Update="Reports\StaffReport.cs">
+      <SubType>XtraReport</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

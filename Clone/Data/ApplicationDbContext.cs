@@ -1,9 +1,11 @@
-﻿using Indotalent.Infrastructures.Docs;
+﻿using Indotalent.DTOs;
+using Indotalent.Infrastructures.Docs;
 using Indotalent.Infrastructures.Images;
 using Indotalent.Models.Configurations;
 using Indotalent.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MWSManagement.DTOs;
 using YamlDotNet.Core.Tokens;
 
 namespace Indotalent.Data
@@ -25,6 +27,13 @@ namespace Indotalent.Data
 
         public DbSet<RetailTransaction> RetailTransaction { get; set; } = default!;
 
+        public DbSet<ProductDto> ProductDTO { get; set; } = default!;
+
+        public DbSet<CustomerDto> CustomerDto { get; set; } = default!;
+        public DbSet<ProductDetailDto> ProductDetailDto { get; set; } = default!;
+
+        public DbSet<UnitOfMeasureDto> UnitOfMeasureDto { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Crucial: This configures the underlying Identity tables (AspNetUsers, AspNetUserRoles, etc.)
@@ -39,6 +48,19 @@ namespace Indotalent.Data
             // Configure RetailTransaction
             modelBuilder.Entity<RetailTransaction>().HasKey(x => x.TransactionId);
             modelBuilder.Entity<RetailTransaction>().ToTable("RETAILTRANSACTIONTABLE");
+            modelBuilder.Entity<ProductDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<ProductDetailDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+
+            modelBuilder.Entity<UnitOfMeasureDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new AspNetCompanyConfiguration());
             modelBuilder.ApplyConfiguration(new LogAnalyticConfiguration());

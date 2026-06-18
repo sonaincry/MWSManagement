@@ -1,8 +1,10 @@
-﻿using Indotalent.Data;
+﻿using Dapper;
+using Indotalent.Data;
 using Indotalent.Models.DTOs;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.Models.DTOs;
+using System.Data;
 
 namespace Indotalent.Services
 {
@@ -59,22 +61,28 @@ namespace Indotalent.Services
         {
             var channelId = ResolveChannelId(storeCode);
 
-            var sql =
-                "EXEC [crt].[GETSALESBYSTAFFREPORT] " +
-                "@bi_ChannelId, @dt_StartDate, @dt_EndDate, @nvc_Staff";
+            // Get the raw connection from EF Core
+            var conn = _context.Database.GetDbConnection();
 
-            return await _context.Database
-                .SqlQueryRaw<SalesByStaffReportDTO>(
-                    sql,
-                    new SqlParameter("@bi_ChannelId", channelId),
-                    new SqlParameter("@dt_StartDate", startDate.Date),
-                    new SqlParameter("@dt_EndDate", endDate.Date),
-                    new SqlParameter("@nvc_Staff",
-                        (object?)staffKeyword ?? DBNull.Value))
-                .ToListAsync();
+            var parameters = new DynamicParameters();
+            parameters.Add("@bi_ChannelId", channelId);
+            parameters.Add("@dt_StartDate", startDate.Date);
+            parameters.Add("@dt_EndDate", endDate.Date);
+
+            // FIX: Pass standard C# null instead of DBNull.Value for Dapper
+            parameters.Add("@nvc_Staff", string.IsNullOrWhiteSpace(staffKeyword) ? null : staffKeyword);
+
+            // Dapper handles the stored procedure and maps loose column names gracefully
+            var result = await conn.QueryAsync<SalesByStaffReportDTO>(
+                "[crt].[GETSALESBYSTAFFREPORT]",
+                parameters,
+                commandType: CommandType.StoredProcedure
+            );
+
+            return result.ToList();
         }
-    
-    public async Task<List<DetailTransactionReportDTO>> GetRetailTransactionsAsync(
+
+        public async Task<List<DetailTransactionReportDTO>> GetRetailTransactionsAsync(
             string? transactionId,
             string? receiptId,
             string? store,

@@ -7,122 +7,168 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-users mr-1"></i> Sales by Staff Report
-                </h3>
-            </div>
+        <form method="post" id="staffFilterForm">
+            @Html.AntiForgeryToken()
 
-            <div class="card-body border-bottom pb-3">
-                @await Html.PartialAsync(
-                "ReportFilter",
-                                new ReportFilterViewModel
-                                {
-                                    StoreId = Model.StoreId,
-                                    StartDate = Model.StartDate,
-                                    EndDate = Model.EndDate,
-                                    StoreOptions = Model.StoreOptions
-                                }
-                                )
-            </div>
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users mr-1"></i> Sales by Staff Report
+                    </h3>
+                </div>
 
-            <div class="card-body">
-                @if (!Model.HasSearched)
-                {
-                    <p class="text-muted">Select filters and click Run Report.</p>
-                }
-                else if (!Model.ReportData.Any())
-                {
-                    <div class="alert alert-warning">No data found.</div>
-                }
-                else
-                {
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="info-box bg-info">
-                                <span class="info-box-icon"><i class="fas fa-user-tie"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Total Staff</span>
-                                    <span class="info-box-number">@Model.ReportData.Count</span>
+                <div class="card-body border-bottom pb-3">
+                    @await Html.PartialAsync(
+                    "ReportFilter",
+                                        new ReportFilterViewModel
+                                        {
+                                            StoreId = Model.StoreId,
+                                            StartDate = Model.StartDate,
+                                            EndDate = Model.EndDate,
+                                            StoreOptions = Model.StoreOptions
+                                        }
+                                        )
+                </div>
+
+                <div class="card-footer bg-white">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search mr-1"></i> Run Report
+                    </button>
+
+                    <button type="button" class="btn btn-danger ml-2" onclick="downloadStaffPdf()">
+                        <i class="fas fa-file-pdf mr-1"></i> Export PDF
+                    </button>
+
+                    <button type="button" class="btn btn-success ml-2" onclick="downloadStaffExcel()">
+                        <i class="fas fa-file-excel mr-1"></i> Export Excel
+                    </button>
+                </div>
+
+                <div class="card-body">
+                    @if (!Model.HasSearched)
+                    {
+                        <p class="text-muted">Select filters and click Run Report.</p>
+                    }
+                    else if (!Model.ReportData.Any())
+                    {
+                        <div class="alert alert-warning">No data found.</div>
+                    }
+                    else
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="info-box bg-info">
+                                    <span class="info-box-icon"><i class="fas fa-user-tie"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Staff</span>
+                                        <span class="info-box-number">@Model.ReportData.Count</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box bg-success">
+                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Transactions</span>
+                                        <span class="info-box-number">@Model.GrandTotalTransactions.ToString("N0")</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-box bg-warning">
+                                    <span class="info-box-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Total Sales (VND)</span>
+                                        <span class="info-box-number">@Model.GrandTotalSales.ToString("N0")</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="info-box bg-success">
-                                <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Total Transactions</span>
-                                    <span class="info-box-number">@Model.GrandTotalTransactions.ToString("N0")</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="info-box bg-warning">
-                                <span class="info-box-icon"><i class="fas fa-money-bill-wave"></i></span>
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Total Sales (VND)</span>
-                                    <span class="info-box-number">@Model.GrandTotalSales.ToString("N0")</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover table-sm">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Staff Name</th>
-                                    <th class="text-right">Transactions</th>
-                                    <th class="text-right">Sales Amount (VND)</th>
-                                    <th class="text-right">Avg / Transaction</th>
-                                    <th class="text-right">% of Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @{
-                                    int rank = 1;
-                                }
-                                @foreach (var row in Model.ReportData)
-                                {
-                                    var pct = Model.GrandTotalSales > 0
-                                    ? row.SalesAmount / Model.GrandTotalSales * 100
-                                    : 0;
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover table-sm">
+                                <thead class="thead-dark">
                                     <tr>
-                                        <td class="text-center">@rank</td>
-                                        <td>@row.StaffName</td>
-                                        <td class="text-right">@row.NoOfTransactions.ToString("N0")</td>
-                                        <td class="text-right">@row.SalesAmount.ToString("N0")</td>
-                                        <td class="text-right">@row.AvgSalesAmount.ToString("N0")</td>
-                                        <td class="text-right">
-                                            <div class="d-flex align-items-center justify-content-end gap-1">
-                                                <span>@pct.ToString("F1")%</span>
-                                                <div class="progress ml-2" style="width:60px; height:8px;">
-                                                    <div class="progress-bar bg-success"
-                                                         style="width:@pct.ToString("F0")%">
+                                        <th>#</th>
+                                        <th>Staff Name</th>
+                                        <th class="text-right">Transactions</th>
+                                        <th class="text-right">Sales Amount (VND)</th>
+                                        <th class="text-right">Avg / Transaction</th>
+                                        <th class="text-right">% of Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int rank = 1;
+                                    }
+                                    @foreach (var row in Model.ReportData)
+                                    {
+                                        var pct = Model.GrandTotalSales > 0
+                                        ? row.SalesAmount / Model.GrandTotalSales * 100
+                                        : 0;
+                                        <tr>
+                                            <td class="text-center">@rank</td>
+                                            <td>@row.StaffName</td>
+                                            <td class="text-right">@row.NoOfTransactions.ToString("N0")</td>
+                                            <td class="text-right">@row.SalesAmount.ToString("N0")</td>
+                                            <td class="text-right">@row.AvgSalesAmount.ToString("N0")</td>
+                                            <td class="text-right">
+                                                <div class="d-flex align-items-center justify-content-end gap-1">
+                                                    <span>@pct.ToString("F1")%</span>
+                                                    <div class="progress ml-2" style="width:60px; height:8px;">
+                                                        <div class="progress-bar bg-success"
+                                                             style="width:@pct.ToString("F0")%">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
+                                        </tr>
+                                        rank++;
+                                    }
+                                </tbody>
+                                <tfoot class="bg-light">
+                                    <tr>
+                                        <td colspan="2"><strong>TOTAL</strong></td>
+                                        <td class="text-right"><strong>@Model.GrandTotalTransactions.ToString("N0")</strong></td>
+                                        <td class="text-right"><strong>@Model.GrandTotalSales.ToString("N0")</strong></td>
+                                        <td class="text-right">—</td>
+                                        <td class="text-right">100%</td>
                                     </tr>
-                                    rank++;
-                                }
-                            </tbody>
-                            <tfoot class="bg-light">
-                                <tr>
-                                    <td colspan="2"><strong>TOTAL</strong></td>
-                                    <td class="text-right"><strong>@Model.GrandTotalTransactions.ToString("N0")</strong></td>
-                                    <td class="text-right"><strong>@Model.GrandTotalSales.ToString("N0")</strong></td>
-                                    <td class="text-right">—</td>
-                                    <td class="text-right">100%</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                }
+                                </tfoot>
+                            </table>
+                        </div>
+                    }
+                </div>
             </div>
-
-        </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function buildStaffQuery() {
+            const params = new URLSearchParams();
+
+            // Extract values mapped safely from your shared partial "ReportFilter" layout elements
+            const storeEl = document.getElementsByName('StoreId')[0];
+            const startEl = document.getElementsByName('StartDate')[0];
+            const endEl = document.getElementsByName('EndDate')[0];
+            const staffEl = document.getElementsByName('StaffKeyword')[0];
+
+            params.append('staffId', staffEl ? staffEl.value : '');
+            params.append('startDate', startEl ? startEl.value : '');
+            params.append('endDate', endEl ? endEl.value : '');
+
+            // If your API routes require store validation context later, you could append it here.
+            return params.toString();
+        }
+
+        function downloadStaffPdf() {
+            window.open(`http://localhost:5045/reports/staff-sales/pdf?${buildStaffQuery()}`, '_blank');
+        }
+
+        function downloadStaffExcel() {
+            window.open(`http://localhost:5045/reports/staff-sales/excel?${buildStaffQuery()}`, '_blank');
+        }
+    </script>
+}

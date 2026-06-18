@@ -1,15 +1,31 @@
-﻿namespace Indotalent.DTOs
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Indotalent.DTOs
 {
     public class ProductDto
     {
-        public int? Id { get; set; }
-        public string? Name { get; set; }
-        public string? Number { get; set; }
-        public double? UnitPrice { get; set; }
-        public bool? Physical { get; set; }
-        public string? ProductGroup { get; set; }
-        public string? UnitMeasure { get; set; }
-        public Guid? RowGuid { get; set; }
-        public DateTime? CreatedAtUtc { get; set; }
+        [Column("Company Code")]
+        public string? CompanyCode { get; set; }
+
+        [Column("Product ID")]
+        public string? ProductId { get; set; }
+
+        [Column("Product Name")]
+        public string? ProductName { get; set; }
+
+        [Column("Category RecID")]
+        public long? CategoryRecId { get; set; }
+
+        [Column("Category Code")]
+        public string? CategoryCode { get; set; }
+
+        [Column("Category Name")]
+        public string? CategoryName { get; set; }
+
+        [Column("Parent Category Name")]
+        public string? ParentCategoryName { get; set; }
+
+        [Column("Category Hierarchy Name")]
+        public string? CategoryHierarchyName { get; set; }
     }
 }

@@ -78,3 +78,5 @@ C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\refint\Re
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.pdb
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.genruntimeconfig.cache
 C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\ref\Report.dll
+C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.Reports.StaffReport.resources
+C:\Users\Sown\Desktop\Code\C#\MWSManagementPrj\Report\obj\Debug\net7.0\Report.sourcelink.json

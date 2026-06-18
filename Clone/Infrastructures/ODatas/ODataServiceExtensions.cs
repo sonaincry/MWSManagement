@@ -62,9 +62,14 @@ namespace Indotalent.Infrastructures.ODatas
             builder.EntitySet<AdjustmentMinusItemChildDto>("AdjustmentMinusItemChild");
             builder.EntitySet<ScrappingItemChildDto>("ScrappingItemChild");
             builder.EntitySet<StockCountItemChildDto>("StockCountItemChild");
+            var product = builder.EntitySet<ProductDto>("Product");
+
+            product.EntityType.HasKey(x => x.ProductId);
             var retailTransaction = builder.EntitySet<RetailTransactionDTO>("RetailTransaction");
 
             retailTransaction.EntityType.HasKey(x => x.TransactionId);
+
+           
 
             services.AddControllers()
                 .AddOData(options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)
