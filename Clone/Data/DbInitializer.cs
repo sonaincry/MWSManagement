@@ -36,7 +36,7 @@ namespace Indotalent.Data
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var companyService = services.GetRequiredService<AspNetCompanyService>();
             var applicationUserService = services.GetRequiredService<ApplicationUserService>();
-            var retailTransactionService = services.GetRequiredService<RetailTransactionService>();
+           // var retailTransactionService = services.GetRequiredService<TransactionDetailService>();
 
             var creator = await applicationUserService.GetAll()
                 .Where(x => x.UserName == appConfig.Value.DefaultAdminEmail)

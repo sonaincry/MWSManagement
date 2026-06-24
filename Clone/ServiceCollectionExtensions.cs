@@ -14,6 +14,7 @@ using Indotalent.Infrastructures.Emails;
 using Indotalent.Infrastructures.Images;
 using Indotalent.Infrastructures.Repositories;
 using Indotalent.Infrastructures.TimeZones;
+using Indotalent.Models.Entities;
 using Indotalent.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -39,7 +40,7 @@ namespace Indotalent
             services.AddScoped<LogSessionService>();
             services.AddScoped<LogAnalyticService>();
             services.AddScoped<AdjustmentMinusService>();
-            services.AddScoped<RetailTransactionService>();
+            services.AddScoped<TransactionDetailService>();
             services.AddScoped<SalesReportService>();
             services.AddScoped<LookupService>();
             services.AddScoped<ProductService>();

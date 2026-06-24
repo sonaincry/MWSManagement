@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Indotalent.AppSettings
@@ -44,6 +45,46 @@ namespace Indotalent.AppSettings
             cs.FlushFinalBlock();
 
             return Encoding.UTF8.GetString(ms.ToArray());
+        }
+        public static Dictionary<string, object?> FormatObject<T>(T obj)
+        {
+            var result = new Dictionary<string, object?>();
+
+            foreach (PropertyInfo prop in typeof(T).GetProperties())
+            {
+                var value = prop.GetValue(obj);
+
+                if (value == null)
+                {
+                    result[prop.Name] = null;
+                    continue;
+                }
+
+                switch (value)
+                {
+                    case decimal d:
+                        result[prop.Name] = d.ToString("#,##0.00");
+                        break;
+
+                    case int i:
+                        result[prop.Name] = i.ToString("#,##0");
+                        break;
+
+                    case long l:
+                        result[prop.Name] = l.ToString("#,##0");
+                        break;
+
+                    case DateTime dt:
+                        result[prop.Name] = dt.ToString("dd/MM/yyyy");
+                        break;
+
+                    default:
+                        result[prop.Name] = value;
+                        break;
+                }
+            }
+
+            return result;
         }
     }
 }

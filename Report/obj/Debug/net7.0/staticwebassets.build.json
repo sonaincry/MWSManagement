@@ -1,1 +1,12 @@
-{"Version":1,"Hash":"2Vq1oKCvpPn7GSdmMHAZ8Z6wJ7rdNz2TCrVrG1kJjGk=","Source":"Report","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "iYWmItowS9hjcQ8Pe0o3GmwOIZPmPS/BXVZkGZpGWfQ=",
+  "Source": "Report",
+  "BasePath": "_content/Report",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

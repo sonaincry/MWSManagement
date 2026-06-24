@@ -1,0 +1,70 @@
+﻿@page
+@model MWSManagement.Pages.Transaction.TransactionDetailPageModel
+@{
+	Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+	ViewData["Title"] = "Transaction Details";
+}
+
+
+
+<div class="row">
+    <div class="col-12">
+        <div id="Grid"></div>
+    </div>
+</div>
+
+@section Scripts {
+	<script>
+		  document.addEventListener('DOMContentLoaded', function () {
+				var grid = new ej.grids.Grid({
+				dataSource: new ej.data.DataManager({
+					url: '/odata/TransactionDetail',
+					adaptor: new ej.data.ODataV4Adaptor()
+				}),
+
+                allowFiltering: true,
+                allowSorting: true,
+                allowGrouping: true,
+                allowTextWrap: true,
+                allowResizing: true,
+                allowPaging: true,
+                allowSelection: true,
+                allowExcelExport: true,
+
+                filterSettings: { type: 'CheckBox' },
+
+                sortSettings: {
+                    columns: [{
+                        field: 'CreatedDate',
+                        direction: 'Descending'
+                    }]
+                },
+
+                pageSettings: {
+                    currentPage: 1,
+                    pageSize: 20,
+                    pageSizes: ["10", "20", "50", "100", "200", "All"]
+                },
+
+                selectionSettings: {
+                    persistSelection: true,
+                    type: 'Single'
+                },
+
+                autoFit: true,
+                showColumnMenu: true,
+                gridLines: 'Horizontal'.
+                   columns: [
+
+                    {
+                        field: 'ChannelId',
+                        isPrimaryKey: true,
+                        headerText: 'Channel ID',
+                        width: 210
+                    }]
+                  });
+
+			  grid.appendTo('#Grid');
+		});
+	</script>
+}

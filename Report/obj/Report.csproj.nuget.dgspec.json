@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Sown\\Desktop\\Code\\C#\\MWSManagementPrj\\Report\\Report.csproj": {}
+    "D:\\Doc\\Source\\WMS\\Report\\Report.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Sown\\Desktop\\Code\\C#\\MWSManagementPrj\\Report\\Report.csproj": {
+    "D:\\Doc\\Source\\WMS\\Report\\Report.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Sown\\Desktop\\Code\\C#\\MWSManagementPrj\\Report\\Report.csproj",
+        "projectUniqueName": "D:\\Doc\\Source\\WMS\\Report\\Report.csproj",
         "projectName": "Report",
-        "projectPath": "C:\\Users\\Sown\\Desktop\\Code\\C#\\MWSManagementPrj\\Report\\Report.csproj",
-        "packagesPath": "C:\\Users\\Sown\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Sown\\Desktop\\Code\\C#\\MWSManagementPrj\\Report\\obj\\",
+        "projectPath": "D:\\Doc\\Source\\WMS\\Report\\Report.csproj",
+        "packagesPath": "C:\\Users\\RGVN_X\\.nuget\\packages\\",
+        "outputPath": "D:\\Doc\\Source\\WMS\\Report\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages",
+          "D:\\DevExpress\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Sown\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\RGVN_X\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -28,7 +28,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\DevExpress 22.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "D:\\DevExpress\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -47,7 +48,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net7.0": {
@@ -85,7 +86,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

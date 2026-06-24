@@ -27,7 +27,7 @@ namespace Indotalent.Data
         public DbSet<LogAnalytic> LogAnalytic { get; set; } = default!;
 
         public DbSet<RetailTransaction> RetailTransaction { get; set; } = default!;
-
+        public DbSet<TransDetailDto> TransDetailDto { get; set; } = default!;
         public DbSet<ProductDto> ProductDTO { get; set; } = default!;
 
         public DbSet<CustomerDto> CustomerDto { get; set; } = default!;
@@ -50,8 +50,31 @@ namespace Indotalent.Data
             modelBuilder.Entity<FileDocument>().Property(f => f.OriginalFileName).HasMaxLength(100);
 
             // Configure RetailTransaction
-            modelBuilder.Entity<RetailTransaction>().HasKey(x => x.TransactionId);
-            modelBuilder.Entity<RetailTransaction>().ToTable("RETAILTRANSACTIONTABLE");
+            //modelBuilder.Entity<RetailTransaction>().HasKey(x => x.TransactionId);
+            // modelBuilder.Entity<RetailTransaction>().ToTable("RETAILTRANSACTIONTABLE");
+            modelBuilder.Entity<RetailTransaction>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToTable("RETAILTRANSACTIONTABLE", "dbo");
+                entity.Property(x => x.PaymentAmount).HasPrecision(18, 2);
+                entity.Property(x => x.NetAmount).HasPrecision(18, 2);
+                entity.Property(x => x.NumberOfItems).HasPrecision(18, 0);
+                entity.Property(x => x.GrossAmount).HasPrecision(18, 2);
+            });
+            //Transaction detail
+            modelBuilder.Entity<TransDetailDto>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView("RETAILTRANSACTIONSVIEW", "crt");
+                entity.Property(x => x.QTY).HasPrecision(18, 4);
+                entity.Property(x => x.NETAMOUNT).HasPrecision(18, 2);
+                entity.Property(x => x.TAXAMOUNT).HasPrecision(18, 2);
+                entity.Property(x => x.PAYMENTAMOUNT).HasPrecision(18, 2);
+            });
+            // modelBuilder.Entity<TransDetailDto>().HasKey(x => x.TRANSACTIONID);
+            //  modelBuilder.Entity<TransDetailDto>().ToView("RETAILTRANSACTIONSVIEW","crt");
+
+            //end
             modelBuilder.Entity<ProductDto>(entity =>
             {
                 entity.HasNoKey();
@@ -59,13 +82,16 @@ namespace Indotalent.Data
             modelBuilder.Entity<ProductDetailDto>(entity =>
             {
                 entity.HasNoKey();
+                entity.Property(x => x.SalesPrice).HasPrecision(18, 2);
             });
 
             modelBuilder.Entity<UnitOfMeasureDto>(entity =>
             {
                 entity.HasNoKey();
             });
-
+            modelBuilder.Entity<ApplicationUser>()
+            .Property(x => x.IsNotDeleted)
+            .HasDefaultValue(false);
 
             modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
