@@ -8,7 +8,7 @@
 <div class="row mb-3">
     <div class="col-12">
         <a href="/Products/ProductList" class="btn btn-secondary btn-sm mb-3">
-            <i class="fas fa-arrow-left mr-1"></i> Back
+            <i class="fas fa-arrow-left mr-1"></i> Back to List
         </a>
 
         @if (!string.IsNullOrEmpty(Model.StatusMessage))
@@ -21,76 +21,407 @@
             </div>
         }
 
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-box-open mr-1"></i> Modify Product Information
-                </h3>
+        <!-- Main Content: 8:2 với chiều cao cố định 700px -->
+        <div class="row d-flex align-items-stretch" style="height: 700px; max-height: 700px;">
+            
+            <!-- Form (80%) - Có scroll riêng -->
+            <div class="col-lg-10 col-md-12 d-flex" style="height: 700px; max-height: 700px;">
+                <div class="card card-primary card-outline w-100" style="height: 700px; max-height: 700px; display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-box-open mr-1"></i> Modify Product Information
+                        </h3>
+                    </div>
+
+                    <!-- Form có scroll dọc riêng -->
+                    <div style="overflow-y: auto; flex: 1;">
+                        <form id="formMain" method="post" novalidate>
+                            <div class="card-body">
+                                <!-- ===== SECTION 1: GENERAL ===== -->
+                                <div class="form-section">
+                                    <h5 class="form-section-title">General</h5>
+                                    <hr class="form-section-divider" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Company Code<span class="text-danger">*</span></label>
+                                                <input type="text" asp-for="Product.CompanyCode" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Product ID<span class="text-danger">*</span></label>
+                                                <input type="text" asp-for="Product.ProductId" class="form-control" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Product Name</label>
+                                                <input type="text" asp-for="Product.ProductName" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ===== SECTION 2: CATEGORY ===== -->
+                                <div class="form-section mt-4">
+                                    <h5 class="form-section-title">Category</h5>
+                                    <hr class="form-section-divider" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Category Code</label>
+                                                <input type="text" id="txtCategoryCode" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Category Name</label>
+                                                <input type="text" id="txtCategoryName" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Parent Category</label>
+                                                <input type="text" id="txtParentCategory" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ===== SECTION 3: INVOICING ===== -->
+                                <div class="form-section mt-4">
+                                    <h5 class="form-section-title">Invoicing</h5>
+                                    <hr class="form-section-divider" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Barcode Identification</label>
+                                                <input type="text" asp-for="Product.Barcode" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Sales Price (VND)</label>
+                                                <input type="number" step="0.01" asp-for="Product.SalesPrice" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Unit of Measure</label>
+                                                <select asp-for="Product.UnitOfMeasure" class="form-control select2">
+                                                    <option value="">-- Select Unit --</option>
+                                                    @foreach (var unit in Model.UnitOptions)
+                                                    {
+                                                        <option value="@unit">@unit</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ===== SECTION 4: DESCRIPTION ===== -->
+                                <div class="form-section mt-4">
+                                    <h5 class="form-section-title">Description</h5>
+                                    <hr class="form-section-divider" />
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Voucher</label>
+                                                <input type="text" id="txtVoucher" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Details</label>
+                                                <input type="text" id="txtDetails" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Hierarchy</label>
+                                                <input type="text" id="txtHierarchy" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="form-label">Extended Description</label>
+                                                <textarea asp-for="Product.ProductDescription" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-end gap-2">
+                                <button type="submit" id="btnSubmit" class="btn btn-primary px-4">
+                                    <i class="fas fa-save mr-1"></i> Save Updates
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <form id="formMain" method="post" novalidate>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Company Code</label>
-                                <input type="text" asp-for="Product.CompanyCode" class="form-control" readonly />
+            <!-- Detail Card - Có scroll riêng -->
+            <div class="col-lg-2 col-md-12 mt-3 mt-lg-0 d-flex" style="height: 700px; max-height: 700px;">
+                <div class="card card-primary card-outline w-100" style="height: 700px; max-height: 700px; display: flex; flex-direction: column;">
+                    <div class="card-header py-2">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-info-circle mr-1"></i> Detail
+                        </h6>
+                    </div>
+                    <!-- Detail Card có scroll dọc riêng -->
+                    <div class="card-body p-2" id="detailContent" style="overflow-y: auto; flex: 1;">
+                        <!-- ===== ITEM INVENTORY ===== -->
+                        <div class="detail-section">
+                            <div class="detail-section-header">
+                                <i class="fas fa-boxes mr-1"></i> Item Inventory
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Product ID (Code)</label>
-                                <input type="text" asp-for="Product.ProductId" class="form-control" readonly />
+                            <div class="detail-item">
+                                <span class="detail-label">Item No.</span>
+                                <span class="detail-value" title="No data">-</span>
                             </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Product Name</label>
-                                <input type="text" asp-for="Product.ProductName" class="form-control" />
+                            <div class="detail-item">
+                                <span class="detail-label">Company</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Product ID</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Product Name</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Category Code</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Category Name</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Parent Category</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Hierarchy</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Description</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Details</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Attachments (0)</span>
+                                <span class="detail-value" title="No data">-</span>
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Barcode Identification</label>
-                                <input type="text" asp-for="Product.Barcode" class="form-control" />
+                        <!-- ===== DIVIDER ===== -->
+                        <hr class="detail-divider" />
+
+                        <!-- ===== ITEM STATUS ===== -->
+                        <div class="detail-section">
+                            <div class="detail-section-header">
+                                <i class="fas fa-chart-bar mr-1"></i>Item status
                             </div>
 
-                            <div class="form-group">
-                                <label class="form-label">Sales Price (VND)</label>
-                                <input type="number" step="0.01" asp-for="Product.SalesPrice" class="form-control" />
+                            <div class="detail-item">
+                                <span class="detail-label">Item No.</span>
+                                <span class="detail-value" title="No data">-</span>
                             </div>
-
-                            <div class="form-group">
-                                <label class="form-label">Unit of Measure</label>
-                                <select asp-for="Product.UnitOfMeasure" class="form-control select2">
-                                    <option value="">-- Select Unit --</option>
-                                    @foreach (var unit in Model.UnitOptions)
-                                    {
-                                        <option value="@unit">@unit</option>
-                                    }
-                                </select>
+                            <div class="detail-item">
+                                <span class="detail-label">Company Code</span>
+                                <span class="detail-value" title="No data">-</span>
                             </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="form-label">Extended Description</label>
-                                <textarea asp-for="Product.ProductDescription" class="form-control" rows="3"></textarea>
+                            <div class="detail-item">
+                                <span class="detail-label">Product ID</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Product Name</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Barcode Identification</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Sales Price (VND)</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Sales Price</span>
+                                <span class="detail-value" title="No data">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Extended Description</span>
+                                <span class="detail-value" title="No data">-</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="card-footer d-flex justify-content-end gap-2">
-                    <button type="submit" id="btnSubmit" class="btn btn-primary px-4">
-                        <i class="fas fa-save mr-1"></i> Save Updates
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <style>
+        /* ===== SCROLLBAR STYLES ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* ===== FORM SECTION STYLES ===== */
+        .form-section-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #007bff !important;
+            margin-bottom: 2px;
+            margin-top: 0;
+        }
+
+        .form-section-divider {
+            border: none;
+            border-top: 2px solid #007bff;
+            margin-top: 4px;
+            margin-bottom: 16px;
+        }
+
+        /* ===== FORM LABEL STYLES ===== */
+        .form-group .form-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #495057;
+            margin-bottom: 4px;
+        }
+
+        /* ===== DETAIL CARD STYLES ===== */
+        .detail-section {
+            margin-bottom: 4px;
+        }
+
+        .detail-section-header {
+            font-weight: 700;
+            font-size: 12px;
+            color: #007bff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 0 6px 0;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: 4px;
+        }
+
+        .detail-divider {
+            border-top: 2px dashed #dee2e6;
+            margin: 8px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2px 0;
+            font-size: 10px;
+            border-bottom: 1px solid #f5f5f5;
+            min-height: 20px;
+            gap: 4px;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+            min-width: 60px;
+            max-width: 45%;
+        }
+
+        .detail-value {
+            color: #212529;
+            font-weight: 500;
+            font-size: 10px;
+            text-align: right;
+            word-break: break-word;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 55%;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .detail-value:hover {
+            overflow: visible !important;
+            white-space: normal !important;
+            background: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+            z-index: 999 !important;
+            position: relative !important;
+            padding: 2px 6px !important;
+            border-radius: 3px !important;
+            max-width: 100% !important;
+            text-align: left !important;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @@media (max-width: 991.98px) {
+            .col-lg-10, .col-lg-2 {
+                width: 100% !important;
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+            }
+            .col-lg-2 {
+                margin-top: 1rem !important;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .detail-item {
+                font-size: 9px;
+            }
+            .detail-label {
+                font-size: 8px;
+            }
+            .detail-value {
+                font-size: 9px;
+            }
+        }
+    </style>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             new ej.buttons.Button({ isPrimary: true }, '#btnSubmit');
