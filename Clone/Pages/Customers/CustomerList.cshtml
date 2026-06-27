@@ -13,43 +13,59 @@
                     <i class="fas fa-id-card mr-1"></i> Loyalty Member List
                 </h3>
             </div>
-            <div class="card-body pb-2">
-                <div class="row align-items-end">
-
-                    <div class="col-md-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
                         <label class="form-label">Account Number</label>
                         <input type="text" id="txtAccount" class="form-control"
                                placeholder="e.g. F0077663" />
                     </div>
-
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Card Number</label>
                         <input type="text" id="txtCard" class="form-control"
                                placeholder="e.g. 8110917089703" />
                     </div>
-
-                    <div class="col-md-4 d-flex gap-2 mt-1">
-                        <button id="btnFilter" class="btn btn-primary w-100">
-                            <i class="fas fa-search mr-1"></i> Search
-                        </button>
-                        <button id="btnAll" class="btn btn-secondary w-100">
-                            <i class="fas fa-users mr-1"></i> All
-                        </button>
-                    </div>
-
                 </div>
+            </div>
+            <div class="">
+
+            </div>
+            <div class="card-footer">
+                <button type="button" id="btnFilter" class="btn btn-primary">
+                    <i class="fas fa-search mr-1"></i> Search
+                </button>
+
+                <button type="button" id="btnAll" class="btn btn-secondary">
+                    <i class="fas fa-users mr-1"></i> All
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
+<div class="card card-primary card-outline mt-3">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-table mr-1"></i> Member List
+        </h3>
+    </div>
+    <div class="card-body">
         <div id="Grid"></div>
     </div>
 </div>
 
 @section Scripts {
+    <style>
+        /* ===== GRID VIỀN XANH ===== */
+        .card.card-primary.card-outline {
+            border-top: 3px solid #007bff !important;
+        }
+
+        .card.card-primary.card-outline .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+    </style>
     <script>
         var grid;
 
