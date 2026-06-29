@@ -1,0 +1,88 @@
+﻿@page "{handler?}"
+@model MWSManagement.Pages.Syncs.TableSyncManagementModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Config Sync Table";
+}
+
+<div class="row mb-3">
+    <div class="col-12 text-right">
+        <button class="btn btn-success" data-toggle="modal" data-target="#mdlTableSync">
+            <i class="fas fa-plus mr-1"></i> Add New Sync Table
+        </button>
+    </div>
+</div>
+
+<div class="card card-primary card-outline">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-table mr-1"></i>Sync Table List</h3>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ConfiguredTables)
+                {
+                    <tr>
+                        <td><b>@item.TableName</b></td>
+                        <td>
+                            @if (item.SyncAction == 1)
+                            {
+                                <span class="badge badge-success">Add</span>
+                            }
+                            else if (item.SyncAction == 2)
+                            {
+                                <span class="badge badge-warning">Update</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">Delete</span>
+                            }
+                        </td>
+                        <td>@(item.IsActive ? "Active" : "Disabled")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="mdlTableSync" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <form method="post" asp-page-handler="Save">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Config Table Sync</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Select table:</label>
+                        <select name="input.TableName" class="form-control" asp-items="Model.DatabaseTablesOptions" required>
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Action:</label>
+                        <select name="input.SyncAction" class="form-control" required>
+                            <option value="1">Add </option>
+                            <option value="2">Update </option>
+                            <option value="3">Delete </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
