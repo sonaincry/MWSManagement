@@ -1,7 +1,7 @@
-﻿using Indotalent.Data;
-using Indotalent.DTOs;
+﻿using Indotalent.DTOs;
+using Indotalent.Infrastructures.Repositories;
+using Microsoft.CodeAnalysis;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
 using System.Data;
 
@@ -9,56 +9,52 @@ namespace Indotalent.Applications.Products
 {
     public class ProductService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProcedureRepository _procedureRepository;
 
-        public ProductService(ApplicationDbContext context)
+        public ProductService(IProcedureRepository procedureRepository)
         {
-            _context = context;
+            _procedureRepository = procedureRepository;
         }
 
-        public async Task<List<ProductDto>> GetProductReportAsync(
-            long? categoryRecId = null,
-            string? categoryCode = null)
+        public async Task<List<ProductDto>> GetProductReportAsync(long? categoryRecId = null, string? categoryCode = null)
         {
-            var list = new List<ProductDto>();
+            var query = @"EXEC [dbo].[GetProductsWithCategoryReport] 
+                            @CategoryRecId, 
+                            @CategoryCode";
 
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = "[dbo].[GetProductsWithCategoryReport]";
-            command.CommandType = CommandType.StoredProcedure;
+            return await _procedureRepository.QueryAsync<ProductDto>(
+            query,
+                SqlParam.BigInt("@CategoryRecId", categoryRecId),
+                SqlParam.NVarChar("@CategoryCode", categoryCode, 50)
+            );
+        }
 
-            command.Parameters.Add(new SqlParameter("@CategoryRecId",
-                categoryRecId.HasValue ? categoryRecId.Value : DBNull.Value));
-            command.Parameters.Add(new SqlParameter("@CategoryCode",
-                categoryCode != null ? categoryCode : DBNull.Value));
+        public async Task<ProductDetailDto?> GetProductDetailAsync(string productId, string companyCode)
+        {
+            var query = @"EXEC [dbo].[GetProductDetailByItem] 
+                            @ProductId, 
+                            @CompanyCode";
 
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
+            return await _procedureRepository.QueryFirstOrDefaultAsync<ProductDetailDto>(
+                query,
+                SqlParam.NVarChar("@ProductId", productId, 50),
+                SqlParam.NVarChar("@CompanyCode", companyCode, 50)
+            );
+        }
 
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                list.Add(new ProductDto
-                {
-                    CompanyCode = Get<string>(reader, "Company Code"),
-                    ProductId = Get<string>(reader, "Product ID"),
-                    ProductName = Get<string>(reader, "Product Name"),
-                    CategoryRecId = GetLong(reader, "Category RecID"),
-                    CategoryCode = Get<string>(reader, "Category Code"),
-                    CategoryName = Get<string>(reader, "Category Name"),
-                    ParentCategoryName = Get<string>(reader, "Parent Category Name"),
-                    CategoryHierarchyName = Get<string>(reader, "Category Hierarchy Name"),
-                });
-            }
+        public async Task<List<UnitOfMeasureDto>> GetUnitOptionsAsync()
+        {
+            var query = @"
+                SELECT * 
+                FROM [ax].[UNITOFMEASURE]
+                ORDER BY SYMBOL ASC";
 
-            return list;
+            return await _procedureRepository.QueryAsync<UnitOfMeasureDto>(query);
         }
 
         public async Task<List<CategoryDTO>> GetCategoriesAsync()
         {
-            var list = new List<CategoryDTO>();
-
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = @"
+            var querry = @"
                 SELECT 
                     HIER.NAME       AS HierarchyName,
                     CAT.RECID       AS RecId,
@@ -71,67 +67,37 @@ namespace Indotalent.Applications.Products
                 LEFT JOIN [ax].ECORESCATEGORY PARENT_CAT 
                     ON CAT.PARENTCATEGORY = PARENT_CAT.RECID
                 ORDER BY HIER.NAME, CAT.CODE";
-            command.CommandType = CommandType.Text;
 
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                list.Add(new CategoryDTO
-                {
-                    RecId = GetLong(reader, "RecId") ?? 0,
-                    Code = Get<string>(reader, "Code"),
-                    Name = Get<string>(reader, "Name"),
-                    ParentName = Get<string>(reader, "ParentName"),
-                    HierarchyName = Get<string>(reader, "HierarchyName"),
-                });
-            }
-
-            return list;
+            return await _procedureRepository.QueryAsync<CategoryDTO>(querry);
         }
 
-        private static T? Get<T>(System.Data.IDataReader r, string col) where T : class
+        public async Task<int> UpdateProductDetailAsync(ProductDetailDto product)
         {
-            var ordinal = r.GetOrdinal(col);
-            return r.IsDBNull(ordinal) ? null : (T)r.GetValue(ordinal);
-        }
+            var query = @"
+                UPDATE [ax].[INVENTTABLEMODULE]
+                SET PRICE = @SalesPrice,
+                    UNITID = @UnitOfMeasure
+                WHERE ITEMID = @ProductId
+                  AND DATAAREAID = @CompanyCode
+                  AND MODULETYPE = 2;
 
-        private static long? GetLong(System.Data.IDataReader r, string col)
-        {
-            var ordinal = r.GetOrdinal(col);
-            return r.IsDBNull(ordinal) ? null : Convert.ToInt64(r.GetValue(ordinal));
-        }
+                UPDATE pt
+                SET pt.NAME = @ProductName
+                FROM [ax].[ECORESPRODUCTTRANSLATION] pt
+                INNER JOIN [ax].[INVENTTABLE] i 
+                    ON i.PRODUCT = pt.PRODUCT
+                WHERE i.ITEMID = @ProductId
+                  AND i.DATAAREAID = @CompanyCode;
+            ";
 
-        public async Task<ProductDetailDto?> GetProductDetailAsync(string productId, string companyCode)
-        {
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = "[dbo].[GetProductDetailByItem]";
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.Add(new SqlParameter("@ItemId", productId));
-            command.Parameters.Add(new SqlParameter("@DataAreaId", companyCode));
-
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            using var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
-            {
-                var ordinalPrice = reader.GetOrdinal("Sales Price");
-                return new ProductDetailDto
-                {
-                    ProductId = reader.IsDBNull(reader.GetOrdinal("Product ID")) ? null : reader.GetString(reader.GetOrdinal("Product ID")),
-                    ProductName = reader.IsDBNull(reader.GetOrdinal("Product Name")) ? null : reader.GetString(reader.GetOrdinal("Product Name")),
-                    ProductDescription = reader.IsDBNull(reader.GetOrdinal("Product Description")) ? null : reader.GetString(reader.GetOrdinal("Product Description")),
-                    SalesPrice = reader.IsDBNull(ordinalPrice) ? 0 : reader.GetDecimal(ordinalPrice),
-                    UnitOfMeasure = reader.IsDBNull(reader.GetOrdinal("Unit of Measure")) ? null : reader.GetString(reader.GetOrdinal("Unit of Measure")),
-                    Barcode = reader.IsDBNull(reader.GetOrdinal("Barcode")) ? null : reader.GetString(reader.GetOrdinal("Barcode")),
-                    CompanyCode = reader.IsDBNull(reader.GetOrdinal("Company Code")) ? null : reader.GetString(reader.GetOrdinal("Company Code"))
-                };
-            }
-            return null;
+            return await _procedureRepository.ExecuteAsync(
+                query,
+                SqlParam.Decimal("@SalesPrice", product.SalesPrice),
+                SqlParam.NVarChar("@UnitOfMeasure", product.UnitOfMeasure),
+                SqlParam.NVarChar("@ProductId", product.ProductId),
+                SqlParam.NVarChar("@CompanyCode", product.CompanyCode),
+                SqlParam.NVarChar("@ProductName", product.ProductName)
+            );
         }
     }
 }

@@ -24,7 +24,7 @@
 
         <!-- Main Content: 8:2 với chiều cao cố định 700px -->
         <div class="row d-flex align-items-stretch" style="height: 700px; max-height: 700px;">
-            
+
             <!-- Form (80%) - Có scroll riêng -->
             <div class="col-lg-10 col-md-12 d-flex" style="height: 700px; max-height: 700px;">
                 <div class="card card-primary card-outline w-100" style="height: 700px; max-height: 700px; display: flex; flex-direction: column;">
@@ -50,7 +50,7 @@
                             <button type="button" id="btnDelete" class="btn btn-danger btn-sm">
                                 <i class="fas fa-trash mr-1"></i> Delete
                             </button>
-                        <!-- GIỮ NGUYÊN btnSubmit, giữ Id theo logic cũ, chỉ disabled vào -->
+                            <!-- GIỮ NGUYÊN btnSubmit, giữ Id theo logic cũ, chỉ disabled vào -->
                             <button type="submit" id="btnSubmit" class="btn btn-primary btn-sm" disabled>
                                 <i class="fas fa-save mr-1"></i> Save Updates
                             </button>
@@ -359,7 +359,6 @@
 </div>
 
 <!-- ===== MODAL DIALOGS ===== -->
-
 <!-- Create Confirmation Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -450,9 +449,9 @@
             border-radius: 4px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
 
         /* ===== ACTION BUTTONS STYLES ===== */
         .action-buttons {
@@ -461,16 +460,16 @@
             flex-wrap: wrap;
         }
 
-        .action-buttons .btn {
-            min-width: 75px;
-            font-size: 12px;
-            padding: 4px 12px;
-        }
+            .action-buttons .btn {
+                min-width: 75px;
+                font-size: 12px;
+                padding: 4px 12px;
+            }
 
-        .action-buttons .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+                .action-buttons .btn:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
 
         /* ===== FORM SECTION STYLES ===== */
         .form-section-title {
@@ -528,9 +527,9 @@
             gap: 4px;
         }
 
-        .detail-item:last-child {
-            border-bottom: none;
-        }
+            .detail-item:last-child {
+                border-bottom: none;
+            }
 
         .detail-label {
             font-weight: 600;
@@ -557,18 +556,18 @@
             min-width: 0;
         }
 
-        .detail-value:hover {
-            overflow: visible !important;
-            white-space: normal !important;
-            background: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
-            z-index: 999 !important;
-            position: relative !important;
-            padding: 2px 6px !important;
-            border-radius: 3px !important;
-            max-width: 100% !important;
-            text-align: left !important;
-        }
+            .detail-value:hover {
+                overflow: visible !important;
+                white-space: normal !important;
+                background: #ffffff !important;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+                z-index: 999 !important;
+                position: relative !important;
+                padding: 2px 6px !important;
+                border-radius: 3px !important;
+                max-width: 100% !important;
+                text-align: left !important;
+            }
 
         /* ===== RESPONSIVE ===== */
         @@media (max-width: 991.98px) {
@@ -577,9 +576,11 @@
                 flex: 0 0 100% !important;
                 max-width: 100% !important;
             }
+
             .col-lg-2 {
                 margin-top: 1rem !important;
             }
+
             .action-buttons {
                 margin-top: 8px;
             }
@@ -589,12 +590,15 @@
             .detail-item {
                 font-size: 9px;
             }
+
             .detail-label {
                 font-size: 8px;
             }
+
             .detail-value {
                 font-size: 9px;
             }
+
             .action-buttons .btn {
                 min-width: 60px;
                 font-size: 10px;
@@ -708,16 +712,15 @@
             // ===== SUBMIT BUTTON + MODAL DIALOG xác minh =====
             // Lưu lại handler submit cũ để gọi sau khi confirm
             const originalSubmitHandler = formElement._submitHandler || null;
-            
+
             // Override: Khi nhấn btnSubmit, show modal thay vì submit trực tiếp
-            btnSubmit.addEventListener('click', function (e) 
-            {
+            btnSubmit.addEventListener('click', function (e) {
                 if (this.disabled) return;
-                
+
                 // Ngăn form submit trực tiếp
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 // Show update confirmation modal
                 $('#updateModal').modal('show');
             });
@@ -725,12 +728,12 @@
             // Confirm Update - Gọi submit form
             document.getElementById('confirmUpdate').addEventListener('click', function () {
                 $('#updateModal').modal('hide');
-                
+
                 // Kiểm tra validation trước khi submit
                 if (formValidator.validate()) {
                     // Submit form thông qua event submit (sẽ gọi handler cũ)
                     formElement.submit();
-                    
+
                     // Sau khi submit thành công, quay về view mode (sẽ được xử lý sau khi reload)
                     // Nhưng nếu ở client-side, chúng ta vẫn set lại view mode để UI nhất quán
                     // Tuy nhiên form sẽ reload trang nên không cần thiết
@@ -763,23 +766,23 @@
             function showToast(type, message) {
                 // Xóa toast cũ nếu có
                 $('.alert.position-fixed').alert('close');
-                
+
                 const iconMap = {
                     'success': 'fa-check-circle',
                     'danger': 'fa-exclamation-circle',
                     'info': 'fa-info-circle',
                     'warning': 'fa-exclamation-triangle'
                 };
-                
-                const toastHtml = 
-                    `<div class="alert alert-${type} alert-dismissible fade show position-fixed" 
-                         style="top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                        <i class="fas ${iconMap[type] || 'fa-info-circle'} mr-2"></i>
-                        ${message}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>`;
+
+                const toastHtml =
+                    `<div class="alert alert-${type} alert-dismissible fade show position-fixed"
+                                 style="top: 20px; right: 20px; z-index: 9999; min-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                                <i class="fas ${iconMap[type] || 'fa-info-circle'} mr-2"></i>
+                                ${message}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>`;
                 const toast = $(toastHtml);
                 $('body').append(toast);
                 setTimeout(() => {

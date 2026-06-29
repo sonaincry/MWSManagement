@@ -1,0 +1,170 @@
+﻿@page
+@model Indotalent.Pages.TaxVatNums.TaxVatNumTableFormModel
+
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Tax VAT Number Form";
+
+    var isCreate = Model.ActionMode == "create";
+    var isEdit = Model.ActionMode == "edit";
+    var isDelete = Model.ActionMode == "delete";
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+
+        <a href="/TaxVatNums/TaxVatNumTableList" class="btn btn-secondary btn-sm mb-3">
+            <i class="fas fa-arrow-left mr-1"></i> Back
+        </a>
+
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                Please check the information below.
+
+                <div asp-validation-summary="All" class="mt-2 mb-0"></div>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-file-invoice-dollar mr-1"></i>
+                    @(isCreate ? "Create Tax VAT Number" : isEdit ? "Edit Tax VAT Number" : "Delete Tax VAT Number")
+                </h3>
+            </div>
+
+            <form method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="Form.RecId" />
+
+                <div class="card-body">
+                    <div class="row">
+
+                        @if (!isCreate)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>RecId</label>
+                                    <input asp-for="Form.RecId" class="form-control" readonly />
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Company</label>
+
+                                @if (isDelete)
+                                {
+                                    <input asp-for="Form.DataAreaId" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <input asp-for="Form.DataAreaId" class="form-control" maxlength="4" />
+                                }
+
+                                <span asp-validation-for="Form.DataAreaId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Country Region</label>
+
+                                @if (isDelete)
+                                {
+                                    <input asp-for="Form.CountryRegionId" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <input asp-for="Form.CountryRegionId" class="form-control" maxlength="10" />
+                                }
+
+                                <span asp-validation-for="Form.CountryRegionId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>VAT Number</label>
+
+                                @if (isDelete)
+                                {
+                                    <input asp-for="Form.VatNum" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <input asp-for="Form.VatNum" class="form-control" maxlength="20" />
+                                }
+
+                                <span asp-validation-for="Form.VatNum" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Name</label>
+
+                                @if (isDelete)
+                                {
+                                    <input asp-for="Form.Name" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <input asp-for="Form.Name" class="form-control" maxlength="60" />
+                                }
+
+                                <span asp-validation-for="Form.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end">
+                    @if (isDelete)
+                    {
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    }
+                    else if (isCreate)
+                    {
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save mr-1"></i> Create
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save mr-1"></i> Update
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

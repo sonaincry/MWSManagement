@@ -66,18 +66,18 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        @* <li class="nav-item">
+                 @*        <li class="nav-item">
                             <a asp-page="/CustomerGroups/CustomerGroupList" class="nav-link @(currentPageFolderName.Equals("CustomerGroups") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Customer Groups</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-page="/CustomerCategories/CustomerCategoryList" class="nav-link @(currentPageFolderName.Equals("CustomerCategories") ? "active" : "")">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Customer Categories</p>
-                            </a>
                         </li> *@
+                        <li class="nav-item">
+                            <a asp-page="/TaxVatNums/TaxVatNumTableList" class="nav-link @(currentPageFolderName.Equals("TaxVatNums") ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tax VatNum</p>
+                            </a>
+                        </li> 
                         <li class="nav-item">
                             <a asp-page="/Customers/CustomerList" class="nav-link @(currentPageFolderName.Equals("Customers") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>
@@ -101,7 +101,7 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Sales Order Items</p>
                             </a>
-                        </li> *@
+                        </li>
                         <li class="nav-item">
                             <a asp-page="/RetailTransactions/RetailTransactionList" class="nav-link @(currentPageFolderName.Equals("RetailTransactions") ? "active" : "")">
                                 <i class="far fa-circle nav-icon"></i>

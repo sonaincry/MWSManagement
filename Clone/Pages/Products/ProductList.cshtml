@@ -1,9 +1,12 @@
 ﻿@page
+@using System.Text.Json
 @model Indotalent.Pages.Products.ProductCategoryReportModel
 @{
     Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
     ViewData["Title"] = "Product Category Report";
 }
+
+@Html.AntiForgeryToken()
 
 <div class="row">
     <div class="col-12">
@@ -36,12 +39,12 @@
             </div>
             <!--Footer - Button-->
             <div class="card-footer">
-                 <button id="btnFilter" class="btn btn-primary">
+                <button id="btnFilter" class="btn btn-primary">
                     <i class="fas fa-search mr-1"></i> Filter
-                 </button>
-                 <button id="btnAll" class="btn btn-secondary">
-                     <i class="fas fa-list mr-1"></i> All
-                 </button>
+                </button>
+                <button id="btnAll" class="btn btn-secondary">
+                    <i class="fas fa-list mr-1"></i> All
+                </button>
             </div>
         </div>
     </div>
@@ -56,113 +59,113 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Detail Card (20%) -->
-<div class="col-lg-2 col-md-12 mt-3 mt-lg-0 d-flex">
-    <div class="card card-primary card-outline w-100">
-        <div class="card-header py-2">
-            <h6 class="card-title mb-0">
-                <i class="fas fa-info-circle mr-1"></i> Detail
-            </h6>
-        </div>
-        <div class="card-body p-2" id="detailContent" style="overflow: hidden;">
-            <!-- ===== ITEM DETAILS - PLANNING ===== -->
-            <div class="detail-section">
-                <div class="detail-section-header">
-                    <i class="fas fa-clipboard-list mr-1"></i> Item Details - Planning
-                </div>
-
-                <div class="detail-item">
-                    <span class="detail-label">Item No.</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Company</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Product ID</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Product Name</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Category Code</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Category Name</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Parent Category</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Hierarchy</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Description</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Details</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Attachments (0)</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
+    <div class="col-lg-2 col-md-12 mt-3 mt-lg-0 d-flex">
+        <div class="card card-primary card-outline w-100">
+            <div class="card-header py-2">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-info-circle mr-1"></i> Detail
+                </h6>
             </div>
+            <div class="card-body p-2" id="detailContent" style="overflow: hidden;">
+                <!-- ===== ITEM DETAILS - PLANNING ===== -->
+                <div class="detail-section">
+                    <div class="detail-section-header">
+                        <i class="fas fa-clipboard-list mr-1"></i> Item Details - Planning
+                    </div>
 
-            <!-- ===== DIVIDER ===== -->
-            <hr class="detail-divider" />
-
-            <!-- ===== ITEM DETAILS - WAREHOUSING ===== -->
-            <div class="detail-section">
-                <div class="detail-section-header">
-                    <i class="fas fa-warehouse mr-1"></i> Item Details - Warehousing
+                    <div class="detail-item">
+                        <span class="detail-label">Item No.</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Company</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product ID</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category Code</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Parent Category</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Hierarchy</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Details</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Attachments (0)</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
                 </div>
 
-                <div class="detail-item">
-                    <span class="detail-label">Item No.</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Company Code</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Product ID</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Product Name</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Barcode Identification</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Sales Price (VND)</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Sales Price</span>
-                    <span class="detail-value" title="No data">-</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Extended Description</span>
-                    <span class="detail-value" title="No data">-</span>
+                <!-- ===== DIVIDER ===== -->
+                <hr class="detail-divider" />
+
+                <!-- ===== ITEM DETAILS - WAREHOUSING ===== -->
+                <div class="detail-section">
+                    <div class="detail-section-header">
+                        <i class="fas fa-warehouse mr-1"></i> Item Details - Warehousing
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Item No.</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Company Code</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product ID</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Barcode Identification</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Sales Price (VND)</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Sales Price</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Extended Description</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <!-- Modal Dialog for Product Detail (Popup) -->
@@ -192,260 +195,62 @@
     </div>
 </div>
 
-@section Scripts 
-{
-    <style>
-        /* ===== GRID STYLES ===== */
-        .e-grid .e-gridcontent .e-rowcell {
-            white-space: normal !important;
-            word-wrap: break-word !important;
-            line-height: 1.4 !important;
-            padding: 6px 8px !important;
-            font-size: 13px !important;
-        }
 
-        .e-grid .e-headercell {
-            padding: 6px 8px !important;
-            font-size: 13px !important;
-        }
 
-        /* ===== DETAIL CARD STYLES ===== */
-        .detail-section {
-            margin-bottom: 4px;
-        }
-
-        .detail-section-header {
-            font-weight: 700;
-            font-size: 13px;
-            color: #007bff;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 4px 0 6px 0;
-            border-bottom: 2px solid #007bff;
-            margin-bottom: 4px;
-        }
-
-        .detail-divider {
-            border-top: 2px dashed #dee2e6;
-            margin: 8px 0;
-        }
-
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2px 0;
-            font-size: 10px;
-            border-bottom: 1px solid #f5f5f5;
-            min-height: 20px;
-            gap: 4px; /* ✅ Khoảng cách giữa label và value */
-        }
-
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            font-weight: 600;
-            color: #495057;
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            flex-shrink: 0; /* ✅ Không co lại */
-            min-width: 60px; /* ✅ Chiều rộng tối thiểu cho label */
-            max-width: 45%; /* ✅ Giới hạn label không chiếm quá nhiều */
-        }
-
-        .detail-value {
-            color: #212529;
-            font-weight: 500;
-            font-size: 10px;
-            text-align: right;
-            word-break: break-word;
-    
-        /* ✅ QUAN TRỌNG: Xử lý text tràn */
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            max-width: 55%; /* ✅ Giới hạn value không quá 55% */
-            flex: 1 1 auto; /* ✅ Cho phép co giãn nhưng không quá max-width */
-            min-width: 0; /* ✅ Cho phép co lại nếu cần */
-        }
-
-        /* ✅ Tooltip khi hover để xem full text */
-        .detail-value:hover {
-            overflow: visible !important;
-            white-space: normal !important;
-            background: #ffffff !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
-            z-index: 999 !important;
-            position: relative !important;
-            padding: 2px 6px !important;
-            border-radius: 3px !important;
-            max-width: 100% !important;
-            text-align: left !important;
-        }
-        /* ===== RESPONSIVE ===== */
-        @@media (max-width: 1000px) {
-            .col-lg-10, .col-lg-2 {
-                width: 100% !important;
-                flex: 0 0 100% !important;
-                max-width: 100% !important;
-            }
-            .col-lg-2 {
-                margin-top: 1rem !important;
-            }
-        }
-
-        @@media (max-width: 768px) {
-            .e-grid .e-gridcontent .e-rowcell {
-                font-size: 11px !important;
-                padding: 4px 6px !important;
-            }
-            .e-grid .e-headercell {
-                font-size: 11px !important;
-                padding: 4px 6px !important;
-            }
-            .detail-item {
-                font-size: 9px;
-            }
-            .detail-label {
-                font-size: 8px;
-            }
-            .detail-value {
-                font-size: 9px;
-            }
-        }
-    </style>
-
+@section Scripts {
     <script>
         var grid;
 
+        var productColumns = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.GridColumns,
+        new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+        }
+        ));
+
         document.addEventListener('DOMContentLoaded', function () {
+
             if ($.fn.select2) {
                 $('#ddlCategory').select2({ width: '100%' });
             }
 
-            grid = new ej.grids.Grid({
-                allowFiltering: true,
-                allowSorting: true,
-                allowGrouping: false,
-                allowTextWrap: true,
-                allowResizing: true,
-                allowPaging: true,
-                allowSelection: true,
-                allowExcelExport: true,
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                columns: productColumns,
+                keyField: 'ProductId',
+                formUrl: '/Products/ProductDetail',
 
-                filterSettings: { type: 'CheckBox' },
-
-                pageSettings: {
-                    currentPage: 1,
-                    pageSize: 20,
-                    pageSizes: ["10", "20", "50", "100", "All"]
+                actions: {
+                    excelExport: true,
+                    search: true,
+                    refresh: true,
+                    add: true,
+                    edit: true,
+                    delete: true
                 },
 
-                showColumnMenu: true,
-                gridLines: 'Horizontal',
-                height: '500px',
-                width: '100%',
+                enableCheckbox: true,
 
-                // ✅ AutoFit khi data bound
-                dataBound: function() {
-                    if (this.dataSource && this.dataSource.length > 0) {
-                        setTimeout(() => {
-                            this.autoFitColumns();
-                        }, 50);
-                    }
+                onRefresh: function () {
+                    loadGrid();
                 },
 
-                // ✅ Click row -> redirect sang ProductDetail
-                rowSelected: function (args) {
-                    var rowData = args.data;
-                    var prodId = rowData.ProductId;
-                    var compCode = rowData.CompanyCode;
-
-                    if (!prodId || !compCode) return;
-
-                    var detailUrl = '/Products/ProductDetail?productId=' + encodeURIComponent(prodId) + '&companyCode=' + encodeURIComponent(compCode);
-                    window.location.href = detailUrl;
+                deleteUrl: '/Products/ProductList?handler=DeleteProducts',
+                onDeleted: function (rows, grid, data) {
+                    loadGrid();
                 },
 
-                columns: [
-                    {
-                        field: 'CompanyCode',
-                        headerText: 'Company',
-                        minWidth: 70,
-                        width: 'auto'
-                    },
-                    {
-                        field: 'ProductId',
-                        headerText: 'Product ID',
-                        minWidth: 90,
-                        width: 'auto',
-                        isPrimaryKey: true
-                    },
-                    {
-                        field: 'ProductName',
-                        headerText: 'Product Name',
-                        minWidth: 130,
-                        width: 'auto'
-                    },
-                    {
-                        field: 'CategoryCode',
-                        headerText: 'Category Code',
-                        minWidth: 100,
-                        width: 'auto'
-                    },
-                    {
-                        field: 'CategoryName',
-                        headerText: 'Category Name',
-                        minWidth: 120,
-                        width: 'auto'
-                    },
-                    {
-                        field: 'ParentCategoryName',
-                        headerText: 'Parent Category',
-                        minWidth: 110,
-                        width: 'auto'
-                    },
-                    {
-                        field: 'CategoryHierarchyName',
-                        headerText: 'Hierarchy',
-                        minWidth: 60,
-                        width: 'auto'
-                    }
-                ],
+                openEditOnDoubleClick: true,
+                onEdit: function (row, grid) {
+                    var url = '/Products/ProductDetail?action=edit'
+                        + '&productId=' + encodeURIComponent(row.ProductId)
+                        + '&companyCode=' + encodeURIComponent(row.CompanyCode);
 
-                toolbar: ['ExcelExport', 'Search'],
-
-                toolbarClick: function (args) {
-                    if (args.item.id === 'Grid_excelexport') {
-                        grid.excelExport();
-                    }
-                },
-
-                actionFailure: function (args) {
-                    console.error('Grid error:', args);
+                    window.location.href = url;
                 }
             });
 
-            grid.appendTo('#Grid');
-
-            // ✅ AutoFit khi resize window
-            let resizeTimer;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
-                    if (grid && grid.dataSource && grid.dataSource.length > 0) {
-                        grid.autoFitColumns();
-                    }
-                }, 250);
-            });
-
-            // Load initial data
-            loadGrid();
-
-            // Wire up buttons
             document.getElementById('btnFilter').addEventListener('click', function () {
                 loadGrid();
             });
@@ -456,45 +261,19 @@
                 loadGrid();
             });
 
-            document.getElementById('txtCategoryCode').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    loadGrid();
-                }
-            });
+            loadGrid();
         });
 
         function loadGrid() {
-            if (!grid) return;
+            var recId = $('#ddlCategory').val();
+            var code = document.getElementById('txtCategoryCode').value.trim();
 
-            grid.showSpinner();
-
-            var categoryRecId = $('#ddlCategory').val();
-            var categoryCode = document.getElementById('txtCategoryCode').value.trim();
-
-            var params = new URLSearchParams();
-            params.append('handler', 'Products');
-            if (categoryRecId) params.append('CategoryRecId', categoryRecId);
-            if (categoryCode) params.append('CategoryCode', categoryCode);
-
-            fetch(`/Products/ProductList?${params.toString()}`, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then(response => response.json())
-            .then(data => {
-                grid.dataSource = data || [];
-                grid.hideSpinner();
-
-                // AutoFit sau khi load
-                setTimeout(function() {
-                    if (grid && grid.dataSource && grid.dataSource.length > 0) {
-                        grid.autoFitColumns();
-                    }
-                }, 150);
-            })
-            .catch(err => {
-                console.error('Load grid failed:', err);
-                grid.hideSpinner();
+            var url = AppGrid.buildUrl('/Products/ProductList', 'Products', {
+                CategoryRecId: recId,
+                CategoryCode: code
             });
+
+            AppGrid.load(grid, url);
         }
     </script>
 }

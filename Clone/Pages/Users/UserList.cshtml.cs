@@ -13,10 +13,5 @@ namespace Indotalent.Pages.Users
         {
             this.SetupViewDataTitleFromUrl();
         }
-
-
-
-
-
     }
 }

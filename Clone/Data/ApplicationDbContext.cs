@@ -3,6 +3,7 @@ using Indotalent.Infrastructures.Docs;
 using Indotalent.Infrastructures.Images;
 using Indotalent.Models.Configurations;
 using Indotalent.Models.Entities;
+using Indotalent.Models.Entities.AX;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
@@ -25,18 +26,15 @@ namespace Indotalent.Data
         public DbSet<LogSession> LogSession { get; set; } = default!;
         public DbSet<LogError> LogError { get; set; } = default!;
         public DbSet<LogAnalytic> LogAnalytic { get; set; } = default!;
-
         public DbSet<RetailTransaction> RetailTransaction { get; set; } = default!;
         public DbSet<TransDetailDto> TransDetailDto { get; set; } = default!;
-        public DbSet<ProductDto> ProductDTO { get; set; } = default!;
-
         public DbSet<CustomerDto> CustomerDto { get; set; } = default!;
         public DbSet<ProductDetailDto> ProductDetailDto { get; set; } = default!;
-
         public DbSet<UnitOfMeasureDto> UnitOfMeasureDto { get; set; } = default!;
-
         public DbSet<LookupItem> LookupItem { get; set; } = default!;
-
+        public DbSet<ProductDto> ProductDTO { get; set; } = default!;
+        public DbSet<CategoryDTO> CategoryDTO { get; set; } = default!;
+        public DbSet<TaxVatNumTableAX> TaxVatNumTables { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,9 +47,6 @@ namespace Indotalent.Data
             modelBuilder.Entity<FileDocument>().HasKey(f => f.Id);
             modelBuilder.Entity<FileDocument>().Property(f => f.OriginalFileName).HasMaxLength(100);
 
-            // Configure RetailTransaction
-            //modelBuilder.Entity<RetailTransaction>().HasKey(x => x.TransactionId);
-            // modelBuilder.Entity<RetailTransaction>().ToTable("RETAILTRANSACTIONTABLE");
             modelBuilder.Entity<RetailTransaction>(entity =>
             {
                 entity.HasNoKey();
@@ -61,7 +56,7 @@ namespace Indotalent.Data
                 entity.Property(x => x.NumberOfItems).HasPrecision(18, 0);
                 entity.Property(x => x.GrossAmount).HasPrecision(18, 2);
             });
-            //Transaction detail
+
             modelBuilder.Entity<TransDetailDto>(entity =>
             {
                 entity.HasNoKey();
@@ -71,27 +66,56 @@ namespace Indotalent.Data
                 entity.Property(x => x.TAXAMOUNT).HasPrecision(18, 2);
                 entity.Property(x => x.PAYMENTAMOUNT).HasPrecision(18, 2);
             });
-            // modelBuilder.Entity<TransDetailDto>().HasKey(x => x.TRANSACTIONID);
-            //  modelBuilder.Entity<TransDetailDto>().ToView("RETAILTRANSACTIONSVIEW","crt");
 
-            //end
-            modelBuilder.Entity<ProductDto>(entity =>
-            {
-                entity.HasNoKey();
-            });
+            modelBuilder.Entity<ProductDto>(entity => { entity.HasNoKey(); });
+            modelBuilder.Entity<CategoryDTO>(entity => { entity.HasNoKey(); });
+            modelBuilder.Entity<UnitOfMeasureDto>(entity => { entity.HasNoKey(); });
+
             modelBuilder.Entity<ProductDetailDto>(entity =>
             {
                 entity.HasNoKey();
                 entity.Property(x => x.SalesPrice).HasPrecision(18, 2);
             });
 
-            modelBuilder.Entity<UnitOfMeasureDto>(entity =>
-            {
-                entity.HasNoKey();
-            });
             modelBuilder.Entity<ApplicationUser>()
             .Property(x => x.IsNotDeleted)
             .HasDefaultValue(false);
+
+            modelBuilder.Entity<TaxVatNumTableAX>(entity =>
+            {
+                entity.ToTable("TAXVATNUMTABLE", "ax");
+
+                entity.HasKey(x => x.RecId);
+
+                entity.Property(x => x.RecId)
+                    .HasColumnName("RECID")
+                    .ValueGeneratedNever();
+
+                entity.Property(x => x.CountryRegionId)
+                    .HasColumnName("COUNTRYREGIONID")
+                    .HasMaxLength(10)
+                    .IsRequired();
+
+                entity.Property(x => x.Name)
+                    .HasColumnName("NAME")
+                    .HasMaxLength(60)
+                    .IsRequired();
+
+                entity.Property(x => x.VatNum)
+                    .HasColumnName("VATNUM")
+                    .HasMaxLength(20)
+                    .IsRequired();
+
+                entity.Property(x => x.DataAreaId)
+                    .HasColumnName("DATAAREAID")
+                    .HasMaxLength(4)
+                    .IsRequired();
+
+                entity.Property(x => x.RowVersion)
+                    .HasColumnName("ROWVERSION")
+                    .IsRowVersion()
+                    .ValueGeneratedOnAddOrUpdate();
+            });
 
             modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());

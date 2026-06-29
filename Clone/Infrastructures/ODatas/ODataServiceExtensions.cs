@@ -19,9 +19,9 @@ namespace Indotalent.Infrastructures.ODatas
             builder.EntitySet<NumberSequenceDto>("NumberSequence");
             builder.EntitySet<ApplicationUserDto>("ApplicationUser");
             builder.EntitySet<UserProfileDto>("UserProfile");
-            builder.EntitySet<AspNetCompanyDto>("AspNetCompany");
+    
             builder.EntitySet<CustomerGroupDto>("CustomerGroup");
-            builder.EntitySet<CustomerCategoryDto>("CustomerCategory");
+            //builder.EntitySet<CustomerCategoryDto>("CustomerCategory");
             builder.EntitySet<VendorGroupDto>("VendorGroup");
             builder.EntitySet<VendorCategoryDto>("VendorCategory");
             builder.EntitySet<WarehouseDto>("Warehouse");
@@ -35,9 +35,6 @@ namespace Indotalent.Infrastructures.ODatas
             builder.EntitySet<VendorContactDto>("VendorContact");
             builder.EntitySet<VendorContactChildDto>("VendorContactChild");
             builder.EntitySet<TaxDto>("Tax");
-            //builder.EntitySet<SalesOrderDto>("SalesOrder");
-            //builder.EntitySet<SalesOrderItemChildDto>("SalesOrderItemChild");
-            //builder.EntitySet<SalesOrderItemDto>("SalesOrderItem");
             builder.EntitySet<PurchaseOrderDto>("PurchaseOrder");
             builder.EntitySet<PurchaseOrderItemChildDto>("PurchaseOrderItemChild");
             builder.EntitySet<PurchaseOrderItemDto>("PurchaseOrderItem");
@@ -64,13 +61,12 @@ namespace Indotalent.Infrastructures.ODatas
             builder.EntitySet<ScrappingItemChildDto>("ScrappingItemChild");
             builder.EntitySet<StockCountItemChildDto>("StockCountItemChild");
             builder.EntitySet<TransDetailDto>("TransactionDetail");
-            var product = builder.EntitySet<ProductDto>("Product");
 
+            var product = builder.EntitySet<ProductDto>("Product");
             product.EntityType.HasKey(x => x.ProductId);
+
             var retailTransaction = builder.EntitySet<RetailTransactionDTO>("RetailTransaction");
             retailTransaction.EntityType.HasKey(x => x.TransactionId);
-
-
 
             services.AddControllers()
                 .AddOData(options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null)

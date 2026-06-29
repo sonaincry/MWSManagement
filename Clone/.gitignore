@@ -1,2 +1,11 @@
-﻿.vs/
-obj/
+﻿bin/
+*.csproj.user
+*.slnLaunch.user
+.vscode/launch.json
+appsettings.Development.json
+*.dll
+*.exe
+*.pdb
+wwwroot/uploads/
+*.zip
+*.bak

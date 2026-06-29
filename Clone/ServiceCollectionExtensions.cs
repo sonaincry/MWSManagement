@@ -1,12 +1,14 @@
 ﻿using Indotalent.Applications.AdjustmentMinuss;
 using Indotalent.Applications.AdjustmentPluss;
 using Indotalent.Applications.ApplicationUsers;
+using Indotalent.Applications.AX;
 using Indotalent.Applications.Companies;
 using Indotalent.Applications.Customers;
 using Indotalent.Applications.LogAnalytics;
 using Indotalent.Applications.LogErrors;
 using Indotalent.Applications.LogSessions;
 using Indotalent.Applications.Products;
+using Indotalent.Applications.TaxVatNums;
 using Indotalent.Infrastructures.Countries;
 using Indotalent.Infrastructures.Currencies;
 using Indotalent.Infrastructures.Docs;
@@ -45,6 +47,9 @@ namespace Indotalent
             services.AddScoped<LookupService>();
             services.AddScoped<ProductService>();
             services.AddScoped<CustomerService>();
+            services.AddScoped<TaxVatNumTableService>();
+            services.AddScoped<IProcedureRepository, ProcedureRepository>();
+            services.AddScoped(typeof(AxCrudService<>));
             return services;
         }
     }

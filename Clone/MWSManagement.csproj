@@ -27,9 +27,5 @@
     <PackageReference Include="UAParser" Version="3.1.47" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Report\Report.csproj" />
-  </ItemGroup>
-
 
 </Project>
