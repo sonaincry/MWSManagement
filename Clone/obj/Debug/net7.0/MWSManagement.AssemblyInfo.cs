@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MWSManagement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+725a221f5501c2f75e3bd0425e2b9f0d3ca2248d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a9adc5964b1f2f787bfab8534046b178ab98d2c")]
 [assembly: System.Reflection.AssemblyProductAttribute("MWSManagement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MWSManagement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

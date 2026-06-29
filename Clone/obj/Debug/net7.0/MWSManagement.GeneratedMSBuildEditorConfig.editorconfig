@@ -218,6 +218,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9fanMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/LocationManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcTG9jYXRpb25NYW5hZ2VtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/Sync.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcU3luYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/TableSyncManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcVGFibGVTeW5jTWFuYWdlbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/TaxVatNums/TaxVatNumTableForm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGF4VmF0TnVtc1xUYXhWYXROdW1UYWJsZUZvcm0uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
