@@ -269,6 +269,40 @@
                             </a>
                         </li> *@
                     </ul>
+                </li
+                >
+                <li class="nav-item @(ViewData["Module"]?.ToString() == "Purchase" ? "menu-open" : "")">
+                    <a href="#" class="nav-link @(ViewData["Module"]?.ToString() == "Purchase" ? "active" : "")">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>
+                            Sync Data
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-page="/Syncs/Sync" class="nav-link @(currentPageFolderName.Equals("Syncs") ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sync</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-page="/Syncs/TableSyncManagement" class="nav-link @(currentPageFolderName.Equals("TableSyncManagement") ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sync Table</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-page="/Syncs/LocationManagement" class="nav-link @(currentPageFolderName.Equals("LocationManagement") ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Location</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item @(ViewData["Module"]?.ToString() == "Purchase" ? "menu-open" : "")">
                     <a href="#" class="nav-link @(ViewData["Module"]?.ToString() == "Purchase" ? "active" : "")">

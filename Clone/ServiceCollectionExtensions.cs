@@ -18,7 +18,9 @@ using Indotalent.Models.Entities;
 using Indotalent.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using MWSManagement.Applications.Locations;
 using MWSManagement.Applications.Lookups;
+using MWSManagement.Applications.TableSyncs;
 
 namespace Indotalent
 {
@@ -45,6 +47,8 @@ namespace Indotalent
             services.AddScoped<LookupService>();
             services.AddScoped<ProductService>();
             services.AddScoped<CustomerService>();
+            services.AddScoped<LocationService>();
+            services.AddScoped<TableSyncService>();
             return services;
         }
     }

@@ -37,6 +37,10 @@ namespace Indotalent.Data
 
         public DbSet<LookupItem> LookupItem { get; set; } = default!;
 
+        public DbSet<LocationDto> LocationDto { get; set; } = default!;
+
+        public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,6 +79,14 @@ namespace Indotalent.Data
             //  modelBuilder.Entity<TransDetailDto>().ToView("RETAILTRANSACTIONSVIEW","crt");
 
             //end
+            modelBuilder.Entity<LocationDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<TableSyncDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
             modelBuilder.Entity<ProductDto>(entity =>
             {
                 entity.HasNoKey();

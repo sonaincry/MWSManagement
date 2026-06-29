@@ -1,0 +1,124 @@
+﻿@page "{handler?}"
+@model Indotalent.Pages.Syncs.SyncPortalModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Hệ thống Đồng bộ Dữ liệu Đa điểm";
+}
+
+<style>
+    .sync-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.65);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+    }
+</style>
+
+<div id="loadingOverlay" class="sync-overlay" style="display: none;">
+    <div class="spinner-border text-primary mb-3" role="status" style="width: 4rem; height: 4rem;">
+        <span class="sr-only">Loading...</span>
+    </div>
+    <h3 class="font-weight-bold">Synchronizing</h3>
+    <p class="text-warning">Please waiting...</p>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-network-wired mr-1"></i> Sync Data 
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post" asp-page-handler="SyncData" onsubmit="showLoadingOverlay()">
+
+                    <div class="form-group">
+                        <label><b>Sender Location:</b></label>
+                        <select asp-for="SenderLocationId" asp-items="Model.LocationOptions" class="form-control" required>
+                            <option value="">-- Sender --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label><b>Receiver Location:</b></label>
+                        <select asp-for="ReceiverLocationId" asp-items="Model.LocationOptions" class="form-control" required>
+                            <option value="">--Receiver --</option>
+                        </select>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group">
+                        <label><b>Table to sync:</b></label>
+                        <div class="row mt-2">
+                            @foreach (var item in Model.ConfiguredTables.Where(x => x.IsActive))
+                            {
+                                <div class="col-md-6 mb-2">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" name="selectedTables" value="@item.TableName" id="chk_@item.TableName.Replace(".", "_")">
+                                        <label class="custom-control-label" for="chk_@item.TableName.Replace(".", "_")">
+                                            @item.TableName
+                                            @if (item.SyncAction == 1)
+                                            {
+                                                <span class="badge badge-success ml-1">Add Only</span>
+                                            }
+                                            else if (item.SyncAction == 2)
+                                            {
+
+                                                <span class="badge badge-warning ml-1">Update</span>
+                                            }
+                                            else
+                                            {
+
+                                                <span class="badge badge-danger ml-1">Delete</span>
+                                            }
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary px-4 btn-lg">
+                            <i class="fas fa-play mr-1"></i> SYNC
+                        </button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrEmpty(Model.SyncMessage))
+                {
+                    <div class="alert @(Model.IsSuccess ? "alert-success" : "alert-danger") mt-4 alert-dismissible">
+                        <h5><i class="icon fas @(Model.IsSuccess ? "fa-check" : "fa-ban")"></i> Trạng thái phân phối</h5>
+                        @Html.Raw(Model.SyncMessage)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showLoadingOverlay() {
+            const checkedTables = document.querySelectorAll('input[name="selectedTables"]:checked');
+            const sender = document.getElementById('SenderLocationId').value;
+            const receiver = document.getElementById('ReceiverLocationId').value;
+
+            if(sender !== "" && receiver !== "" && checkedTables.length > 0 && sender !== receiver) {
+                document.getElementById('loadingOverlay').style.display = 'flex';
+            }
+        }
+    </script>
+}
