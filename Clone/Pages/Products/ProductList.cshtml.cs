@@ -1,7 +1,9 @@
 ﻿using Indotalent.Applications.Products;
+using Indotalent.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MWSManagement.ControlUI.Helper.Grids;
 using System.Text.Json;
 
 namespace Indotalent.Pages.Products
@@ -20,21 +22,24 @@ namespace Indotalent.Pages.Products
 
         [BindProperty(SupportsGet = true)]
         public string? CategoryCode { get; set; }
+        public List<GridColumnDto> GridColumns { get; set; } = new();
 
         public List<SelectListItem> CategoryOptions { get; set; } = new();
 
         public async Task OnGetAsync()
         {
+            GridColumns = GridColumnHelper.FromModel<ProductDto>();
+
             await LoadCategoriesAsync();
         }
 
-        // AJAX endpoint: /Reports/ProductCategoryReport?handler=Products&CategoryRecId=xxx
         public async Task<IActionResult> OnGetProductsAsync()
         {
+
             var data = await _productService.GetProductReportAsync(CategoryRecId, CategoryCode);
             return new JsonResult(data, new JsonSerializerOptions
             {
-                PropertyNamingPolicy = null  // keep PascalCase to match Syncfusion field names
+                PropertyNamingPolicy = null  
             });
         }
 
@@ -61,6 +66,49 @@ namespace Indotalent.Pages.Products
             if (detail == null) return NotFound();
 
             return new JsonResult(detail);
+        }
+
+        public async Task<IActionResult> OnPostDeleteProductsAsync([FromBody] List<ProductDto> rows)
+        {
+            if (rows == null || rows.Count == 0)
+            {
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "No selected products."
+                });
+            }
+
+            try
+            {
+                var deletedCount = 0;
+
+                foreach (var row in rows)
+                {
+                    if (string.IsNullOrWhiteSpace(row.ProductId) ||
+                        string.IsNullOrWhiteSpace(row.CompanyCode))
+                    {
+                        continue;
+                    }
+
+                    //await _productService.DeleteProductAsync(row.ProductId, row.CompanyCode);
+                    deletedCount++;
+                }
+
+                return new JsonResult(new
+                {
+                    success = true,
+                    message = $"Deleted {deletedCount} product(s)."
+                });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
     }
 }

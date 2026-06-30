@@ -1,0 +1,296 @@
+﻿.bg-primary {
+    background-color: #307ccd !important
+}
+
+/* ===== GRID STYLES ===== */
+.e-grid .e-gridcontent .e-rowcell {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+}
+
+.e-grid .e-headercell {
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+}
+/* ===== DETAIL CARD STYLES ===== */
+.detail-section {
+    margin-bottom: 4px;
+}
+
+.detail-section-header {
+    font-weight: 700;
+    font-size: 13px;
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 0 6px 0;
+    border-bottom: 2px solid #007bff;
+    margin-bottom: 4px;
+}
+
+.detail-divider {
+    border-top: 2px dashed #dee2e6;
+    margin: 8px 0;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+    font-size: 10px;
+    border-bottom: 1px solid #f5f5f5;
+    min-height: 20px;
+    gap: 4px; /* ✅ Khoảng cách giữa label và value */
+}
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+.detail-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0; /* ✅ Không co lại */
+    min-width: 60px; /* ✅ Chiều rộng tối thiểu cho label */
+    max-width: 45%; /* ✅ Giới hạn label không chiếm quá nhiều */
+}
+
+.detail-value {
+    color: #212529;
+    font-weight: 500;
+    font-size: 10px;
+    text-align: right;
+    word-break: break-word;
+    /* ✅ QUAN TRỌNG: Xử lý text tràn */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 55%; /* ✅ Giới hạn value không quá 55% */
+    flex: 1 1 auto; /* ✅ Cho phép co giãn nhưng không quá max-width */
+    min-width: 0; /* ✅ Cho phép co lại nếu cần */
+}
+    /* ✅ Tooltip khi hover để xem full text */
+    .detail-value:hover {
+        overflow: visible !important;
+        white-space: normal !important;
+        background: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+        z-index: 999 !important;
+        position: relative !important;
+        padding: 2px 6px !important;
+        border-radius: 3px !important;
+        max-width: 100% !important;
+        text-align: left !important;
+    }
+/* ===== RESPONSIVE ===== */
+@@media (max-width: 1000px) {
+    .col-lg-10, .col-lg-2 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .col-lg-2 {
+        margin-top: 1rem !important;
+    }
+}
+
+@@media (max-width: 768px) {
+    .e-grid .e-gridcontent .e-rowcell {
+        font-size: 11px !important;
+        padding: 4px 6px !important;
+    }
+
+    .e-grid .e-headercell {
+        font-size: 11px !important;
+        padding: 4px 6px !important;
+    }
+
+    .detail-item {
+        font-size: 9px;
+    }
+
+    .detail-label {
+        font-size: 8px;
+    }
+
+    .detail-value {
+        font-size: 9px;
+    }
+}
+
+
+/* ===== SCROLLBAR STYLES ===== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+/* ===== ACTION BUTTONS STYLES ===== */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+    .action-buttons .btn {
+        min-width: 75px;
+        font-size: 12px;
+        padding: 4px 12px;
+    }
+
+        .action-buttons .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+/* ===== FORM SECTION STYLES ===== */
+.form-section-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #007bff !important;
+    margin-bottom: 2px;
+    margin-top: 0;
+}
+
+.form-section-divider {
+    border: none;
+    border-top: 2px solid #007bff;
+    margin-top: 4px;
+    margin-bottom: 16px;
+}
+/* ===== FORM LABEL STYLES ===== */
+.form-group .form-label {
+    font-weight: 600;
+    font-size: 12px;
+    color: #495057;
+    margin-bottom: 4px;
+}
+/* ===== DETAIL CARD STYLES ===== */
+.detail-section {
+    margin-bottom: 4px;
+}
+
+.detail-section-header {
+    font-weight: 700;
+    font-size: 12px;
+    color: #007bff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 0 6px 0;
+    border-bottom: 2px solid #007bff;
+    margin-bottom: 4px;
+}
+
+.detail-divider {
+    border-top: 2px dashed #dee2e6;
+    margin: 8px 0;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+    font-size: 10px;
+    border-bottom: 1px solid #f5f5f5;
+    min-height: 20px;
+    gap: 4px;
+}
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+.detail-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    min-width: 60px;
+    max-width: 45%;
+}
+
+.detail-value {
+    color: #212529;
+    font-weight: 500;
+    font-size: 10px;
+    text-align: right;
+    word-break: break-word;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 55%;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+    .detail-value:hover {
+        overflow: visible !important;
+        white-space: normal !important;
+        background: #ffffff !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+        z-index: 999 !important;
+        position: relative !important;
+        padding: 2px 6px !important;
+        border-radius: 3px !important;
+        max-width: 100% !important;
+        text-align: left !important;
+    }
+/* ===== RESPONSIVE ===== */
+@@media (max-width: 991.98px) {
+    .col-lg-10, .col-lg-2 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .col-lg-2 {
+        margin-top: 1rem !important;
+    }
+
+    .action-buttons {
+        margin-top: 8px;
+    }
+}
+
+@@media (max-width: 768px) {
+    .detail-item {
+        font-size: 9px;
+    }
+
+    .detail-label {
+        font-size: 8px;
+    }
+
+    .detail-value {
+        font-size: 9px;
+    }
+
+    .action-buttons .btn {
+        min-width: 60px;
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}

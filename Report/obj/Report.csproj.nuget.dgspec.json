@@ -1,6 +1,19 @@
 {
   "format": 1,
   "restore": {
+<<<<<<< HEAD
+    "D:\\RadiantGlobal\\Project\\Clone\\MWSManagement\\Report\\Report.csproj": {}
+  },
+  "projects": {
+    "D:\\RadiantGlobal\\Project\\Clone\\MWSManagement\\Report\\Report.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\RadiantGlobal\\Project\\Clone\\MWSManagement\\Report\\Report.csproj",
+        "projectName": "Report",
+        "projectPath": "D:\\RadiantGlobal\\Project\\Clone\\MWSManagement\\Report\\Report.csproj",
+        "packagesPath": "C:\\Users\\megab\\.nuget\\packages\\",
+        "outputPath": "D:\\RadiantGlobal\\Project\\Clone\\MWSManagement\\Report\\obj\\",
+=======
     "C:\\Users\\Sown\\Desktop\\Code\\123\\MWSManagement\\Report\\Report.csproj": {}
   },
   "projects": {
@@ -12,13 +25,18 @@
         "projectPath": "C:\\Users\\Sown\\Desktop\\Code\\123\\MWSManagement\\Report\\Report.csproj",
         "packagesPath": "C:\\Users\\Sown\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Sown\\Desktop\\Code\\123\\MWSManagement\\Report\\obj\\",
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\DevExpress 22.2\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
+<<<<<<< HEAD
+          "C:\\Users\\megab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
           "C:\\Users\\Sown\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
           "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
@@ -47,7 +65,11 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
+<<<<<<< HEAD
+        "SdkAnalysisLevel": "9.0.300"
+=======
         "SdkAnalysisLevel": "10.0.100"
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
       },
       "frameworks": {
         "net7.0": {
@@ -85,7 +107,11 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.315\\RuntimeIdentifierGraph.json"
+=======
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102\\RuntimeIdentifierGraph.json"
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
         }
       }
     }

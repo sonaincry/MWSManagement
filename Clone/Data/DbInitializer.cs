@@ -2,6 +2,7 @@
 using Indotalent.Applications.Companies;
 using Indotalent.AppSettings;
 using Indotalent.Data.System;
+using Indotalent.DTOs;
 using Indotalent.Infrastructures.Countries;
 using Indotalent.Infrastructures.Currencies;
 using Indotalent.Infrastructures.Images;

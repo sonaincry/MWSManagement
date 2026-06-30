@@ -1,12 +1,11 @@
 using Dapper;
-using DevExpress.CodeParser;
 using Indotalent.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Indotalent.Data;
-using System.Data; // Make sure this is added for IDbConnection
+using System.Data; 
 
 namespace Indotalent.Pages.Products
 {

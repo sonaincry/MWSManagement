@@ -76,15 +76,15 @@
         document.addEventListener('DOMContentLoaded', function () {
             new ej.buttons.Button({ isPrimary: true }, '#btnAddNew');
 
-            document.getElementById('btnAddNew').addEventListener('click', function() {
+            document.getElementById('btnAddNew').addEventListener('click', function () {
                 $('#modalCreateUnit').modal('show');
             });
 
-            @{
-                        var jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null };
-                        var rawJson = System.Text.Json.JsonSerializer.Serialize(Model.UnitList, jsonOptions);
-            }
-            var gridData = @Html.Raw(rawJson);
+        @{
+            var jsonOptions = new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = null };
+            var rawJson = System.Text.Json.JsonSerializer.Serialize(Model.UnitList, jsonOptions);
+        }
+                    var gridData = @Html.Raw(rawJson);
 
             var grid = new ej.grids.Grid({
                 dataSource: gridData,
@@ -124,10 +124,10 @@
                             },
                             body: JSON.stringify(args.data)
                         })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (!data.success) alert("Update failed: " + data.message);
-                        });
+                            .then(res => res.json())
+                            .then(data => {
+                                if (!data.success) alert("Update failed: " + data.message);
+                            });
                     }
                     else if (args.requestType === 'delete') {
                         if (confirm("Are you sure you want to delete this unit record?")) {
@@ -139,10 +139,10 @@
                                 },
                                 body: JSON.stringify(args.data[0])
                             })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (!data.success) alert("Delete failed: " + data.message);
-                            });
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (!data.success) alert("Delete failed: " + data.message);
+                                });
                         } else {
                             args.cancel = true;
                         }

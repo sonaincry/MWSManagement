@@ -21,6 +21,7 @@
 
                 <div class="card-body">
                     <div class="row">
+                        <!-- Store -->
                         <div class="col-md-3">
                             <label>Store</label>
                             <select name="StoreId" class="form-control" asp-for="StoreId">
@@ -35,36 +36,28 @@
                             </select>
                         </div>
 
-                        <div class="col-md-2">
+                        <!-- Terminal -->
+                        <div class="col-md-3">
                             <label>Terminal</label>
                             <input name="TerminalId" class="form-control" value="@Model.TerminalId" />
                         </div>
 
-                        <div class="col-md-2">
-                            <label>Transaction ID</label>
-                            <input name="TransId" class="form-control" value="@Model.TransId" />
-                        </div>
-
-                        <div class="col-md-2">
-                            <label>Receipt ID</label>
-                            <input name="ReceiptId" class="form-control" value="@Model.ReceiptId" />
-                        </div>
-
-                        <div class="col-md-2">
+                        <!-- Start Date -->
+                        <div class="col-md-3">
                             <label>Start Date</label>
                             <input name="StartDate" type="date" class="form-control"
                                    value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
                         </div>
 
-                        <div class="col-md-2">
+                        <!-- End Date -->
+                        <div class="col-md-3">
                             <label>End Date</label>
                             <input name="EndDate" type="date" class="form-control"
                                    value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
                         </div>
-                    </div>
 
-                    <div class="row mt-3">
-                        <div class="col-md-2">
+                        <!-- Type - sẽ tự động xuống hàng dưới vì đã đủ 4 cột -->
+                        <div class="col-md-3">
                             <label>Type</label>
                             <select name="Type" class="form-control">
                                 <option value="0" selected="@(Model.Type == 0)">Cancel</option>
@@ -74,7 +67,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-search mr-1"></i> Run Report
@@ -91,7 +83,7 @@
             </div>
         </form>
 
-        <div class="card card-secondary card-outline mt-3">
+        <div class="card card-primary card-outline mt-3">
             <div class="card-header">
                 <h3 class="card-title"><i class="fas fa-table mr-1"></i>Transactions List</h3>
             </div>

@@ -1,22 +1,26 @@
 ﻿@page
+@using System.Text.Json
 @model Indotalent.Pages.Products.ProductCategoryReportModel
 @{
     Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
     ViewData["Title"] = "Product Category Report";
 }
 
-<div class="row mb-3">
+@Html.AntiForgeryToken()
+
+<div class="row">
     <div class="col-12">
         <div class="card card-primary card-outline">
+            <!--Header - Tile-->
             <div class="card-header">
                 <h3 class="card-title">
                     <i class="fas fa-boxes mr-1"></i> Product Category Report
                 </h3>
             </div>
-            <div class="card-body pb-2">
-                <div class="row align-items-end">
-
-                    <div class="col-md-6">
+            <!--Body - Information boxes-->
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
                         <label class="form-label">Category</label>
                         <select id="ddlCategory" class="form-control select2">
                             @foreach (var opt in Model.CategoryOptions)
@@ -31,54 +35,179 @@
                         <input type="text" id="txtCategoryCode" class="form-control"
                                placeholder="" />
                     </div>
+                </div>
+            </div>
+            <!--Footer - Button-->
+            <div class="card-footer">
+                <button id="btnFilter" class="btn btn-primary">
+                    <i class="fas fa-search mr-1"></i> Filter
+                </button>
+                <button id="btnAll" class="btn btn-secondary">
+                    <i class="fas fa-list mr-1"></i> All
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Main Content: Chia theo tỉ lệ 8:2 -->
+<div class="row d-flex align-items-stretch">
+    <!-- Phần Table (80%) -->
+    <div class="col-lg-10 col-md-12 d-flex">
+        <div class="card card-primary card-outline w-100">
+            <div class="card-body p-0 d-flex flex-column">
+                <div id="Grid" style="flex: 1; min-height: 400px;"></div>
+            </div>
+        </div>
+    </div>
 
-                    <div class="col-md-3 d-flex gap-2 mt-1">
-                        <button id="btnFilter" class="btn btn-primary w-100">
-                            <i class="fas fa-search mr-1"></i> Filter
-                        </button>
-                        <button id="btnAll" class="btn btn-secondary w-100">
-                            <i class="fas fa-list mr-1"></i> All
-                        </button>
+    <!-- Detail Card (20%) -->
+    <div class="col-lg-2 col-md-12 mt-3 mt-lg-0 d-flex">
+        <div class="card card-primary card-outline w-100">
+            <div class="card-header py-2">
+                <h6 class="card-title mb-0">
+                    <i class="fas fa-info-circle mr-1"></i> Detail
+                </h6>
+            </div>
+            <div class="card-body p-2" id="detailContent" style="overflow: hidden;">
+                <!-- ===== ITEM DETAILS - PLANNING ===== -->
+                <div class="detail-section">
+                    <div class="detail-section-header">
+                        <i class="fas fa-clipboard-list mr-1"></i> Item Details - Planning
                     </div>
 
+                    <div class="detail-item">
+                        <span class="detail-label">Item No.</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Company</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product ID</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category Code</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Category Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Parent Category</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Hierarchy</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Description</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Details</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Attachments (0)</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                </div>
+
+                <!-- ===== DIVIDER ===== -->
+                <hr class="detail-divider" />
+
+                <!-- ===== ITEM DETAILS - WAREHOUSING ===== -->
+                <div class="detail-section">
+                    <div class="detail-section-header">
+                        <i class="fas fa-warehouse mr-1"></i> Item Details - Warehousing
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label">Item No.</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Company Code</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product ID</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Product Name</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Barcode Identification</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Sales Price (VND)</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Sales Price</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Extended Description</span>
+                        <span class="detail-value" title="No data">-</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div id="Grid"></div>
-    </div>
-</div>
-
+<!-- Modal Dialog for Product Detail (Popup) -->
 <div class="modal fade" id="mdlProductDetail" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="fas fa-info-circle mr-1"></i> Product Detail Card</h5>
+                <h5 class="modal-title"><i class="fas fa-info-circle mr-1"></i> Product Detail</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <table class="table table-sm table-bordered">
-                    <tr><th class="w-35 bg-light">Product ID:</th><td id="lblProdId"></td></tr>
-                    <tr><th class="bg-light">Product Name:</th><td id="lblProdName"></td></tr>
-                    <tr><th class="bg-light">Barcode:</th><td id="lblBarcode"></td></tr>
-                    <tr><th class="bg-light">Sales Price:</th><td id="lblPrice" class="text-danger font-weight-bold"></td></tr>
-                    <tr><th class="bg-light">Unit:</th><td id="lblUnit"></td></tr>
-                    <tr><th class="bg-light">Description:</th><td id="lblDesc"></td></tr>
-                </table>
+            <div class="modal-body" id="modalDetailContent">
+                <div class="text-center text-muted py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a id="btnViewFullDetail" href="#" class="btn btn-primary">
+                    <i class="fas fa-edit mr-1"></i> View Full Detail
+                </a>
             </div>
         </div>
     </div>
 </div>
 
+
+
 @section Scripts {
     <script>
         var grid;
+
+        var productColumns = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model.GridColumns,
+        new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+        }
+        ));
 
         document.addEventListener('DOMContentLoaded', function () {
 
@@ -86,93 +215,42 @@
                 $('#ddlCategory').select2({ width: '100%' });
             }
 
-            grid = new ej.grids.Grid({
-                allowFiltering: true,
-                allowSorting: true,
-                allowGrouping: false,
-                allowTextWrap: true,
-                allowResizing: true,
-                allowPaging: true,
-                allowSelection: true,
-                allowExcelExport: true,
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                columns: productColumns,
+                keyField: 'ProductId',
+                formUrl: '/Products/ProductDetail',
 
-                filterSettings: { type: 'CheckBox' },
-
-                pageSettings: {
-                    currentPage: 1,
-                    pageSize: 50,
-                    pageSizes: ["20", "50", "100", "200", "All"]
+                actions: {
+                    excelExport: true,
+                    search: true,
+                    refresh: true,
+                    add: true,
+                    edit: true,
+                    delete: true
                 },
 
-                showColumnMenu: true,
-                gridLines: 'Horizontal',
+                enableCheckbox: true,
 
-                rowSelected: function (args) {
-            var rowData = args.data;
-            var prodId = rowData.ProductId;
-            var compCode = rowData.CompanyCode;
-
-            if (!prodId || !compCode) return;
-
-            var detailUrl = '/Products/ProductDetail?productId=' + encodeURIComponent(prodId) + '&companyCode=' + encodeURIComponent(compCode);
-            window.location.href = detailUrl;
-        },
-
-                columns: [
-                    {
-                        field: 'CompanyCode',
-                        headerText: 'Company',
-                        width: 100
-                    },
-                    {
-                        field: 'ProductId',
-                        headerText: 'Product ID',
-                        width: 120,
-                        isPrimaryKey: true
-                    },
-                    {
-                        field: 'ProductName',
-                        headerText: 'Product Name',
-                        width: 250
-                    },
-                    {
-                        field: 'CategoryCode',
-                        headerText: 'Category Code',
-                        width: 160
-                    },
-                    {
-                        field: 'CategoryName',
-                        headerText: 'Category Name',
-                        width: 220
-                    },
-                    {
-                        field: 'ParentCategoryName',
-                        headerText: 'Parent Category',
-                        width: 200
-                    },
-                    {
-                        field: 'CategoryHierarchyName',
-                        headerText: 'Hierarchy',
-                        width: 100
-                    }
-                ],
-
-                toolbar: ['ExcelExport', 'Search'],
-
-                toolbarClick: (args) => {
-                    if (args.item.id === 'Grid_excelexport') {
-                        grid.excelExport();
-                    }
+                onRefresh: function () {
+                    loadGrid();
                 },
 
-                actionFailure: (args) => {
-                    console.error('Grid error:', args);
+                deleteUrl: '/Products/ProductList?handler=DeleteProducts',
+                onDeleted: function (rows, grid, data) {
+                    loadGrid();
+                },
+
+                openEditOnDoubleClick: true,
+                onEdit: function (row, grid) {
+                    var url = '/Products/ProductDetail?action=edit'
+                        + '&productId=' + encodeURIComponent(row.ProductId)
+                        + '&companyCode=' + encodeURIComponent(row.CompanyCode);
+
+                    window.location.href = url;
                 }
             });
 
-            grid.appendTo('#Grid');
-
-            // wire up buttons
             document.getElementById('btnFilter').addEventListener('click', function () {
                 loadGrid();
             });
@@ -182,34 +260,20 @@
                 document.getElementById('txtCategoryCode').value = '';
                 loadGrid();
             });
+
+            loadGrid();
         });
 
         function loadGrid() {
-            var recId    = $('#ddlCategory').val();
-            var code     = document.getElementById('txtCategoryCode').value.trim();
+            var recId = $('#ddlCategory').val();
+            var code = document.getElementById('txtCategoryCode').value.trim();
 
-            var params = new URLSearchParams();
-            params.append('handler', 'Products');
-            if (recId)  params.append('CategoryRecId', recId);
-            if (code)   params.append('CategoryCode', code);
-
-            var url = '/Products/ProductList?' + params.toString();
-
-            // show loading
-            grid.showSpinner();
-
-            fetch(url, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-            .then(r => r.json())
-            .then(data => {
-                grid.dataSource = data;
-                grid.hideSpinner();
-            })
-            .catch(err => {
-                console.error('Load failed:', err);
-                grid.hideSpinner();
+            var url = AppGrid.buildUrl('/Products/ProductList', 'Products', {
+                CategoryRecId: recId,
+                CategoryCode: code
             });
+
+            AppGrid.load(grid, url);
         }
     </script>
 }

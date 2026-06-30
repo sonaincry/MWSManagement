@@ -1,0 +1,287 @@
+is_global = true
+build_property.TargetFramework = net7.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = MWSManagement
+build_property.RootNamespace = MWSManagement
+build_property.ProjectDir = E:\IT\Radiant\SourceCode\RetailPOS\PortalWeb\Clone\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 7.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = E:\IT\Radiant\SourceCode\RetailPOS\PortalWeb\Clone
+build_property._RazorSourceGeneratorDebug = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/AccessDenied.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxBY2Nlc3NEZW5pZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ConfirmEmail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxDb25maXJtRW1haWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ForgotPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxGb3Jnb3RQYXNzd29yZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ForgotPasswordConfirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxGb3Jnb3RQYXNzd29yZENvbmZpcm1hdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/Logout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/RegisterConfirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3RlckNvbmZpcm1hdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ResendEmailConfirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZXNlbmRFbWFpbENvbmZpcm1hdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ResetPassword.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZXNldFBhc3N3b3JkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZXNldFBhc3N3b3JkQ29uZmlybWF0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/_StatusMessage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfU3RhdHVzTWVzc2FnZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Areas/Identity/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Companies/AspNetCompanyForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tcGFuaWVzXEFzcE5ldENvbXBhbnlGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Companies/AspNetCompanyList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ29tcGFuaWVzXEFzcE5ldENvbXBhbnlMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Customers/CustomerForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJzXEN1c3RvbWVyRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Customers/CustomerList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJzXEN1c3RvbWVyTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Customers/CustomerLoyaltyList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJzXEN1c3RvbWVyTG95YWx0eUxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Dashboards/DefaultDashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkc1xEZWZhdWx0RGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogAnalytics/LogAnalyticList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nQW5hbHl0aWNzXExvZ0FuYWx5dGljTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogAnalytics/LogClearingForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nQW5hbHl0aWNzXExvZ0NsZWFyaW5nRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogErrors/LogClearingForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nRXJyb3JzXExvZ0NsZWFyaW5nRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogErrors/LogErrorList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nRXJyb3JzXExvZ0Vycm9yTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogSessions/LogClearingForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nU2Vzc2lvbnNcTG9nQ2xlYXJpbmdGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/LogSessions/LogSessionList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nU2Vzc2lvbnNcTG9nU2Vzc2lvbkxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Products/ProductDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcUHJvZHVjdERldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Products/ProductList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZHVjdHNcUHJvZHVjdExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Reports/DailySalesReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xEYWlseVNhbGVzUmVwb3J0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Reports/ReportFilter.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xSZXBvcnRGaWx0ZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Reports/SalesByDateReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xTYWxlc0J5RGF0ZVJlcG9ydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Reports/SalesByStaffReport.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVwb3J0c1xTYWxlc0J5U3RhZmZSZXBvcnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/RetailTransactions/RetailTransactionList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmV0YWlsVHJhbnNhY3Rpb25zXFJldGFpbFRyYW5zYWN0aW9uTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/_Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9BZG1pbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/_AdminPopup.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9BZG1pblBvcHVwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/_Auth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9BdXRoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/__css.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fY3NzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/__footer.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fZm9vdGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/__js.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fanMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/__navbar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fbmF2YmFyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/AdminLTE/__sidebar.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fc2lkZWJhci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/_StatusMessage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9TdGF0dXNNZXNzYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/__css.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9fY3NzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/__js.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9fanMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/LocationManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcTG9jYXRpb25NYW5hZ2VtZW50LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/Sync.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcU3luYy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Syncs/TableSyncManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3luY3NcVGFibGVTeW5jTWFuYWdlbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/TaxVatNums/TaxVatNumTableForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGF4VmF0TnVtc1xUYXhWYXROdW1UYWJsZUZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/TaxVatNums/TaxVatNumTableList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGF4VmF0TnVtc1xUYXhWYXROdW1UYWJsZUxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Transaction/TransactionDetailPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY3Rpb25cVHJhbnNhY3Rpb25EZXRhaWxQYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/UnitOfMeasures/UnitOfMeasureList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVW5pdE9mTWVhc3VyZXNcVW5pdE9mTWVhc3VyZUxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/UserProfiles/ChangeAvatarForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclByb2ZpbGVzXENoYW5nZUF2YXRhckZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/UserProfiles/ChangePasswordForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclByb2ZpbGVzXENoYW5nZVBhc3N3b3JkRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/UserProfiles/UserForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclByb2ZpbGVzXFVzZXJGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/UserProfiles/UserList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlclByb2ZpbGVzXFVzZXJMaXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Users/ChangeAvatarForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcQ2hhbmdlQXZhdGFyRm9ybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Users/ChangePasswordForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcQ2hhbmdlUGFzc3dvcmRGb3JtLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Users/UserForm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcVXNlckZvcm0uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Users/UserList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXNlcnNcVXNlckxpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,91 @@
+﻿@page
+@using System.Text.Json
+@model Indotalent.Pages.TaxVatNums.TaxVatNumTableListModel
+
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Tax VAT Number Table";
+
+    var dataJsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = null
+        };
+
+    var columnJsonOptions = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+}
+
+@Html.AntiForgeryToken()
+
+<div class="row mb-3">
+    <div class="col-12">
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-file-invoice-dollar mr-1"></i>
+                    Tax VAT Number Table
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var grid;
+
+        var taxVatColumns = @Html.Raw(JsonSerializer.Serialize(Model.GridColumns, columnJsonOptions));
+        var taxVatData = @Html.Raw(JsonSerializer.Serialize(Model.TaxVatNumList, dataJsonOptions));
+
+        document.addEventListener('DOMContentLoaded', function () {
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                dataSource: taxVatData,
+                columns: taxVatColumns,
+
+                keyField: 'RecId',
+                formUrl: '/TaxVatNums/TaxVatNumTableForm',
+                idParamName: 'recId',
+
+                actions: {
+                    excelExport: true,
+                    search: true,
+                    refresh: true,
+                    add: true,
+                    edit: true,
+                    delete: true
+                },
+
+                enableCheckbox: true,
+
+                deleteUrl: '/TaxVatNums/TaxVatNumTableList?handler=Delete',
+
+                onRefresh: function () {
+                    window.location.reload();
+                },
+
+                onDeleted: function () {
+                    window.location.reload();
+                },
+
+                openEditOnDoubleClick: true
+            });
+        });
+    </script>
+}
