@@ -118,9 +118,9 @@ namespace Indotalent.Pages.Syncs
                         decryptedSenderConn = ConnectionHelper.Decrypt(senderLoc.ConnectionString);
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    throw new Exception(ex.Message);
+                    decryptedSenderConn = senderLoc.ConnectionString;
                 }
 
                 try
@@ -130,9 +130,9 @@ namespace Indotalent.Pages.Syncs
                         decryptedReceiverConn = ConnectionHelper.Decrypt(receiverLoc.ConnectionString);
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    throw new Exception(ex.Message);
+                    decryptedReceiverConn = receiverLoc.ConnectionString;
                 }
 
                 var serverProvider = new SqlSyncProvider(decryptedSenderConn);

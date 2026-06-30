@@ -100,7 +100,7 @@
                 @if (!string.IsNullOrEmpty(Model.SyncMessage))
                 {
                     <div class="alert @(Model.IsSuccess ? "alert-success" : "alert-danger") mt-4 alert-dismissible">
-                        <h5><i class="icon fas @(Model.IsSuccess ? "fa-check" : "fa-ban")"></i> Trạng thái phân phối</h5>
+                        <h5><i class="icon fas @(Model.IsSuccess ? "fa-check" : "fa-ban")"></i> Synchornize status</h5>
                         @Html.Raw(Model.SyncMessage)
                     </div>
                 }

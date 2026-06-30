@@ -49,14 +49,13 @@ namespace Indotalent
             services.AddScoped<LookupService>();
             services.AddScoped<ProductService>();
             services.AddScoped<CustomerService>();
-<<<<<<< HEAD
             services.AddScoped<TaxVatNumTableService>();
             services.AddScoped<IProcedureRepository, ProcedureRepository>();
             services.AddScoped(typeof(AxCrudService<>));
-=======
+
             services.AddScoped<LocationService>();
             services.AddScoped<TableSyncService>();
->>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
+
             return services;
         }
     }
