@@ -32,9 +32,17 @@ namespace Indotalent.Data
         public DbSet<ProductDetailDto> ProductDetailDto { get; set; } = default!;
         public DbSet<UnitOfMeasureDto> UnitOfMeasureDto { get; set; } = default!;
         public DbSet<LookupItem> LookupItem { get; set; } = default!;
+<<<<<<< HEAD
         public DbSet<ProductDto> ProductDTO { get; set; } = default!;
         public DbSet<CategoryDTO> CategoryDTO { get; set; } = default!;
         public DbSet<TaxVatNumTableAX> TaxVatNumTables { get; set; } = default!;
+=======
+
+        public DbSet<LocationDto> LocationDto { get; set; } = default!;
+
+        public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
+
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,10 +75,26 @@ namespace Indotalent.Data
                 entity.Property(x => x.PAYMENTAMOUNT).HasPrecision(18, 2);
             });
 
+<<<<<<< HEAD
             modelBuilder.Entity<ProductDto>(entity => { entity.HasNoKey(); });
             modelBuilder.Entity<CategoryDTO>(entity => { entity.HasNoKey(); });
             modelBuilder.Entity<UnitOfMeasureDto>(entity => { entity.HasNoKey(); });
 
+=======
+            //end
+            modelBuilder.Entity<LocationDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<TableSyncDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<ProductDto>(entity =>
+            {
+                entity.HasNoKey();
+            });
+>>>>>>> 1ce99524544ee11bc1422957011437417685a5c7
             modelBuilder.Entity<ProductDetailDto>(entity =>
             {
                 entity.HasNoKey();
