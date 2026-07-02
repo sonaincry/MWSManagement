@@ -1,16 +1,14 @@
-using Indotalent.Applications.Products;
+﻿using Indotalent.Applications.Products;
 using Indotalent.DTOs;
 using Indotalent.Infrastructures.Extensions;
+using Indotalent.Pages.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using MWSManagement.DTOs;
-using System.Data;
 
 namespace Indotalent.Pages.Products
 {
-    public class ProductDetailModel : PageModel
+    public class ProductDetailModel : BaseActionPageModel
     {
-        public string? action { get; set; } = string.Empty;
         private readonly ProductService _productService;
 
         public ProductDetailModel(ProductService productService)
@@ -23,31 +21,29 @@ namespace Indotalent.Pages.Products
 
         public List<string> UnitOptions { get; set; } = new();
 
-        [TempData]
-        public string? StatusMessage { get; set; }
-
         public async Task OnGetAsync(string? productId, string? companyCode)
         {
-            this.SetupViewDataTitleFromUrl();
-            this.SetupStatusMessage();
-            StatusMessage = this.ReadStatusMessage();
-            action = Request.Query["action"];
+            InitPageState();
 
             await LoadUnitOptionsAsync();
 
-
-            if (action == "create")
+            if (IsCreate)
             {
+                Product = new ProductDetailDto
+                {
+                    CompanyCode = "food",
+                    SalesPrice = 0
+                };
 
+                return;
             }
-            else if (action == "edit")
+
+            if (IsEdit || IsDelete)
             {
                 if (string.IsNullOrWhiteSpace(productId) || string.IsNullOrWhiteSpace(companyCode))
                 {
                     throw new Exception("Missing productId or companyCode.");
                 }
-
-                await LoadUnitOptionsAsync();
 
                 var detail = await _productService.GetProductDetailAsync(productId, companyCode);
 
@@ -62,14 +58,70 @@ namespace Indotalent.Pages.Products
 
         public async Task<IActionResult> OnPostAsync()
         {
+            InitPageState();
+            ValidateForm();
+
+            await LoadUnitOptionsAsync();
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            if (Product == null)
+            try
             {
-                return BadRequest("Product data is empty.");
+                if (IsCreate)
+                {
+                    this.WriteToastMessage("Product created successfully.", "success");
+
+                    return RedirectToPage("/Products/ProductCategoryReport");
+                }
+
+                if (IsEdit)
+                {
+                    await _productService.UpdateProductDetailAsync(Product);
+
+                    this.WriteToastMessage("Success update data.", "success");
+
+                    return RedirectToPage("/Products/ProductList");
+                }
+
+                if (IsDelete)
+                {
+                    //await _productService.DeleteProductAsync(
+                    //    Product.ProductId ?? string.Empty,
+                    //    Product.CompanyCode ?? string.Empty
+                    //);
+
+                    this.WriteToastMessage("Product deleted successfully.", "danger");
+
+                    return RedirectToPage("/Products/ProductList");
+                }
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Database Error: " + ex.Message);
+                return Page();
+            }
+        }
+
+        private void ValidateForm()
+        {
+            if (IsDelete)
+            {
+                if (string.IsNullOrWhiteSpace(Product.ProductId))
+                {
+                    ModelState.AddModelError("Product.ProductId", "Product ID is required.");
+                }
+
+                if (string.IsNullOrWhiteSpace(Product.CompanyCode))
+                {
+                    ModelState.AddModelError("Product.CompanyCode", "Company Code is required.");
+                }
+
+                return;
             }
 
             if (string.IsNullOrWhiteSpace(Product.ProductId))
@@ -91,40 +143,6 @@ namespace Indotalent.Pages.Products
             {
                 ModelState.AddModelError("Product.UnitOfMeasure", "Unit of measure is required.");
             }
-
-            var action = Request.Query["action"].ToString() ?? "create";
-            if (action == "create")
-            {
-
-
-            }
-            else if (action == "edit")
-            {
-                try
-                {
-                    await _productService.UpdateProductDetailAsync(Product);
-
-                    StatusMessage = "Product information successfully updated.";
-
-                    return RedirectToPage("/Products/ProductDetail", new
-                    {
-                        productId = Product.ProductId,
-                        companyCode = Product.CompanyCode
-                    });
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, "Database Error: " + ex.Message);
-                    return Page();
-                }
-
-            }
-            else if (action == "delete")
-            {
-
-            }
-
-            return Page();
         }
 
         private async Task LoadUnitOptionsAsync()

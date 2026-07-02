@@ -17,6 +17,9 @@ namespace Indotalent.Pages.Products
             _productService = productService;
         }
 
+        [TempData]
+        public string? StatusMessage { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public long? CategoryRecId { get; set; }
 

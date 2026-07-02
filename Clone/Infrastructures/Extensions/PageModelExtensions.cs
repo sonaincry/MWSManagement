@@ -35,6 +35,13 @@ namespace Indotalent.Infrastructures.Extensions
             pageModel.TempData["StatusMessage"] = message;
         }
 
+        //type: success, danger, warning
+        public static void WriteToastMessage(this PageModel page, string message, string type = "success")
+        {
+            page.TempData["StatusMessage"] = message;
+            page.TempData["StatusType"] = type;
+        }
+
         public static string ReadStatusMessage(this PageModel pageModel)
         {
             var result = string.Empty;

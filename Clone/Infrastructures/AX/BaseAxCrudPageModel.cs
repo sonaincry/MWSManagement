@@ -1,11 +1,12 @@
 ﻿using Indotalent.Applications.AX;
+using Indotalent.Infrastructures.Extensions;
 using Indotalent.Models.Contracts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Indotalent.Pages.Shared
 {
-    public abstract class BaseAxCrudPageModel<TEntity> : PageModel
+    public abstract class BaseAxCrudPageModel<TEntity> : BaseActionPageModel
         where TEntity : class, IAxEntity, new()
     {
         protected readonly AxCrudService<TEntity> Service;
@@ -18,19 +19,9 @@ namespace Indotalent.Pages.Shared
         [BindProperty]
         public TEntity Form { get; set; } = new();
 
-        public string ActionMode { get; set; } = "create";
-
-        [TempData]
-        public string? StatusMessage { get; set; }
-
         public virtual async Task OnGetAsync(long? recId)
         {
-            ActionMode = Request.Query["action"].ToString();
-
-            if (string.IsNullOrWhiteSpace(ActionMode))
-            {
-                ActionMode = "create";
-            }
+            InitPageState();
 
             await LoadLookupsAsync();
 
@@ -60,12 +51,7 @@ namespace Indotalent.Pages.Shared
 
         public virtual async Task<IActionResult> OnPostAsync()
         {
-            ActionMode = Request.Query["action"].ToString();
-
-            if (string.IsNullOrWhiteSpace(ActionMode))
-            {
-                ActionMode = "create";
-            }
+            InitPageState();
 
             await LoadLookupsAsync();
             ValidateForm();
@@ -80,14 +66,15 @@ namespace Indotalent.Pages.Shared
                 if (ActionMode == "create")
                 {
                     await Service.CreateAsync(Form);
-                    StatusMessage = "Success create new data.";
+                    this.WriteToastMessage("Success create new data.", "success");
                     return RedirectToListPage();
                 }
 
                 if (ActionMode == "edit")
                 {
                     await Service.UpdateAsync(Form);
-                    StatusMessage = "Success update data.";
+                   
+                    this.WriteToastMessage("Success update data.", "success");
                     return RedirectToListPage();
                     //return RedirectToEditPage(Form.RecId);
                 }
@@ -95,7 +82,7 @@ namespace Indotalent.Pages.Shared
                 if (ActionMode == "delete")
                 {
                     await Service.DeleteAsync(Form.RecId);
-                    StatusMessage = "Success delete data.";
+                    this.WriteToastMessage("Success delete data.", "success");
                     return RedirectToListPage();
                 }
 

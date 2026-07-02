@@ -36,6 +36,31 @@
     <!-- ./wrapper -->
     @await Html.PartialAsync("~/Pages/Shared/AdminLTE/__js.cshtml")
     <script src="~/js/common-grid.js"></script>
+    <script src="~/js/form-action-common.js"></script>
+    <script src="~/js/toast-common.js"></script>
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <input type="hidden" id="globalStatusMessage" value="@TempData["StatusMessage"]" />
+        <input type="hidden" id="globalStatusType" value="@(TempData["StatusType"] ?? "success")" />
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var messageInput = document.getElementById('globalStatusMessage');
+            var typeInput = document.getElementById('globalStatusType');
+
+            if (messageInput && messageInput.value && window.ToastCommon) {
+                var type = typeInput && typeInput.value ? typeInput.value : 'success';
+
+                ToastCommon.show(type, messageInput.value, {
+                    timeout: 5000
+                });
+            }
+        });
+    </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 
