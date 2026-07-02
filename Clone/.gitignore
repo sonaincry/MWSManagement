@@ -1,4 +1,7 @@
 ﻿bin/
+obj/
+*.user
+.vs/
 *.csproj.user
 *.slnLaunch.user
 .vscode/launch.json
