@@ -198,6 +198,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXEFkbWluTFRFXF9fc2lkZWJhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/_ConfirmDeleteModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db25maXJtRGVsZXRlTW9kYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/IT/Radiant/SourceCode/RetailPOS/PortalWeb/Clone/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
