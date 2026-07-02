@@ -1,109 +1,52 @@
-﻿using Indotalent.Data;
-using MWSManagement.DTOs;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Indotalent.Applications.AX;
+using Indotalent.Data;
+using Indotalent.Models.Entities.AX;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MWSManagement.Models.Entities;
 using System.Data;
 
-namespace MWSManagement.Applications.TableSyncs
+namespace Indotalent.Applications.TableSyncs
 {
-    public class TableSyncService
+    public class TableSyncService : AxCrudService<TableSync>
     {
-        private readonly ApplicationDbContext _context;
-
-        public TableSyncService(ApplicationDbContext context)
+        public TableSyncService(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
-
-        public async Task<List<TableSyncDto>> GetConfiguredTablesAsync()
+        public async Task<List<string>> GetSystemTablesAsync()
         {
-            var list = new List<TableSyncDto>();
+            var tables = new List<string>();
 
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = "SELECT Id, TableName, SyncAction, IsActive FROM [dbo].[TableSyncConfigs] ORDER BY Id DESC";
-            command.CommandType = CommandType.Text;
+            var conn = _context.Database.GetDbConnection();
 
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            if (conn.State == ConnectionState.Closed)
             {
-                list.Add(new TableSyncDto
+                await conn.OpenAsync();
+            }
+
+            string query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME";
+
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = query;
+                cmd.CommandType = CommandType.Text;
+
+                using (var reader = await cmd.ExecuteReaderAsync())
                 {
-                    Id = reader.GetInt32(0),
-                    TableName = reader.GetString(1),
-                    SyncAction = reader.GetInt32(2),
-                    IsActive = reader.GetBoolean(3)
-                });
-            }
-            return list;
-        }
-
-        public async Task<List<SelectListItem>> GetDatabaseTablesOptionsAsync()
-        {
-            var options = new List<SelectListItem>();
-
-            string queryTables = @"
-                SELECT TABLE_SCHEMA + '.' + TABLE_NAME AS FullTableName 
-                FROM INFORMATION_SCHEMA.TABLES 
-                WHERE TABLE_TYPE = 'BASE TABLE' 
-                  AND TABLE_NAME NOT LIKE 'sys%' 
-                  AND TABLE_NAME NOT LIKE '%_tracking'
-                  AND TABLE_NAME NOT LIKE 'scope_info%'
-                ORDER BY TABLE_SCHEMA, TABLE_NAME";
-
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = queryTables;
-            command.CommandType = CommandType.Text;
-
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                var tableName = reader.GetString(0);
-                options.Add(new SelectListItem { Value = tableName, Text = tableName });
+                    while (await reader.ReadAsync())
+                    {
+                        tables.Add(reader.GetString(0));
+                    }
+                }
             }
 
-            return options;
+            return tables;
         }
 
-        public async Task SaveTableSyncConfigAsync(TableSyncDto input)
+        public async Task<bool> IsCodeExistsAsync(string code, long currentRecId = 0)
         {
-            string insertQuery = @"
-                IF NOT EXISTS (SELECT 1 FROM TableSyncConfigs WHERE TableName = @TableName)
-                BEGIN
-                    INSERT INTO TableSyncConfigs (TableName, SyncAction, IsActive) 
-                    VALUES (@TableName, @SyncAction, 1)
-                END
-                ELSE
-                BEGIN
-                    UPDATE TableSyncConfigs 
-                    SET SyncAction = @SyncAction, IsActive = 1 
-                    WHERE TableName = @TableName
-                END";
-
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = insertQuery;
-            command.CommandType = CommandType.Text;
-
-            var pTableName = command.CreateParameter();
-            pTableName.ParameterName = "@TableName";
-            pTableName.Value = input.TableName;
-            command.Parameters.Add(pTableName);
-
-            var pSyncAction = command.CreateParameter();
-            pSyncAction.ParameterName = "@SyncAction";
-            pSyncAction.Value = input.SyncAction;
-            command.Parameters.Add(pSyncAction);
-
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            await command.ExecuteNonQueryAsync();
+            return await _context.TableSync
+                .AnyAsync(x => x.Code == code && x.RecId != currentRecId);
         }
     }
 }

@@ -2,7 +2,7 @@
 @model Indotalent.Pages.Syncs.SyncPortalModel
 @{
     Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
-    ViewData["Title"] = "Hệ thống Đồng bộ Dữ liệu Đa điểm";
+    ViewData["Title"] = "Synchronize Portal";
 }
 
 <style>
@@ -12,7 +12,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.65);
+        background-color: rgba(0, 0, 0, 0.7);
         z-index: 9999;
         display: flex;
         flex-direction: column;
@@ -23,85 +23,109 @@
 </style>
 
 <div id="loadingOverlay" class="sync-overlay" style="display: none;">
-    <div class="spinner-border text-primary mb-3" role="status" style="width: 4rem; height: 4rem;">
+    <div class="spinner-border text-warning mb-3" role="status" style="width: 5rem; height: 5rem;">
         <span class="sr-only">Loading...</span>
     </div>
-    <h3 class="font-weight-bold">Synchronizing</h3>
-    <p class="text-warning">Please waiting...</p>
+    <h3 class="font-weight-bold">SYNCHRONIZING</h3>
+    <p class="text-light">Please do not turn off the screen</p>
 </div>
 
 <div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card card-primary card-outline">
+    <div class="col-md-10 mx-auto">
+        <div class="card card-primary card-outline shadow">
             <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-network-wired mr-1"></i> Sync Data 
+                <h3 class="card-title font-weight-bold">
+                    <i class="fas fa-sync-alt fa-spin mr-2 text-primary"></i>
+                    Synchronization
                 </h3>
             </div>
             <div class="card-body">
-                <form method="post" asp-page-handler="SyncData" onsubmit="showLoadingOverlay()">
+                <form method="post" asp-page-handler="SyncData" onsubmit="return showLoadingOverlay()">
 
-                    <div class="form-group">
-                        <label><b>Sender Location:</b></label>
-                        <select asp-for="SenderLocationId" asp-items="Model.LocationOptions" class="form-control" required>
-                            <option value="">-- Sender --</option>
-                        </select>
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-primary"><b><i class="fas fa-upload mr-1"></i> Sender Location:</b></label>
+                                <select asp-for="SenderLocationId" asp-items="Model.LocationOptions" class="form-control select2" style="width: 100%;" required>
+                                    <option value="">-- Sender --</option>
+                                </select>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label><b>Receiver Location:</b></label>
-                        <select asp-for="ReceiverLocationId" asp-items="Model.LocationOptions" class="form-control" required>
-                            <option value="">--Receiver --</option>
-                        </select>
-                    </div>
-
-                    <hr />
-
-                    <div class="form-group">
-                        <label><b>Table to sync:</b></label>
-                        <div class="row mt-2">
-                            @foreach (var item in Model.ConfiguredTables.Where(x => x.IsActive))
-                            {
-                                <div class="col-md-6 mb-2">
-                                    <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" name="selectedTables" value="@item.TableName" id="chk_@item.TableName.Replace(".", "_")">
-                                        <label class="custom-control-label" for="chk_@item.TableName.Replace(".", "_")">
-                                            @item.TableName
-                                            @if (item.SyncAction == 1)
-                                            {
-                                                <span class="badge badge-success ml-1">Add Only</span>
-                                            }
-                                            else if (item.SyncAction == 2)
-                                            {
-
-                                                <span class="badge badge-warning ml-1">Update</span>
-                                            }
-                                            else
-                                            {
-
-                                                <span class="badge badge-danger ml-1">Delete</span>
-                                            }
-                                        </label>
-                                    </div>
-                                </div>
-                            }
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success"><b><i class="fas fa-download mr-1"></i> Receiver Location:</b></label>
+                                <select asp-for="ReceiverLocationId" asp-items="Model.LocationOptions" class="form-control select2" style="width: 100%;" required>
+                                    <option value="">-- Receiver --</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <hr />
+                    <hr class="my-4" />
 
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-primary px-4 btn-lg">
-                            <i class="fas fa-play mr-1"></i> SYNC
+                    <div class="form-group">
+                        <label class="font-weight-bold text-dark mb-3">
+                            <i class="fas fa-table mr-1 text-secondary"></i> Table list:
+                        </label>
+
+                        @if (Model.ConfiguredTables == null || !Model.ConfiguredTables.Any())
+                        {
+                            <div class="alert alert-warning">
+                                <i class="fas fa-exclamation-triangle mr-2"></i> Not found any table!
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                @foreach (var item in Model.ConfiguredTables)
+                                {
+                                    <div class="col-md-4 mb-3">
+                                        <div class="custom-control custom-checkbox p-3 bg-light rounded border">
+                                            <input class="custom-control-input" type="checkbox" name="selectedTables" value="@item.TableName" id="chk_@item.RecId">
+                                            <label class="custom-control-label d-block cursor-pointer" for="chk_@item.RecId">
+                                                <span class="font-weight-bold text-wrap text-monospace">@item.TableName</span>
+                                                <div class="mt-1">
+                                                    <span class="small text-muted mr-1">@item.Code</span>
+                                                    @if (item.SyncAction == 1)
+                                                    {
+                                                        <span class="badge badge-success">Add</span>
+                                                    }
+                                                    else if (item.SyncAction == 2)
+                                                    {
+                                                        <span class="badge badge-warning">Update</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-danger">Delete</span>
+                                                    }
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="card-footer bg-white text-right px-0">
+                        <button type="submit" class="btn btn-primary px-5 btn-lg shadow-sm font-weight-bold">
+                            <i class="fas fa-play-circle mr-2"></i> Sync
                         </button>
                     </div>
                 </form>
 
                 @if (!string.IsNullOrEmpty(Model.SyncMessage))
                 {
-                    <div class="alert @(Model.IsSuccess ? "alert-success" : "alert-danger") mt-4 alert-dismissible">
-                        <h5><i class="icon fas @(Model.IsSuccess ? "fa-check" : "fa-ban")"></i> Synchornize status</h5>
-                        @Html.Raw(Model.SyncMessage)
+                    <div class="alert @(Model.IsSuccess ? "alert-success" : "alert-danger") alert-dismissible mt-4 shadow-sm">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5>
+                            <i class="icon fas @(Model.IsSuccess ? "fa-check-circle" : "fa-exclamation-circle") mr-2"></i>
+                            Kết quả xử lý hệ thống
+                        </h5>
+                        <div class="mt-2 pl-2">
+                            @Html.Raw(Model.SyncMessage)
+                        </div>
                     </div>
                 }
             </div>
@@ -112,13 +136,26 @@
 @section Scripts {
     <script>
         function showLoadingOverlay() {
+            const sender = $('#SenderLocationId').val();
+            const receiver = $('#ReceiverLocationId').val();
             const checkedTables = document.querySelectorAll('input[name="selectedTables"]:checked');
-            const sender = document.getElementById('SenderLocationId').value;
-            const receiver = document.getElementById('ReceiverLocationId').value;
 
-            if(sender !== "" && receiver !== "" && checkedTables.length > 0 && sender !== receiver) {
-                document.getElementById('loadingOverlay').style.display = 'flex';
+            if (!sender || !receiver || sender === "" || receiver === "") {
+                return true;
             }
+
+            if (String(sender).trim() === String(receiver).trim()) {
+                alert("Sender && Receiver cannot same!");
+                return false;
+            }
+
+            if (checkedTables.length === 0) {
+                alert("error: Please select table to sync!");
+                return false;
+            }
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            return true;
         }
     </script>
 }

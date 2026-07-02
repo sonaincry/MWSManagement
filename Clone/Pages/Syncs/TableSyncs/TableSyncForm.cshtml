@@ -1,0 +1,151 @@
+﻿@page
+@model MWSManagement.Pages.Syncs.TableSyncs.TableSyncFormModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Table Sync Form";
+    var isCreate = Model.ActionMode == "create";
+    var isEdit = Model.ActionMode == "edit";
+    var isDelete = Model.ActionMode == "delete";
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a href="/TableSyncs/TableSyncList" class="btn btn-secondary btn-sm mb-3">
+            <i class="fas fa-arrow-left mr-1"></i> Back
+        </a>
+
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle mr-1"></i> Please check the information below.
+                <div asp-validation-summary="All" class="mt-2 mb-0"></div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-sync mr-1"></i>
+                    @(isCreate ? "Create Config" : isEdit ? "Edit Config" : "Delete Config")
+                </h3>
+            </div>
+
+            <form method="post" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Form.RecId" />
+
+                <div class="card-body">
+                    <div class="row">
+                        @if (!isCreate)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>RecId</label>
+                                    <input asp-for="Form.RecId" class="form-control" readonly />
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Code</label>
+                                <input asp-for="Form.Code"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="100" />
+                                <span asp-validation-for="Form.Code" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Table Name</label>
+                                @if (isDelete)
+                                {
+                                    <input asp-for="Form.TableName" class="form-control" readonly />
+                                }
+                                else
+                                {
+                                    <select asp-for="Form.TableName" class="form-control select2">
+                                        <option value="">-- Select Table --</option>
+                                        @foreach (var tableName in Model.AvailableTables)
+                                        {
+                                            <option value="@tableName">@tableName</option>
+                                        }
+                                    </select>
+                                }
+                                <span asp-validation-for="Form.TableName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sync Action</label>
+                                @if (isDelete)
+                                {
+                                    <input class="form-control"
+                                           value="@(Model.Form.SyncAction == 1 ? "Add" : Model.Form.SyncAction == 2 ? "Update" : Model.Form.SyncAction == 3 ? "Delete" : "Unknown")"
+                                           readonly />
+                                    <input type="hidden" asp-for="Form.SyncAction" />
+                                }
+                                else
+                                {
+                                    <select asp-for="Form.SyncAction" class="form-control select2">
+                                        <option value="1">Add</option>
+                                        <option value="2">Update</option>
+                                        <option value="3">Delete</option>
+                                    </select>
+                                }
+                                <span asp-validation-for="Form.SyncAction" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group clearfix mt-4">
+                                <div class="icheck-primary d-inline">
+                                    <input type="checkbox"
+                                           asp-for="Form.IsActive"
+                                           id="IsActive"
+                                           disabled="@isDelete" />
+                                    <label for="IsActive">Is Active</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end">
+                    @if (isDelete)
+                    {
+                        <button type="submit" class="btn btn-danger px-4">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="fas fa-save mr-1"></i> @(isCreate ? "Create" : "Update")
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

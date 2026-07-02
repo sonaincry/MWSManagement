@@ -1,0 +1,71 @@
+﻿@page
+@using System.Text.Json
+@model MWSManagement.Pages.Syncs.Locations.LocationListModel
+
+
+
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Location List";
+    var dataJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+    var columnJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+}
+
+@Html.AntiForgeryToken()
+
+<div class="row mb-3">
+    <div class="col-12">
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <i class="fas fa-info-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-server mr-1"></i> Sync Locations
+                </h3>
+            </div>
+            <div class="card-body">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var grid;
+        var columns = @Html.Raw(JsonSerializer.Serialize(Model.GridColumns, columnJsonOptions));
+        var data = @Html.Raw(JsonSerializer.Serialize(Model.LocationList, dataJsonOptions));
+
+        document.addEventListener('DOMContentLoaded', function () {
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                dataSource: data,
+                columns: columns,
+                keyField: 'RecId',
+                formUrl: '/Syncs/Locations/LocationForm',
+                idParamName: 'recId',
+                actions: {
+                    excelExport: true,
+                    search: true,
+                    refresh: true,
+                    add: true,
+                    edit: true,
+                    delete: true
+                },
+                enableCheckbox: true,
+                deleteUrl: '/Syncs/Locations/LocationList?handler=Delete',
+                onRefresh: function () { window.location.reload(); },
+                onDeleted: function () { window.location.reload(); },
+                openEditOnDoubleClick: true
+            });
+        });
+    </script>
+}

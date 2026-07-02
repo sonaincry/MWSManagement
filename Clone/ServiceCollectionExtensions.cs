@@ -8,6 +8,7 @@ using Indotalent.Applications.LogAnalytics;
 using Indotalent.Applications.LogErrors;
 using Indotalent.Applications.LogSessions;
 using Indotalent.Applications.Products;
+using Indotalent.Applications.TableSyncs;
 using Indotalent.Applications.TaxVatNums;
 using Indotalent.Infrastructures.Countries;
 using Indotalent.Infrastructures.Currencies;
@@ -22,7 +23,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using MWSManagement.Applications.Locations;
 using MWSManagement.Applications.Lookups;
-using MWSManagement.Applications.TableSyncs;
 
 namespace Indotalent
 {

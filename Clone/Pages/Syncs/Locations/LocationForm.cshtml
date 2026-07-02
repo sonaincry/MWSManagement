@@ -1,0 +1,195 @@
+﻿@page
+@model MWSManagement.Pages.Syncs.Locations.LocationFormModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Sync Location Form";
+    var isCreate = Model.ActionMode == "create";
+    var isEdit = Model.ActionMode == "edit";
+    var isDelete = Model.ActionMode == "delete";
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+        <a href="/Locations/SyncLocationList" class="btn btn-secondary btn-sm mb-3">
+            <i class="fas fa-arrow-left mr-1"></i> Back
+        </a>
+
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle mr-1"></i> Please check the information below.
+                <div asp-validation-summary="All" class="mt-2 mb-0"></div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-server mr-1"></i>
+                    @(isCreate ? "Create Location" : isEdit ? "Edit Location" : "Delete Location")
+                </h3>
+            </div>
+
+            <form method="post" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Form.RecId" />
+
+                <div class="card-body">
+                    <div class="row">
+                        @if (!isCreate)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>RecId</label>
+                                    <input asp-for="Form.RecId" class="form-control" readonly />
+                                </div>
+                            </div>
+                        }
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Location Name</label>
+                                <input asp-for="Form.Name"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="200" />
+                                <span asp-validation-for="Form.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Server Address</label>
+                                <input asp-for="Form.Server"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="200" />
+                                <span asp-validation-for="Form.Server" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Database Name</label>
+                                <input asp-for="Form.DatabaseName"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="200" />
+                                <span asp-validation-for="Form.DatabaseName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input asp-for="Form.Username"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="100" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input asp-for="Form.Password"
+                                       type="password"
+                                       class="form-control"
+                                       readonly="@isDelete"
+                                       maxlength="100" />
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <div>
+                        @if (!isDelete)
+                        {
+                            <button type="button" id="btnTestConnection" class="btn btn-info">
+                                <i class="fas fa-plug mr-1"></i> Test Connection
+                            </button>
+                        }
+                    </div>
+                    <div>
+                        @if (isDelete)
+                        {
+                            <button type="submit" class="btn btn-danger px-4"><i class="fas fa-trash mr-1"></i> Delete</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-primary px-4"><i class="fas fa-save mr-1"></i> @(isCreate ? "Create" : "Update")</button>
+                        }
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var btnTest = document.getElementById('btnTestConnection');
+            if (btnTest) {
+                btnTest.addEventListener('click', function () {
+                    var data = {
+                        server: document.querySelector('input[name="Form.Server"]').value,
+                        databaseName: document.querySelector('input[name="Form.DatabaseName"]').value,
+                        username: document.querySelector('input[name="Form.Username"]').value,
+                        password: document.querySelector('input[name="Form.Password"]').value
+                    };
+
+                    if (!data.server || !data.databaseName) {
+                        alert('Please fill Server Address and Database Name before testing.');
+                        return;
+                    }
+
+                    btnTest.disabled = true;
+                    btnTest.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Testing...';
+
+                    fetch('?handler=TestConnection', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(res => {
+                        if (res.success) {
+                            alert('🎉 Success: ' + res.message);
+                        } else {
+                            alert('❌ Error: ' + res.message);
+                        }
+                    })
+                    .catch(err => {
+                        alert('An error occurred: ' + err);
+                    })
+                    .finally(() => {
+                        btnTest.disabled = false;
+                        btnTest.innerHTML = '<i class="fas fa-plug mr-1"></i> Test Connection';
+                    });
+                });
+            }
+        });
+    </script>
+}

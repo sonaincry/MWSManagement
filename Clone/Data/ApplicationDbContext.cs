@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
 using MWSManagement.Models.DTOs;
+using MWSManagement.Models.Entities;
 using YamlDotNet.Core.Tokens;
 
 namespace Indotalent.Data
@@ -36,7 +37,9 @@ namespace Indotalent.Data
         public DbSet<ProductDto> ProductDTO { get; set; } = default!;
         public DbSet<CategoryDTO> CategoryDTO { get; set; } = default!;
         public DbSet<TaxVatNumTableAX> TaxVatNumTables { get; set; } = default!;
+        public DbSet<TableSync> TableSync { get; set; } = default!;
 
+        public DbSet<Location> Location { get; set; } = default!;
 
         public DbSet<LocationDto> LocationDto { get; set; } = default!;
 
@@ -136,6 +139,14 @@ namespace Indotalent.Data
                     .HasColumnName("ROWVERSION")
                     .IsRowVersion()
                     .ValueGeneratedOnAddOrUpdate();
+            });
+
+            modelBuilder.Entity<TableSync>(entity => {
+                entity.HasKey(x => x.RecId);
+            });
+
+            modelBuilder.Entity<Location>(entity => {
+                entity.HasKey(x => x.RecId);
             });
 
             modelBuilder.Entity<LookupItem>().HasNoKey();
