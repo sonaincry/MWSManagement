@@ -1,0 +1,293 @@
+﻿@page
+@model MWSManagement.Pages.Syncs.JobSyncs.JobSyncFormModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Setup Sync Job";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.0.0/dist/select2-bootstrap4.min.css" />
+
+<style>
+    .select2-container--bootstrap4 .select2-selection--single {
+        height: calc(2.25rem + 2px) !important;
+    }
+
+    .table-responsive-scroll {
+        max-height: 350px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    .table-modern thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f4f6f9;
+        color: #495057;
+        z-index: 10;
+        border-bottom: 2px solid #dee2e6 !important;
+    }
+</style>
+
+<div class="card card-primary shadow">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-list"></i> Setup Sync Job</h3>
+    </div>
+    <form method="post" id="jobSyncForm">
+        <div class="card-body">
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Form.RecId" />
+
+            <input type="hidden" asp-for="Form.SenderLocationIds" id="hiddenSenders" />
+            <input type="hidden" asp-for="Form.ReceiverLocationIds" id="hiddenReceivers" />
+            <input type="hidden" asp-for="Form.TableNames" id="hiddenTables" />
+
+            <div class="row mb-3">
+                <div class="col-md-6 form-group">
+                    <label asp-for="Form.Code">Job Code</label>
+                    <input asp-for="Form.Code" class="form-control" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label asp-for="Form.Name">Description</label>
+                    <input asp-for="Form.Name" class="form-control" />
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="card card-outline card-primary shadow-sm mb-4">
+                <div class="card-header py-2 bg-light">
+                    <h6 class="card-title text-primary font-weight-bold mb-0"><i class="fas fa-upload mr-1"></i> Sender Locations</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select id="searchSender" asp-items="Model.LocationOptions" class="form-control select2" style="width: 100%;">
+                            <option value="">-- Select Sender Location --</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive-scroll mt-2">
+                        <table class="table table-bordered table-sm table-striped mb-0 text-sm align-middle table-modern" id="tableSenders">
+                            <thead>
+                                <tr>
+                                    <th style="width: 180px;">Location ID</th>
+                                    <th>Location Name</th>
+                                    <th class="text-center" style="width: 70px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-outline card-success shadow-sm mb-4">
+                <div class="card-header py-2 bg-light">
+                    <h6 class="card-title text-success font-weight-bold mb-0"><i class="fas fa-download mr-1"></i> Receiver Locations</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select id="searchReceiver" asp-items="Model.LocationOptions" class="form-control select2" style="width: 100%;">
+                            <option value="">-- Select Receiver Location --</option>
+                        </select>
+                    </div>
+                    <div class="table-responsive-scroll mt-2">
+                        <table class="table table-bordered table-sm table-striped mb-0 text-sm align-middle table-modern" id="tableReceivers">
+                            <thead>
+                                <tr>
+                                    <th style="width: 180px;">Location ID</th>
+                                    <th>Location Name</th>
+                                    <th class="text-center" style="width: 70px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-outline card-secondary shadow-sm mb-4">
+                <div class="card-header py-2 bg-light">
+                    <h6 class="card-title text-secondary font-weight-bold mb-0"><i class="fas fa-table mr-1"></i> Tables to Sync</h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <select id="searchTable" class="form-control select2" style="width: 100%;">
+                            <option value="">-- Type or Search Table to Add --</option>
+                            @if (Model.AvailableTables != null)
+                            {
+                                foreach (var item in Model.AvailableTables)
+                                {
+                                    var hasAction = item.Value.Contains(":");
+                                    var pureValue = hasAction ? item.Value.Split(':')[0] : item.Value;
+                                    var actionCode = hasAction ? item.Value.Split(':')[1] : "1"; 
+
+                                    <option value="@pureValue" data-action="@actionCode">@item.Text</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="table-responsive-scroll mt-2">
+                        <table class="table table-bordered table-sm table-striped mb-0 text-sm align-middle table-modern" id="tableSyncs">
+                            <thead>
+                                <tr>
+                                    <th>Table Name</th>
+                                    <th style="width: 180px;" class="text-center">Sync Action</th>
+                                    <th class="text-center" style="width: 70px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <a href="/Syncs/JobSyncs/JobSyncList" class="btn btn-secondary">Back</a>
+            <button type="submit" class="btn btn-primary float-right">Save Job</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({ theme: 'bootstrap4', allowClear: true });
+
+            var selectedSenders = [];
+            var selectedReceivers = [];
+            var selectedTables = []; // Lưu trữ mảng Object: { name: 'AXDATA', action: '1' }
+
+            initOldData();
+
+            function initOldData() {
+                var oldSenders = $('#hiddenSenders').val();
+                if (oldSenders) {
+                    selectedSenders = oldSenders.split(',').filter(Boolean);
+                    selectedSenders.forEach(function(val) {
+                        var text = $("#searchSender option[value='" + val + "']").text() || val;
+                        appendRow('#tableSenders tbody', val, text, 'btn-delete-sender');
+                    });
+                }
+
+                var oldReceivers = $('#hiddenReceivers').val();
+                if (oldReceivers) {
+                    selectedReceivers = oldReceivers.split(',').filter(Boolean);
+                    selectedReceivers.forEach(function(val) {
+                        var text = $("#searchReceiver option[value='" + val + "']").text() || val;
+                        appendRow('#tableReceivers tbody', val, text, 'btn-delete-receiver');
+                    });
+                }
+
+                var oldTables = $('#hiddenTables').val();
+                if (oldTables) {
+                    var rawTableArray = oldTables.split(',').filter(Boolean);
+                    rawTableArray.forEach(function(item) {
+                        var parts = item.split(':');
+                        var tableName = parts[0];
+                        var actionCode = parts[1] || "1";
+
+                        selectedTables.push({ name: tableName, action: actionCode });
+                        appendTableReadOnlyRow('#tableSyncs tbody', tableName, actionCode);
+                    });
+                }
+            }
+
+            function appendRow(targetTbody, value, text, deleteBtnClass) {
+                $(targetTbody).append(`<tr data-val="${value}">
+                    <td><span class="badge badge-secondary px-2">${value}</span></td>
+                    <td class="font-weight-bold text-dark px-3">${text}</td>
+                    <td class="text-center"><button type="button" class="btn btn-xs btn-danger ${deleteBtnClass}"><i class="fas fa-trash-alt"></i></button></td>
+                </tr>`);
+            }
+
+            function appendTableReadOnlyRow(targetTbody, tableName, actionCode) {
+                var badgeHtml = '';
+                if (actionCode === "1") {
+                    badgeHtml = '<span class="badge badge-success px-3 py-1"><i class="fas fa-plus-circle mr-1"></i> 1 - Add</span>';
+                } else if (actionCode === "2") {
+                    badgeHtml = '<span class="badge badge-warning px-3 py-1 text-white"><i class="fas fa-sync-alt mr-1"></i> 2 - Update</span>';
+                } else if (actionCode === "3") {
+                    badgeHtml = '<span class="badge badge-danger px-3 py-1"><i class="fas fa-minus-circle mr-1"></i> 3 - Delete</span>';
+                } else {
+                    badgeHtml = `<span class="badge badge-secondary px-3 py-1">${actionCode}</span>`;
+                }
+
+                var rowHtml = `<tr data-tablename="${tableName}" data-action="${actionCode}">
+                    <td class="text-monospace font-weight-bold text-primary align-middle px-3">${tableName}</td>
+                    <td class="text-center align-middle">${badgeHtml}</td>
+                    <td class="text-center align-middle">
+                        <button type="button" class="btn btn-xs btn-danger btn-delete-table"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+                $(targetTbody).append(rowHtml);
+            }
+
+            function updateHiddenFields() {
+                $('#hiddenSenders').val(selectedSenders.join(','));
+                $('#hiddenReceivers').val(selectedReceivers.join(','));
+
+                var tableStrings = selectedTables.map(t => `${t.name}:${t.action}`);
+                $('#hiddenTables').val(tableStrings.join(','));
+            }
+
+            $('#searchSender').on('select2:select', function (e) {
+                var val = $(this).val();
+                if (val && !selectedSenders.includes(val)) {
+                    selectedSenders.push(val);
+                    appendRow('#tableSenders tbody', val, e.params.data.text, 'btn-delete-sender');
+                    updateHiddenFields();
+                }
+                $(this).val('').trigger('change');
+            });
+
+            $('#searchReceiver').on('select2:select', function (e) {
+                var val = $(this).val();
+                if (val && !selectedReceivers.includes(val)) {
+                    selectedReceivers.push(val);
+                    appendRow('#tableReceivers tbody', val, e.params.data.text, 'btn-delete-receiver');
+                    updateHiddenFields();
+                }
+                $(this).val('').trigger('change');
+            });
+
+            $('#searchTable').on('select2:select', function (e) {
+                var val = $(this).val();
+
+                var selectedOption = $(this).find(':selected');
+                var actionCode = selectedOption.data('action') || "1";
+
+                var exists = selectedTables.some(t => t.name === val);
+                if (val && !exists) {
+                    selectedTables.push({ name: val, action: actionCode.toString() });
+                    appendTableReadOnlyRow('#tableSyncs tbody', val, actionCode.toString());
+                    updateHiddenFields();
+                }
+                $(this).val('').trigger('change');
+            });
+            $(document).on('click', '.btn-delete-sender', function () {
+                selectedSenders = selectedSenders.filter(item => item !== $(this).closest('tr').data('val'));
+                $(this).closest('tr').remove();
+                updateHiddenFields();
+            });
+
+            $(document).on('click', '.btn-delete-receiver', function () {
+                selectedReceivers = selectedReceivers.filter(item => item !== $(this).closest('tr').data('val'));
+                $(this).closest('tr').remove();
+                updateHiddenFields();
+            });
+
+            $(document).on('click', '.btn-delete-table', function () {
+                var tableName = $(this).closest('tr').data('tablename');
+                selectedTables = selectedTables.filter(t => t.name !== tableName);
+                $(this).closest('tr').remove();
+                updateHiddenFields();
+            });
+        });
+    </script>
+}

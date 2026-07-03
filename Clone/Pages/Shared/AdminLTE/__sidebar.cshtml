@@ -303,6 +303,14 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a asp-page="/Syncs/JobSyncs/JobSyncList" class="nav-link @(currentPageFolderName.Equals("JobSyncList") ? "active" : "")">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Scheduler Job</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item @(ViewData["Module"]?.ToString() == "Purchase" ? "menu-open" : "")">
                     <a href="#" class="nav-link @(ViewData["Module"]?.ToString() == "Purchase" ? "active" : "")">

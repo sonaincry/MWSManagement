@@ -1,0 +1,88 @@
+﻿@page "{handler?}"
+@using System.Text.Json
+@model MWSManagement.Pages.Syncs.JobSyncs.JobSyncListModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Scheduler Jobs";
+    var dataJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+    var columnJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+}
+
+@Html.AntiForgeryToken()
+
+<div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; color: white;">
+    <div class="spinner-border text-success mb-3" role="status" style="width: 4rem; height: 4rem;"></div>
+    <h4>EXECUTING SCHEDULER JOB...</h4>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div id="logBox"></div>
+
+        <div class="card card-primary card-outline">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="card-title flex-grow-1"><i class="fas fa-calendar-alt mr-1"></i> Available Sync Jobs</h3>
+                <button type="button" class="btn btn-success font-weight-bold" onclick="runJob()">
+                    <i class="fas fa-play mr-1"></i> RUN SELECTED JOB
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="Grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var grid;
+        var columns = @Html.Raw(JsonSerializer.Serialize(Model.GridColumns, columnJsonOptions));
+        var data = @Html.Raw(JsonSerializer.Serialize(Model.ConfigList, dataJsonOptions));
+
+        document.addEventListener('DOMContentLoaded', function () {
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                dataSource: data,
+                columns: columns,
+                keyField: 'RecId',
+                formUrl: '/Syncs/JobSyncs/JobSyncForm',
+                idParamName: 'recId',
+                actions: { excelExport: true, search: true, refresh: true, add: true, edit: true, delete: true },
+                enableCheckbox: true,
+                deleteUrl: '/Syncs/JobSyncs/JobSyncList?handler=Delete',
+                openEditOnDoubleClick: true
+            });
+        });
+
+        function runJob() {
+            var selected = grid.getSelectedRecords();
+            if (selected.length !== 1) {
+                alert("Please select exactly ONE Scheduler Job to execute.");
+                return;
+            }
+
+            if (!confirm("Are you sure you want to trigger job: " + selected[0].Code + "?")) return;
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            fetch('/Syncs/JobSyncs/JobSyncList?handler=ExecuteJob', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                body: JSON.stringify(selected[0].RecId)
+            })
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                let style = res.success ? 'alert-success' : 'alert-warning';
+                $('#logBox').html('<div class="alert ' + style + '">' + res.message + '</div>');
+            })
+            .catch(err => {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                alert("Execution Failed: " + err);
+            });
+        }
+    </script>
+}

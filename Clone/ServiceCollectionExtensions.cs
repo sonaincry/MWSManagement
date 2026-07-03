@@ -4,6 +4,7 @@ using Indotalent.Applications.ApplicationUsers;
 using Indotalent.Applications.AX;
 using Indotalent.Applications.Companies;
 using Indotalent.Applications.Customers;
+using Indotalent.Applications.JobSyncs;
 using Indotalent.Applications.LogAnalytics;
 using Indotalent.Applications.LogErrors;
 using Indotalent.Applications.LogSessions;
@@ -55,6 +56,7 @@ namespace Indotalent
 
             services.AddScoped<LocationService>();
             services.AddScoped<TableSyncService>();
+            services.AddScoped<JobSyncService>();
 
             return services;
         }

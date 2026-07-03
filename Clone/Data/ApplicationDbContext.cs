@@ -41,11 +41,11 @@ namespace Indotalent.Data
 
         public DbSet<Location> Location { get; set; } = default!;
 
-        public DbSet<LocationDto> LocationDto { get; set; } = default!;
+        //public DbSet<LocationDto> LocationDto { get; set; } = default!;
 
-        public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
+        //public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
 
-
+        public DbSet<JobSync> JobSync { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Crucial: This configures the underlying Identity tables (AspNetUsers, AspNetUserRoles, etc.)
@@ -144,11 +144,12 @@ namespace Indotalent.Data
             modelBuilder.Entity<TableSync>(entity => {
                 entity.HasKey(x => x.RecId);
             });
-
             modelBuilder.Entity<Location>(entity => {
                 entity.HasKey(x => x.RecId);
             });
-
+            modelBuilder.Entity<JobSync>(entity => {
+                entity.HasKey(x => x.RecId);
+            });
             modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new AspNetCompanyConfiguration());
