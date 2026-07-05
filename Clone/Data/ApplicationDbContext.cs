@@ -46,6 +46,10 @@ namespace Indotalent.Data
         //public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
 
         public DbSet<JobSync> JobSync { get; set; } = default!;
+        public DbSet<EcoResProductCreateResultDto> EcoResProductCreateResultDto { get; set; } = default!;
+        public DbSet<EcoResCategoryOptionDto> EcoResCategoryOptionDto { get; set; } = default!;
+        public DbSet<EcoResProductListDto> EcoResProductListDto { get; set; } = default!;
+        public DbSet<EcoResProductCreateDto> EcoResProductCreateDto { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Crucial: This configures the underlying Identity tables (AspNetUsers, AspNetUserRoles, etc.)
@@ -150,6 +154,11 @@ namespace Indotalent.Data
             modelBuilder.Entity<JobSync>(entity => {
                 entity.HasKey(x => x.RecId);
             });
+            modelBuilder.Entity<EcoResProductCreateResultDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<EcoResCategoryOptionDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<EcoResProductListDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<EcoResProductCreateDto>().HasNoKey().ToView(null);
+            
             modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new AspNetCompanyConfiguration());
