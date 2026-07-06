@@ -1,0 +1,74 @@
+﻿@page "/Syncs/JobSyncs/JobLogList/{handler?}"
+@using System.Text.Json
+@model MWSManagement.Pages.Syncs.JobSyncs.JobLogListModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = "Dotmim Sync Job History Logs";
+    var logJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card card-secondary card-outline">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="card-title flex-grow-1"><i class="fas fa-history mr-1"></i> Continuous Job Execution Logs</h3>
+                <a href="/Syncs/JobSyncs/JobSyncList" class="btn btn-sm btn-primary">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to Jobs
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover mb-0" id="historicalLogGrid">
+                        <thead class="bg-dark text-white">
+                            <tr>
+                                <th style="width: 12%">Job Code</th>
+                                <th style="width: 12%" class="text-center">Run Date</th>
+                                <th style="width: 12%" class="text-center">Run Time</th>
+                                <th style="width: 12%" class="text-center">Status</th>
+                                <th style="width: 52%">Detailed Synchronization Message</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.FormattedLogs.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No job operations recorded in database logs yet.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (dynamic log in Model.FormattedLogs)
+                                {
+                                    <tr>
+                                        <td class="align-middle font-weight-bold text-primary text-monospace">@log.JobCode</td>
+                                        <td class="text-center align-middle text-monospace">@log.RunDate</td>
+                                        <td class="text-center align-middle text-monospace">@log.RunTime</td>
+                                        <td class="text-center align-middle">
+                                            @if (log.Status == "Success")
+                                            {
+                                                <span class="badge badge-success px-3 py-1"><i class="fas fa-check-circle mr-1"></i> Success</span>
+                                            }
+                                            else if (log.Status == "Warning")
+                                            {
+                                                <span class="badge badge-warning px-3 py-1 text-white"><i class="fas fa-exclamation-triangle mr-1"></i> Warning</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger px-3 py-1"><i class="fas fa-times-circle mr-1"></i> Failed</span>
+                                            }
+                                        </td>
+                                        <td class="bg-light">
+                                            <div class="p-2 rounded bg-white border text-sm shadow-sm" style="max-height: 250px; overflow-y: auto;">
+                                                @Html.Raw(log.Description)
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

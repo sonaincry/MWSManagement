@@ -22,7 +22,7 @@ namespace Indotalent.Data
         {
 
             var context = services.GetRequiredService<ApplicationDbContext>();
-            if (context.Users.Any())
+             if (context.Users.Any())
             {
                 return;
             }

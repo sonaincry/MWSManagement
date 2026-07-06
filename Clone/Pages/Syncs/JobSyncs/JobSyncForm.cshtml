@@ -147,6 +147,15 @@
         </div>
         <div class="card-footer">
             <a href="/Syncs/JobSyncs/JobSyncList" class="btn btn-secondary">Back</a>
+
+            @if (Model.Form.RecId > 0)
+            {
+
+                <a href="/Syncs/JobSyncs/JobLogList?jobId=@Model.Form.RecId" class="btn btn-info ml-1">
+                    <i class="fas fa-history"></i> View Logs
+                </a>
+            }
+
             <button type="submit" class="btn btn-primary float-right">Save Job</button>
         </div>
     </form>
@@ -206,27 +215,27 @@
                 </tr>`);
             }
 
-            function appendTableReadOnlyRow(targetTbody, tableName, actionCode) {
-                var badgeHtml = '';
-                if (actionCode === "1") {
-                    badgeHtml = '<span class="badge badge-success px-3 py-1"><i class="fas fa-plus-circle mr-1"></i> 1 - Add</span>';
-                } else if (actionCode === "2") {
-                    badgeHtml = '<span class="badge badge-warning px-3 py-1 text-white"><i class="fas fa-sync-alt mr-1"></i> 2 - Update</span>';
-                } else if (actionCode === "3") {
-                    badgeHtml = '<span class="badge badge-danger px-3 py-1"><i class="fas fa-minus-circle mr-1"></i> 3 - Delete</span>';
-                } else {
-                    badgeHtml = `<span class="badge badge-secondary px-3 py-1">${actionCode}</span>`;
-                }
-
-                var rowHtml = `<tr data-tablename="${tableName}" data-action="${actionCode}">
-                    <td class="text-monospace font-weight-bold text-primary align-middle px-3">${tableName}</td>
-                    <td class="text-center align-middle">${badgeHtml}</td>
-                    <td class="text-center align-middle">
-                        <button type="button" class="btn btn-xs btn-danger btn-delete-table"><i class="fas fa-trash-alt"></i></button>
-                    </td>
-                </tr>`;
-                $(targetTbody).append(rowHtml);
+                    function appendTableReadOnlyRow(targetTbody, tableName, actionCode) {
+            var badgeHtml = '';
+            if (actionCode === "1") {
+                badgeHtml = '<span class="badge badge-success px-3 py-1"><i class="fas fa-plus-circle mr-1"></i> Add</span>';
+            } else if (actionCode === "2") {
+                badgeHtml = '<span class="badge badge-warning px-3 py-1 text-white"><i class="fas fa-sync-alt mr-1"></i> Update</span>';
+            } else if (actionCode === "3") {
+                badgeHtml = '<span class="badge badge-danger px-3 py-1"><i class="fas fa-minus-circle mr-1"></i> Delete</span>';
+            } else {
+                badgeHtml = `<span class="badge badge-secondary px-3 py-1">${actionCode}</span>`;
             }
+
+            var rowHtml = `<tr data-tablename="${tableName}" data-action="${actionCode}">
+                <td class="text-monospace font-weight-bold text-primary align-middle px-3">${tableName}</td>
+                <td class="text-center align-middle">${badgeHtml}</td>
+                <td class="text-center align-middle">
+                    <button type="button" class="btn btn-xs btn-danger btn-delete-table"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            </tr>`;
+            $(targetTbody).append(rowHtml);
+        }
 
             function updateHiddenFields() {
                 $('#hiddenSenders').val(selectedSenders.join(','));

@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dotmim.Sync;
+using Dotmim.Sync.Enumerations;
+using Dotmim.Sync.SqlServer;
+using Indotalent.Applications.JobSyncs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
-using MWSManagement.ControlUI.Helper.Grids;
-using MWSManagement.Models.Entities;
-using Indotalent.Applications.JobSyncs;
-using Dotmim.Sync;
-using Dotmim.Sync.SqlServer;
-using Dotmim.Sync.Enumerations;
-using System.Text;
+using MWSManagement.Applications.JobLogs;
 using MWSManagement.Applications.Locations;
+using MWSManagement.ControlUI.Helper.Grids;
+using MWSManagement.Models;
+using MWSManagement.Models.Entities;
 using System.Data;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MWSManagement.Pages.Syncs.JobSyncs
 {
@@ -17,11 +20,13 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
     {
         private readonly JobSyncService _service;
         private readonly LocationService _locationService;
+        private readonly JobLogService _jobLogService;
 
-        public JobSyncListModel(JobSyncService service, LocationService locationService)
+        public JobSyncListModel(JobSyncService service, LocationService locationService, JobLogService jobLogService)
         {
             _service = service;
             _locationService = locationService;
+            _jobLogService = jobLogService;
         }
 
         public List<object> ConfigList { get; set; } = new();
@@ -76,15 +81,18 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
             if (job == null) return new JsonResult(new { success = false, message = "Job not found!" });
 
             var locations = await _locationService.GetAllAsync();
-
             var senderIds = job.SenderLocationIds.Split(',').Select(long.Parse).ToList();
             var receiverIds = job.ReceiverLocationIds.Split(',').Select(long.Parse).ToList();
-            var tables = job.TableNames.Split(',').ToList();
+            var tables = job.TableNames.Split(',').Select(t => t.Trim()).Where(t => !string.IsNullOrEmpty(t)).ToList();
 
             var logBuilder = new StringBuilder();
-            logBuilder.Append($"<h5><i class='fas fa-play text-success mr-2'></i><b>Executing Scheduler Job: {job.Code}</b></h5><hr/>");
+            var databaseDescriptionBuilder = new StringBuilder();
+
+            logBuilder.Append($"<div class='mb-2 pb-2 border-bottom'><h5 class='text-dark font-weight-bold'><i class='fas fa-terminal mr-2 text-secondary'></i>Executing Scheduler Job: {job.Code}</h5></div>");
 
             int successCount = 0;
+            int totalOperations = 0;
+            bool ultimateSuccess = true;
 
             foreach (var senderId in senderIds)
             {
@@ -102,14 +110,19 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
                     var serverProvider = new SqlSyncProvider(senderConn);
                     var clientProvider = new SqlSyncProvider(receiverConn);
 
-                    foreach (var table in tables)
+                    foreach (var rawTable in tables)
                     {
+                        totalOperations++;
+                        string schemaName = "dbo";
+                        string tableName = rawTable;
+
+                        if (tableName.Contains(":"))
+                        {
+                            tableName = tableName.Split(':')[0].Trim();
+                        }
+
                         try
                         {
-                            string schemaName = "dbo"; // Default schema
-                            string tableName = table.Trim();
-
-                            // 1. Tách chuỗi nếu cấu hình chứa cả dạng "schema.tablename"
                             if (tableName.Contains("."))
                             {
                                 var parts = tableName.Split('.');
@@ -118,7 +131,6 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
                             }
                             else
                             {
-                                // 2. Tự động truy vấn tìm đúng Schema của bảng ở database gốc (Fix lỗi TAXDATA không tồn tại)
                                 using (var conn = new SqlConnection(senderConn))
                                 {
                                     await conn.OpenAsync();
@@ -147,9 +159,55 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
                             setup.Tables.Add(setupTable);
 
                             var agent = new SyncAgent(clientProvider, serverProvider);
+                            var decimalFacets = new Dictionary<string, (byte Precision, byte Scale)>(StringComparer.OrdinalIgnoreCase);
+
+                            using (var conn = new SqlConnection(senderConn))
+                            {
+                                await conn.OpenAsync();
+                                var cmd = new SqlCommand(@"
+        SELECT COLUMN_NAME, NUMERIC_PRECISION, NUMERIC_SCALE
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_NAME = @t AND DATA_TYPE IN ('decimal','numeric')", conn);
+                                cmd.Parameters.AddWithValue("@t", tableName);
+                                using var reader = await cmd.ExecuteReaderAsync();
+                                while (await reader.ReadAsync())
+                                {
+                                    byte precision = Convert.ToByte(reader.GetValue(1));
+                                    byte scale = Convert.ToByte(reader.GetValue(2));
+                                    decimalFacets[reader.GetString(0)] = (precision, scale);
+                                }
+                            }
+
+                            void FixDecimalParams(System.Data.Common.DbCommand command)
+                            {
+                                if (command is SqlCommand sqlCmd)
+                                {
+                                    foreach (SqlParameter p in sqlCmd.Parameters)
+                                    {
+                                        if (p.SqlDbType == SqlDbType.Decimal)
+                                        {
+                                            logBuilder.Append($"<div style='font-size:11px;color:#888'>[DEBUG] Cmd param {p.ParameterName} Precision={p.Precision} Scale={p.Scale} Value={p.Value}</div>");
+
+                                            var colName = p.ParameterName.TrimStart('@');
+                                            if (decimalFacets.TryGetValue(colName, out var facet))
+                                            {
+                                                p.Precision = facet.Precision;
+                                                p.Scale = facet.Scale;
+                                            }
+                                            else
+                                            {
+                                                p.Precision = 38;
+                                                p.Scale = 10;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            agent.LocalOrchestrator.OnGetCommand(args => FixDecimalParams(args.Command));
+                            agent.RemoteOrchestrator.OnGetCommand(args => FixDecimalParams(args.Command));
                             string scopeName = $"Job_{job.Code}_{senderId}_{receiverId}_{schemaName}_{tableName}";
 
-                            // Đảm bảo không vượt quá độ dài ký tự scope quy định của Dotmim
                             if (scopeName.Length > 100)
                             {
                                 scopeName = "Scope_" + Guid.NewGuid().ToString().Substring(0, 8);
@@ -157,18 +215,58 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
 
                             var result = await agent.SynchronizeAsync(scopeName, setup, SyncType.Normal, null).ConfigureAwait(false);
 
-                            logBuilder.Append($"✅ <b>[{senderNode.Name}]</b> ➔ <b>[{receiverNode.Name}]</b> | Table: <i>{schemaName}.{tableName}</i> | Changes: <span class='badge badge-success'>{result.ChangesAppliedOnClient?.TotalAppliedChanges ?? 0}</span><br/>");
+                            // UI Version with HTML
+                            logBuilder.Append($"<div class='py-1 text-muted' style='font-family: monospace;'><span class='text-success font-weight-bold'>[OK]</span> [{senderNode.Name}] ➔ [{receiverNode.Name}] | Table: {schemaName}.{tableName} | Changes: {result.ChangesAppliedOnClient?.TotalAppliedChanges ?? 0}</div>");
+
+                            // Database Version without HTML (Appends lines separated by a newline break)
+                            databaseDescriptionBuilder.AppendLine($"[OK] [{senderNode.Name}] ➔ [{receiverNode.Name}] | Table: {schemaName}.{tableName} | Changes: {result.ChangesAppliedOnClient?.TotalAppliedChanges ?? 0}");
+
                             successCount++;
                         }
                         catch (Exception ex)
                         {
-                            logBuilder.Append($"❌ <b>[{senderNode.Name}]</b> ➔ <b>[{receiverNode.Name}]</b> | Table: <i>{table}</i> | Error: <span class='text-danger'>{ex.Message}</span><br/>");
+                            ultimateSuccess = false;
+
+                            logBuilder.Append($"<div class='p-2 my-2 rounded border bg-light text-dark' style='font-family: monospace; font-size: 13px; border-left: 4px solid #6c757d !important;'>");
+                            logBuilder.Append($"<b class='text-secondary'>[ERROR]</b> [{senderNode.Name}] ➔ [{receiverNode.Name}] | Table: {tableName}<br/>");
+                            logBuilder.Append($"<span class='text-dark d-block mt-1' style='white-space: pre-wrap;'>Message: {ex.Message}</span>");
+                            if (ex.InnerException != null)
+                            {
+                                logBuilder.Append($"<span class='text-muted d-block mt-1' style='font-size:11px;'>Inner Details: {ex.InnerException.Message}</span>");
+                            }
+                            logBuilder.Append($"</div>");
+
+                            databaseDescriptionBuilder.AppendLine($"[ERROR] [{senderNode.Name}] ➔ [{receiverNode.Name}] | Table: {tableName} | Message: {ex.Message}");
                         }
                     }
                 }
             }
 
-            return new JsonResult(new { success = successCount > 0, message = logBuilder.ToString() });
+            string operationalStatus = "Success";
+            if (successCount == 0 && totalOperations > 0) operationalStatus = "Failed";
+            else if (!ultimateSuccess) operationalStatus = "Warning";
+
+            try
+            {
+                var persistentLog = new JobLog
+                {
+                    JobRecId = job.RecId,
+                    JobCode = job.Code,
+                    RunDate = DateTime.Today,
+                    RunTime = DateTime.Now.TimeOfDay,
+                    Status = operationalStatus,
+                    Description = databaseDescriptionBuilder.ToString().Trim() // Saves perfectly clean plain text lines!
+                };
+
+                await _jobLogService.CreateAsync(persistentLog);
+            }
+            catch (Exception dbLogEx)
+            {
+                var errorMsg = dbLogEx.InnerException != null ? dbLogEx.InnerException.Message : dbLogEx.Message;
+                logBuilder.Append($"<div class='mt-2 pt-2 border-top text-muted font-weight-bold' style='font-size:12px;'><i class='fas fa-info-circle mr-1'></i> System Note: Run tracked but log string context optimized ({errorMsg})</div>");
+            }
+
+            return new JsonResult(new { success = (operationalStatus != "Failed"), message = logBuilder.ToString() });
         }
 
         private string BuildConnectionString(dynamic locationEntity)

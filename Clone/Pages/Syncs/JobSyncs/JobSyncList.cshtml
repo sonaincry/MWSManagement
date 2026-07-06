@@ -17,7 +17,8 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <div id="logBox"></div>
+        <!-- New minimalist Gray & White Container -->
+        <div id="logBox" class="mb-3"></div>
 
         <div class="card card-primary card-outline">
             <div class="card-header d-flex align-items-center">
@@ -64,6 +65,7 @@
             if (!confirm("Are you sure you want to trigger job: " + selected[0].Code + "?")) return;
 
             document.getElementById('loadingOverlay').style.display = 'flex';
+            $('#logBox').empty();
 
             fetch('/Syncs/JobSyncs/JobSyncList?handler=ExecuteJob', {
                 method: 'POST',
@@ -73,15 +75,33 @@
                 },
                 body: JSON.stringify(selected[0].RecId)
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error("Server status: " + res.status);
+                return res.json();
+            })
             .then(res => {
                 document.getElementById('loadingOverlay').style.display = 'none';
-                let style = res.success ? 'alert-success' : 'alert-warning';
-                $('#logBox').html('<div class="alert ' + style + '">' + res.message + '</div>');
+
+                // Minimalist Gray & White styling logic matching your request
+                let wrapperClass = res.success ? 'border-secondary' : 'border-dark';
+                $('#logBox').html(
+                    '<div class="card ' + wrapperClass + ' shadow-sm m-0" style="background-color: #ffffff; border: 2px solid #ced4da;">' +
+                    '  <div class="card-body p-3 text-dark">' +
+                         res.message +
+                    '  </div>' +
+                    '</div>'
+                );
             })
             .catch(err => {
                 document.getElementById('loadingOverlay').style.display = 'none';
-                alert("Execution Failed: " + err);
+                $('#logBox').html(
+                    '<div class="card border-danger shadow-sm m-0" style="background-color: #ffffff; border: 2px solid #dc3545;">' +
+                    '  <div class="card-body p-3 text-dark">' +
+                    '    <h5 class="text-danger font-weight-bold"><i class="fas fa-exclamation-triangle mr-2"></i>Execution Failed</h5>' +
+                    '    <p class="text-muted mb-0">' + err.message + '</p>' +
+                    '  </div>' +
+                    '</div>'
+                );
             });
         }
     </script>

@@ -7,6 +7,7 @@ using Indotalent.Models.Entities.AX;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
+using MWSManagement.Models;
 using MWSManagement.Models.DTOs;
 using MWSManagement.Models.Entities;
 using YamlDotNet.Core.Tokens;
@@ -46,6 +47,8 @@ namespace Indotalent.Data
         //public DbSet<TableSyncDto> TableSyncDto { get; set; } = default!;
 
         public DbSet<JobSync> JobSync { get; set; } = default!;
+
+        public DbSet<JobLog> JobLog { get; set; } = default!; 
         public DbSet<EcoResProductCreateResultDto> EcoResProductCreateResultDto { get; set; } = default!;
         public DbSet<EcoResCategoryOptionDto> EcoResCategoryOptionDto { get; set; } = default!;
         public DbSet<EcoResProductListDto> EcoResProductListDto { get; set; } = default!;
@@ -154,6 +157,13 @@ namespace Indotalent.Data
             modelBuilder.Entity<JobSync>(entity => {
                 entity.HasKey(x => x.RecId);
             });
+            modelBuilder.Entity<JobLog>(entity => {
+                entity.HasKey(x => x.RecId);
+
+                entity.Property(x => x.RecId)
+                      .ValueGeneratedNever();
+            });
+
             modelBuilder.Entity<EcoResProductCreateResultDto>().HasNoKey().ToView(null);
             modelBuilder.Entity<EcoResCategoryOptionDto>().HasNoKey().ToView(null);
             modelBuilder.Entity<EcoResProductListDto>().HasNoKey().ToView(null);

@@ -23,6 +23,7 @@ using Indotalent.Models.Entities;
 using Indotalent.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using MWSManagement.Applications.JobLogs;
 using MWSManagement.Applications.Locations;
 using MWSManagement.Applications.Lookups;
 
@@ -59,6 +60,7 @@ namespace Indotalent
             services.AddScoped<TableSyncService>();
             services.AddScoped<JobSyncService>();
             services.AddScoped<EcoResProductService>();
+            services.AddScoped<JobLogService>();
             return services;
         }
     }
