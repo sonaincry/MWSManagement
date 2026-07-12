@@ -99,5 +99,7 @@ namespace Indotalent.Applications.Products
                 SqlParam.NVarChar("@ProductName", product.ProductName)
             );
         }
+
+
     }
 }

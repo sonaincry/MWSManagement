@@ -1,34 +1,28 @@
 ﻿using MWSManagement.ControlUI.Helper.Grids;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace Indotalent.DTOs
 {
     public class UnitOfMeasureDto
     {
-        [Column("RECID")]
-        [Display(Name = "RECID")]
-        [GridColumn(Width = 100)]
+        [Display(Name = "RecId")]
+        [GridColumn(Width = 120, IsPrimaryKey = true, Visible = false, AllowEditing = false)]
         public long RecId { get; set; }
 
-        [Column("SYMBOL")]
-        [Display(Name = "SYMBOL")]
-        [GridColumn(Width = 100)]
+        [Display(Name = "Unit Code")]
+        [GridColumn(Width = 120)]
         public string Symbol { get; set; } = string.Empty;
 
-        [Column("DECIMALPRECISION")]
-        [Display(Name = "DECIMALPRECISION")]
-        [GridColumn(Width = 100)]
+        [Display(Name = "Decimal Precision")]
+        [GridColumn(Width = 140)]
         public int DecimalPrecision { get; set; }
 
-        [Column("UNITOFMEASURECLASS")]
-        [Display(Name = "UNITOFMEASURECLASS")]
-        [GridColumn(Width = 100)]
+        [Display(Name = "Unit Class")]
+        [GridColumn(Width = 120)]
         public int UnitOfMeasureClass { get; set; }
 
-        [Column("SYSTEMOFUNITS")]
-        [Display(Name = "SYSTEMOFUNITS")]
-        [GridColumn(Width = 100)]
+        [Display(Name = "System Group")]
+        [GridColumn(Width = 120)]
         public int SystemOfUnits { get; set; }
     }
 }

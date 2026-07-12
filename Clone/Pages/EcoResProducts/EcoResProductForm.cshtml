@@ -6,6 +6,60 @@
     ViewData["Title"] = Model.ActionMode == "edit" ? "Edit Product" : "Create Product";
 }
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-results__option[aria-disabled=true] {
+        display: none !important;
+    }
+
+    .tree-toggle {
+        color: #007bff !important; /* Đổi sang màu xanh Primary cho nổi bật hành động đóng/mở */
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 8px;
+        display: inline-block;
+        /* Tăng kích thước vùng click (Hitbox) */
+        width: 26px;
+        height: 26px;
+        line-height: 24px;
+        text-align: center;
+        font-size: 16px; /* Tăng chữ to lên rõ ràng */
+        /* Tạo hiệu ứng bo tròn nhẹ để user dễ nhận diện là nút */
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+        /* Khóa hành vi bôi đen text khi click nhanh nhiều lần */
+        user-select: none;
+        transition: all 0.2s ease;
+    }
+
+        /* Hiệu ứng phản hồi trực quan khi user di chuột hoặc chạm vào */
+        .tree-toggle:hover {
+            background-color: #007bff;
+            color: #ffffff !important;
+            border-color: #007bff;
+        }
+
+    .tree-node {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .select2-container--default .select2-selection--single {
+        height: calc(2.25rem + 2px) !important;
+        border: 1px solid #ced4da !important;
+    }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 1.5 !important;
+            padding: .375rem .75rem !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 38px !important;
+        }
+</style>
+
 <div class="row mb-3">
     <div class="col-12">
 
@@ -36,13 +90,16 @@
         }
 
         <div class="card card-primary card-outline">
-            <h3 class="card-title">
-                <i class="fas fa-box mr-1"></i> @(Model.ActionMode == "edit" ? "Edit Product" : "Create Product")
-            </h3>
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-box mr-1"></i> @(Model.ActionMode == "edit" ? "Edit Product" : "Create Product")
+                </h3>
+            </div>
 
             <form method="post" novalidate>
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Form.RecId" />
+
                 <div class="card-body">
                     <div class="row">
 
@@ -67,12 +124,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Category</label>
-                                <select asp-for="Form.CategoryRecId" class="form-control" id="categorySelect">
+                                <select asp-for="Form.CategoryRecId" class="form-control" id="categorySelect" style="width: 100%;">
                                     <option value="">-- None --</option>
-                                    @foreach (var c in Model.CategoryOptions)
+                                    @for (int i = 0; i < Model.CategoryOptions.Count; i++)
                                     {
-                                        <option value="@c.CategoryRecId" data-hierarchy="@c.CategoryHierarchyRecId">
-                                            @c.Name
+                                        var c = Model.CategoryOptions[i];
+                                        var hasChildren = (i + 1 < Model.CategoryOptions.Count) && (Model.CategoryOptions[i + 1].Level > c.Level);
+
+                                        <option value="@c.CategoryRecId"
+                                                data-hierarchy="@c.CategoryHierarchyRecId"
+                                                data-level="@c.Level"
+                                                data-haschildren="@(hasChildren ? "true" : "false")">
+                                            @(new string('\u00A0', (int)(c.Level * 4)))@(c.Level > 0 ? "└ " : "")@c.Name
                                         </option>
                                     }
                                 </select>
@@ -82,6 +145,36 @@
                         <input type="hidden" asp-for="Form.CategoryHierarchyRecId" id="categoryHierarchyHidden" />
 
                     </div>
+
+                    <input type="hidden" asp-for="PriceForm.ProductRecId" />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Unit Measure</label>
+                                <select asp-for="PriceForm.UnitId" class="form-control">
+                                    <option value="">-- Select Unit Measure --</option>
+                                    @foreach (var u in Model.UnitOptions)
+                                    {
+                                        <option value="@u.Symbol">@u.Symbol</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="PriceForm.UnitId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Sale Price</label>
+                                <input name="PriceForm.SalesPrice"
+                                       id="PriceForm_SalesPrice"
+                                       value="@(Model.PriceForm.SalesPrice == 0 ? "0" : Model.PriceForm.SalesPrice.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))"
+                                       class="form-control"
+                                       type="text" />
+                                <span asp-validation-for="PriceForm.SalesPrice" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="card-footer d-flex justify-content-end">
@@ -96,11 +189,248 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
-        document.getElementById('categorySelect').addEventListener('change', function () {
-            var selected = this.options[this.selectedIndex];
-            var hierarchy = selected.getAttribute('data-hierarchy') || '';
-            document.getElementById('categoryHierarchyHidden').value = hierarchy;
+        $(document).ready(function() {
+            // Biến toàn cục quản lý cấu trúc cây
+            var nodeToggleStates = {};
+            var $select = $('#categorySelect');
+            var globalMinLevel = 0; // Tách minLevel ra ngoài để tránh treo trình duyệt
+
+            // HÀM TÌM MIN LEVEL TRƯỚC (Chỉ chạy khi bắt đầu hoặc khi cần thiết)
+            function calculateMinLevel() {
+                var min = 999;
+                $('#categorySelect option').each(function() {
+                    var lvlAttr = $(this).data('level');
+                    if (lvlAttr !== undefined && lvlAttr !== null) {
+                        var lvl = parseInt(lvlAttr);
+                        if (lvl < min) { min = lvl; }
+                    }
+                });
+                globalMinLevel = (min === 999) ? 0 : min;
+            }
+
+            // HÀM KHỞI TẠO VÀ ĐỒNG BỘ TRẠNG THÁI CÂY (Dùng chung cho cả Create & Update)
+            function initCategorySelect(isFirstLoad) {
+                if (isFirstLoad) {
+                    calculateMinLevel();
+
+                    // Thiết lập trạng thái đóng/mở mặc định cho lần đầu tải trang
+                    $('#categorySelect option').each(function() {
+                        var lvlAttr = $(this).data('level');
+                        var val = $(this).val();
+
+                        if (lvlAttr === undefined || lvlAttr === null || val === "") return;
+
+                        var lvl = parseInt(lvlAttr);
+                        if (lvl > globalMinLevel) {
+                            $(this).prop('disabled', true); // Mặc định ẩn các tầng sâu hơn
+                        }
+
+                        if ($(this).data('haschildren') === true || $(this).data('haschildren') === "true") {
+                            nodeToggleStates[val] = '+'; // Mặc định hiển thị dấu cộng
+                        }
+                    });
+
+                    // ĐẶC BIỆT CHO UPDATE: Nếu có dữ liệu cũ, tự động mở chuỗi tầng cha
+                    var selectedVal = $select.val();
+                    if (selectedVal) {
+                        var $selectedOption = $('#categorySelect option[value="' + selectedVal + '"]');
+                        var prevOptions = $selectedOption.prevAll();
+                        var currentTargetLvl = parseInt($selectedOption.data('level')) || globalMinLevel;
+
+                        $selectedOption.prop('disabled', false);
+
+                        prevOptions.each(function() {
+                            var opt = $(this);
+                            var optLvlAttr = opt.data('level');
+                            if (optLvlAttr === undefined || opt.val() === "") return;
+
+                            var optLvl = parseInt(optLvlAttr);
+
+                            if (optLvl < currentTargetLvl) {
+                                opt.prop('disabled', false);
+                                nodeToggleStates[opt.val()] = '—'; // Đổi thành dấu mở '—'
+
+                                // Mở các tầng con trực thuộc cấp cha này
+                                var pLevel = parseInt(opt.data('level'));
+                                opt.nextAll().each(function() {
+                                    var curr = $(this);
+                                    var currLvlAttr = curr.data('level');
+                                    if (currLvlAttr === undefined) return false;
+                                    var currLvl = parseInt(currLvlAttr);
+
+                                    if (currLvl <= pLevel) return false;
+                                    if (currLvl === pLevel + 1) {
+                                        curr.prop('disabled', false);
+                                    }
+                                });
+
+                                currentTargetLvl = optLvl;
+                            }
+                            if (currentTargetLvl === globalMinLevel) return false;
+                        });
+                    }
+                }
+
+                // Hủy Select2 cũ nếu có trước khi dựng lại
+                if ($select.hasClass("select2-hidden-accessible")) {
+                    $select.select2('destroy');
+                }
+
+                // Dựng lại cấu trúc cây hoàn chỉnh
+                $select.select2({
+                    templateResult: formatCategoryTree,
+                    minimumResultsForSearch: 0
+                });
+            }
+
+            // TEMPLATE HIỂN THỊ CÂY SELECT2 (Đã được tối ưu tốc độ, không gây đơ trang)
+            function formatCategoryTree (state) {
+                if (!state.id) { return state.text; }
+
+                var element = $(state.element);
+                var lvlAttr = element.data('level');
+
+                if (lvlAttr === undefined || state.id === "") {
+                    return state.text;
+                }
+
+                var level = parseInt(lvlAttr) || 0;
+                var hasChildren = element.data('haschildren') === true || element.data('haschildren') === "true";
+
+                var relativeLevel = level - globalMinLevel; 
+                var padding = relativeLevel * 15;
+                var cleanText = state.text.replace(/^[└\s\u00A0]+/g, '');
+
+                var $state;
+                        if (hasChildren) {
+            var toggleChar = nodeToggleStates[state.id] || '+';
+            $state = $('<span class="tree-node parent-node" data-val="'+state.id+'" style="padding-left: ' + padding + 'px;"><span class="tree-toggle">' + toggleChar + '</span> ' + cleanText + '</span>');
+        } else {
+            $state = $('<span class="tree-node leaf-node" style="padding-left: ' + padding + 'px;"><span style="margin-left:34px;"></span>' + cleanText + '</span>');
+        }
+
+                return $state;
+            };
+
+            initCategorySelect(true);
+
+            $select.on('change', function () {
+                var selected = this.options[this.selectedIndex];
+                if (selected) {
+                    var hierarchy = selected.getAttribute('data-hierarchy') || '';
+                    var hiddenInput = document.getElementById('categoryHierarchyHidden');
+                    if (hiddenInput) { hiddenInput.value = hierarchy; }
+                }
+            });
+
+            $select.on('select2:selecting', function(e) {
+                var $highlightedOption = $('.select2-results__option--highlighted');
+                var isClickingToggle = $(e.params.args.originalEvent.target).hasClass('tree-toggle');
+
+                if (isClickingToggle) {
+                    e.preventDefault(); 
+
+                    var optVal = e.params.args.data.id;
+                    var selectedOption = $('#categorySelect option[value="' + optVal + '"]');
+
+                    var $toggleSpan = $highlightedOption.find('.tree-toggle');
+                    var isExpanded = $toggleSpan.text() === '—';
+
+                    if (isExpanded) {
+                        nodeToggleStates[optVal] = '+';
+                        toggleChildrenVisibility(selectedOption, false);
+                    } else {
+                        nodeToggleStates[optVal] = '—';
+                        toggleChildrenVisibility(selectedOption, true);
+                    }
+                }
+            });
+
+            function toggleChildrenVisibility(parentOption, shouldExpand) {
+                var parentLevel = parseInt(parentOption.data('level'));
+                var nextOptions = parentOption.nextAll();
+
+                if (shouldExpand) {
+                    nextOptions.each(function() {
+                        var currentOption = $(this);
+                        var currentLvlAttr = currentOption.data('level');
+                        if (currentLvlAttr === undefined) return false;
+
+                        var currentLevel = parseInt(currentLvlAttr);
+                        if (currentLevel <= parentLevel) return false;
+
+                        if (currentLevel === parentLevel + 1) {
+                            currentOption.prop('disabled', false);
+                        }
+                    });
+                } else {
+                    nextOptions.each(function() {
+                        var currentOption = $(this);
+                        var currentLvlAttr = currentOption.data('level');
+                        if (currentLvlAttr === undefined) return false;
+
+                        var currentLevel = parseInt(currentLvlAttr);
+                        if (currentLevel <= parentLevel) return false;
+
+                        currentOption.prop('disabled', true);
+
+                        var childVal = currentOption.val();
+                        if (nodeToggleStates[childVal]) {
+                            nodeToggleStates[childVal] = '+';
+                        }
+                    });
+                }
+
+                var currentVal = $select.val();
+
+                initCategorySelect(false);
+
+                $select.val(currentVal).trigger('change.select2');
+                $select.select2('open');
+            }
+
+
+            var $priceInput = $('#PriceForm_SalesPrice');
+
+            if ($priceInput.length && $priceInput.val() && $priceInput.val() !== '0') {
+                var initialRaw = $priceInput.val();
+                var formattedInit = formatVietnameseCurrency(initialRaw.replace('.', ','));
+                $priceInput.val(formattedInit);
+            }
+
+            $priceInput.on('input', function (e) {
+                var cursorPosition = this.selectionStart;
+                var originalLength = this.value.length;
+                var rawValue = this.value.replace(/[^0-9,]/g, '');
+
+                var parts = rawValue.split(',');
+                if (parts.length > 2) {
+                    rawValue = parts[0] + ',' + parts.slice(1).join('');
+                }
+
+                var formattedValue = formatVietnameseCurrency(rawValue);
+                this.value = formattedValue;
+
+                var newLength = formattedValue.length;
+                this.setSelectionRange(cursorPosition + (newLength - originalLength), cursorPosition + (newLength - originalLength));
+            });
+
+            function formatVietnameseCurrency(value) {
+                if (!value) return '';
+                var parts = value.split(',');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                return parts.join(',');
+            }
+
+            $('form').on('submit', function () {
+                if ($priceInput.length) {
+                    var rawPrice = $priceInput.val().replace(/\./g, '').replace(/,/g, '.');
+                    $priceInput.val(rawPrice);
+                }
+            });
         });
     </script>
 }

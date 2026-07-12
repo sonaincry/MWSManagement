@@ -37,6 +37,17 @@
         var columns = @Html.Raw(JsonSerializer.Serialize(Model.GridColumns, columnJsonOptions));
         var data = @Html.Raw(JsonSerializer.Serialize(Model.ProductList, dataJsonOptions));
         document.addEventListener('DOMContentLoaded', function () {
+
+            if (data && data.length > 0) {
+                data.forEach(function (item) {
+                    if (item.ProductType == 1) {
+                        item.ProductType = 'Item';
+                    } else if (item.ProductType == 2) {
+                        item.ProductType = 'Service';
+                    }
+                });
+            }
+
             grid = AppGrid.create({
                 gridId: 'Grid',
                 dataSource: data,

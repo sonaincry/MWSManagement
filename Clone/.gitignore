@@ -9,4 +9,4 @@ appsettings.Development.json
 wwwroot/uploads/
 *.zip
 *.bak
-appsettings*.json
+appsettings.json

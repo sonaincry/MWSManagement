@@ -12,6 +12,7 @@ using Indotalent.Applications.LogSessions;
 using Indotalent.Applications.Products;
 using Indotalent.Applications.TableSyncs;
 using Indotalent.Applications.TaxVatNums;
+using Indotalent.Applications.UnitOfMeasures;
 using Indotalent.Infrastructures.Countries;
 using Indotalent.Infrastructures.Currencies;
 using Indotalent.Infrastructures.Docs;
@@ -54,6 +55,7 @@ namespace Indotalent
             services.AddScoped<CustomerService>();
             services.AddScoped<TaxVatNumTableService>();
             services.AddScoped<IProcedureRepository, ProcedureRepository>();
+            services.AddScoped<UnitMeasureService>();
             services.AddScoped(typeof(AxCrudService<>));
 
             services.AddScoped<LocationService>();

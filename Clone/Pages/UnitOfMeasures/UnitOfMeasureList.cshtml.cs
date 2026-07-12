@@ -1,132 +1,41 @@
-using Dapper;
+using Indotalent.Applications.UnitOfMeasures;
 using Indotalent.DTOs;
+using MWSManagement.ControlUI.Helper.Grids;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Indotalent.Data;
-using System.Data; 
 
-namespace Indotalent.Pages.Products
+namespace Indotalent.Pages.UnitOfMeasures
 {
     public class UnitOfMeasureListModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UnitMeasureService _service;
 
-        // Inject the context directly and keep it
-        public UnitOfMeasureListModel(ApplicationDbContext context)
+        public UnitOfMeasureListModel(UnitMeasureService service)
         {
-            _context = context;
+            _service = service;
         }
 
         public List<UnitOfMeasureDto> UnitList { get; set; } = new();
-
-        [BindProperty]
-        public UnitOfMeasureDto NewUnit { get; set; } = new();
+        public List<GridColumnDto> GridColumns { get; set; } = new();
 
         [TempData]
         public string? StatusMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
-            await LoadGridDataAsync();
-            return Page();
+            GridColumns = GridColumnHelper.FromModel<UnitOfMeasureDto>();
+            UnitList = await _service.GetAllAsync();
         }
 
-        private async Task LoadGridDataAsync()
+        public async Task<IActionResult> OnPostDeleteAsync([FromBody] List<UnitOfMeasureDto> rows)
         {
-            // Share the existing authenticated connection from Entity Framework
-            var conn = _context.Database.GetDbConnection();
+            if (rows == null || rows.Count == 0)
+                return new JsonResult(new { success = false, message = "No selected row(s)." });
 
-            var sql = @"
-                SELECT 
-                    RECID AS [RecId],
-                    SYMBOL AS [Symbol],
-                    DECIMALPRECISION AS [DecimalPrecision],
-                    UNITOFMEASURECLASS AS [UnitOfMeasureClass],
-                    SYSTEMOFUNITS AS [SystemOfUnits]
-                FROM [ax].[UNITOFMEASURE]
-                ORDER BY SYMBOL ASC;";
-
-            var data = await conn.QueryAsync<UnitOfMeasureDto>(sql);
-            UnitList = data.ToList();
-        }
-
-        public async Task<IActionResult> OnPostCreateUnitAsync()
-        {
-            if (string.IsNullOrEmpty(NewUnit.Symbol))
-            {
-                StatusMessage = "Error: Symbol cannot be empty.";
-                return RedirectToPage();
-            }
-
-            var conn = _context.Database.GetDbConnection();
             try
             {
-                var checkExist = await conn.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(1) FROM [ax].[UNITOFMEASURE] WHERE SYMBOL = @Symbol",
-                    new { Symbol = NewUnit.Symbol.Trim() });
-
-                if (checkExist > 0)
-                {
-                    StatusMessage = $"Error: The unit code '{NewUnit.Symbol}' already exists!";
-                    return RedirectToPage();
-                }
-
-                long randomRecId = (long)(new Random().NextDouble() * 9_000_000_000_000L) + 1_000_000_000_000L;
-
-                var sqlInsert = @"
-                    INSERT INTO [ax].[UNITOFMEASURE] (SYMBOL, DECIMALPRECISION, UNITOFMEASURECLASS, SYSTEMOFUNITS, RECID)
-                    VALUES (@Symbol, @DecimalPrecision, @UnitOfMeasureClass, @SystemOfUnits, @RecId);";
-
-                await conn.ExecuteAsync(sqlInsert, new
-                {
-                    Symbol = NewUnit.Symbol.Trim().ToUpper(),
-                    DecimalPrecision = NewUnit.DecimalPrecision,
-                    UnitOfMeasureClass = NewUnit.UnitOfMeasureClass,
-                    SystemOfUnits = NewUnit.SystemOfUnits,
-                    RecId = randomRecId
-                });
-
-                StatusMessage = $"Successfully added unit '{NewUnit.Symbol}'.";
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = "Database Insertion Error: " + ex.Message;
-            }
-
-            return RedirectToPage();
-        }
-
-        public async Task<IActionResult> OnPostUpdateUnitAsync([FromBody] UnitOfMeasureDto updatedUnit)
-        {
-            var conn = _context.Database.GetDbConnection();
-            try
-            {
-                var sqlUpdate = @"
-                    UPDATE [ax].[UNITOFMEASURE]
-                    SET DECIMALPRECISION = @DecimalPrecision,
-                        UNITOFMEASURECLASS = @UnitOfMeasureClass,
-                        SYSTEMOFUNITS = @SystemOfUnits
-                    WHERE RECID = @RecId;";
-
-                await conn.ExecuteAsync(sqlUpdate, updatedUnit);
-                return new JsonResult(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(new { success = false, message = ex.Message });
-            }
-        }
-
-        public async Task<IActionResult> OnPostDeleteUnitAsync([FromBody] UnitOfMeasureDto targetUnit)
-        {
-            var conn = _context.Database.GetDbConnection();
-            try
-            {
-                var sqlDelete = "DELETE FROM [ax].[UNITOFMEASURE] WHERE RECID = @RecId;";
-                await conn.ExecuteAsync(sqlDelete, new { RecId = targetUnit.RecId });
-                return new JsonResult(new { success = true });
+                var count = await _service.DeleteManyAsync(rows);
+                return new JsonResult(new { success = true, message = $"Deleted {count} row(s)." });
             }
             catch (Exception ex)
             {

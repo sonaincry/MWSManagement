@@ -1,15 +1,19 @@
-﻿using Indotalent.Infrastructures.Repositories;
+﻿using Indotalent.Applications.UnitOfMeasures;
 using Indotalent.DTOs;
+using Indotalent.Infrastructures.Repositories;
+using Microsoft.Data.SqlClient;
+using MWSManagement.DTOs;
 
 namespace Indotalent.Applications.EcoResProducts
 {
     public class EcoResProductService
     {
         private readonly IProcedureRepository _repo;
-
-        public EcoResProductService(IProcedureRepository repo)
+        private readonly UnitMeasureService _unitService;
+        public EcoResProductService(IProcedureRepository repo, UnitMeasureService unitService)
         {
             _repo = repo;
+            _unitService = unitService;
         }
 
         public async Task<List<EcoResProductListDto>> GetAllAsync()
@@ -46,12 +50,14 @@ namespace Indotalent.Applications.EcoResProducts
         public async Task<List<EcoResCategoryOptionDto>> GetCategoryOptionsAsync()
         {
             const string sql = @"
-                SELECT RECID AS CategoryRecId,
-                       CATEGORYHIERARCHY AS CategoryHierarchyRecId,
-                       NAME AS Name
-                FROM dbo.ECORESCATEGORY
-                WHERE ISACTIVE = 1
-                ORDER BY NAME";
+        SELECT RECID AS CategoryRecId,
+               CATEGORYHIERARCHY AS CategoryHierarchyRecId,
+               NAME AS Name,
+               LEVEL_ AS Level,
+               NESTEDSETLEFT AS SortOrder
+        FROM dbo.ECORESCATEGORY
+        WHERE ISACTIVE = 1
+        ORDER BY NESTEDSETLEFT";
 
             return await _repo.QueryAsync<EcoResCategoryOptionDto>(sql);
         }
@@ -104,6 +110,36 @@ namespace Indotalent.Applications.EcoResProducts
             }
 
             return recIds.Count;
+        }
+
+        public async Task<EcoResProductPriceResultDto?> SetPriceAsync(EcoResProductPriceDto input)
+        {
+            const string sql = @"
+        EXEC dbo.USP_ReleaseAndPriceEcoResProduct
+            @ProductRecId = {0},
+            @UnitId = {1},
+            @SalesPrice = {2}";
+
+            return await _repo.QueryFirstOrDefaultAsync<EcoResProductPriceResultDto>(
+                sql, input.ProductRecId, input.UnitId, input.SalesPrice);
+        }
+
+        public async Task<decimal?> GetCurrentPriceAsync(long productRecId)
+        {
+            const string sql = @"
+        SELECT TOP 1 m.PRICE
+        FROM dbo.ECORESPRODUCT p
+        INNER JOIN dbo.INVENTTABLE t ON t.PRODUCT = p.RECID
+        INNER JOIN dbo.INVENTTABLEMODULE m ON m.ITEMID = t.ITEMID AND m.MODULETYPE = 1
+        WHERE p.RECID = @p0";
+
+            var result = await _repo.QueryDataTableAsync(sql, new SqlParameter("@p0", productRecId));
+            return result.Rows.Count > 0 ? Convert.ToDecimal(result.Rows[0]["PRICE"]) : (decimal?)null;
+        }
+
+        public async Task<List<UnitOfMeasureDto>> GetUnitOptionsAsync()
+        {
+            return await _unitService.GetAllAsync();
         }
     }
 }

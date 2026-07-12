@@ -1,4 +1,5 @@
-﻿using Indotalent.DTOs;
+﻿using Indotalent.Applications.UnitOfMeasures;
+using Indotalent.DTOs;
 using Indotalent.Infrastructures.Docs;
 using Indotalent.Infrastructures.Images;
 using Indotalent.Models.Configurations;
@@ -53,6 +54,10 @@ namespace Indotalent.Data
         public DbSet<EcoResCategoryOptionDto> EcoResCategoryOptionDto { get; set; } = default!;
         public DbSet<EcoResProductListDto> EcoResProductListDto { get; set; } = default!;
         public DbSet<EcoResProductCreateDto> EcoResProductCreateDto { get; set; } = default!;
+        public DbSet<EcoResProductPriceResultDto> EcoResProductPriceResultDto { get; set; } = default!;
+        public DbSet<EcoResProductPriceDto> EcoResProductPriceDto { get; set; } = default!;
+
+        public DbSet<RecIdResultDto> RecIdResultDto { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Crucial: This configures the underlying Identity tables (AspNetUsers, AspNetUserRoles, etc.)
@@ -168,7 +173,10 @@ namespace Indotalent.Data
             modelBuilder.Entity<EcoResCategoryOptionDto>().HasNoKey().ToView(null);
             modelBuilder.Entity<EcoResProductListDto>().HasNoKey().ToView(null);
             modelBuilder.Entity<EcoResProductCreateDto>().HasNoKey().ToView(null);
-            
+            modelBuilder.Entity<EcoResProductPriceResultDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<EcoResProductPriceDto>().HasNoKey().ToView(null);
+            modelBuilder.Entity<RecIdResultDto>().HasNoKey().ToView(null);
+
             modelBuilder.Entity<LookupItem>().HasNoKey();
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new AspNetCompanyConfiguration());
