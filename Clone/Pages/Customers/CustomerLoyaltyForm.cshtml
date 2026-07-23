@@ -1,0 +1,139 @@
+﻿@page
+@model Indotalent.Pages.CustomerLoyalty.CustomerLoyaltyFormModel
+@{
+    Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
+    ViewData["Title"] = Model.ActionMode == "edit" ? "Edit Customer Loyalty Card" : "Create Customer Loyalty Card";
+}
+
+<div class="row mb-3">
+    <div class="col-12">
+
+        <a href="/Customers/CustomerLoyaltyList" class="btn btn-secondary btn-sm mb-3">
+            <i class="fas fa-arrow-left mr-1"></i> Back
+        </a>
+
+        @if (!string.IsNullOrEmpty(Model.StatusMessage))
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fas fa-check-circle mr-1"></i> @Model.StatusMessage
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                Please check the information below.
+                <div asp-validation-summary="All" class="mt-2 mb-0"></div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-id-card mr-1"></i>
+                    @(Model.ActionMode == "edit" ? "Edit Customer Loyalty Card" : "Create Customer Loyalty Card")
+                </h3>
+            </div>
+
+            <form method="post" novalidate>
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="ActionMode" />
+
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Customer Account Num</label>
+                                <input asp-for="Form.CustomerAccountNum" class="form-control"
+                                       placeholder="Leave blank for NEW customer"
+                                       readonly="@(Model.ActionMode == "edit" ? "readonly" : null)" />
+                                <small class="form-text text-muted">If filled, new card attaches to this existing member.</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Card Number <span class="text-danger">*</span></label>
+                                <input asp-for="Form.CardNumber" class="form-control" placeholder="Enter Card Number e.g. 8150000000099" required />
+                                <span asp-validation-for="Form.CardNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Customer Name</label>
+                                <input asp-for="Form.CustomerName" class="form-control" placeholder="Enter full name" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Mobile Phone</label>
+                                <input asp-for="Form.MobilePhone" class="form-control" placeholder="e.g. 0901234567" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Identification Number / CCCD</label>
+                                <input asp-for="Form.IdentificationNumber" class="form-control" placeholder="Enter ID Number" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input asp-for="Form.Email" type="email" class="form-control" placeholder="example@domain.com" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Birth Date</label>
+                                <input asp-for="Form.BirthDate" type="date" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Card Status</label>
+                                <select asp-for="Form.CardTenderType" class="form-control">
+                                    <option value="0">As Card Tender (Active)</option>
+                                    <option value="3">Blocked</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Full Address</label>
+                                <input asp-for="Form.FullAddress" class="form-control" placeholder="Enter street address" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save mr-1"></i>
+                        @(Model.ActionMode == "edit" ? "Save" : "Create")
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

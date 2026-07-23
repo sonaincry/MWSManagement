@@ -1,177 +1,52 @@
 ﻿@page
-@model Indotalect.Pages.Customers.CustomerLoyaltyListModel
+@using System.Text.Json
+@model Indotalent.Pages.Customers.CustomerLoyaltyListModel
 @{
     Layout = "~/Pages/Shared/AdminLTE/_Admin.cshtml";
     ViewData["Title"] = "Loyalty Members";
+    var dataJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = null };
+    var columnJsonOptions = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 }
-
-<div class="row mb-3">
-    <div class="col-12">
-        <div class="card card-primary card-outline">
-            <div class="card-header">
-                <h3 class="card-title">
-                    <i class="fas fa-id-card mr-1"></i> Loyalty Member List
-                </h3>
-            </div>
-            <div class="card-body pb-2">
-                <div class="row align-items-end">
-
-                    <div class="col-md-4">
-                        <label class="form-label">Account Number</label>
-                        <input type="text" id="txtAccount" class="form-control"
-                               placeholder="e.g. F0077663" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Card Number</label>
-                        <input type="text" id="txtCard" class="form-control"
-                               placeholder="e.g. 8110917089703" />
-                    </div>
-
-                    <div class="col-md-4 d-flex gap-2 mt-1">
-                        <button id="btnFilter" class="btn btn-primary w-100">
-                            <i class="fas fa-search mr-1"></i> Search
-                        </button>
-                        <button id="btnAll" class="btn btn-secondary w-100">
-                            <i class="fas fa-users mr-1"></i> All
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+@Html.AntiForgeryToken()
 
 <div class="row">
     <div class="col-12">
-        <div id="Grid"></div>
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                <div id="Grid"></div>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
         var grid;
+        var columns = @Html.Raw(JsonSerializer.Serialize(Model.GridColumns, columnJsonOptions));
+        var data = @Html.Raw(JsonSerializer.Serialize(Model.CustomerList, dataJsonOptions));
 
         document.addEventListener('DOMContentLoaded', function () {
-
-            grid = new ej.grids.Grid({
-                allowFiltering: true,
-                allowSorting: true,
-                allowResizing: true,
-                allowPaging: true,
-                allowExcelExport: true,
-                allowTextWrap: true,
-
-                filterSettings: { type: 'CheckBox' },
-
-                pageSettings: {
-                    currentPage: 1,
-                    pageSize: 50,
-                    pageSizes: ["20", "50", "100", "200", "All"]
+            grid = AppGrid.create({
+                gridId: 'Grid',
+                dataSource: data,
+                columns: columns,
+                keyField: 'AccountNum',
+                formUrl: '/Customers/CustomerLoyaltyForm',
+                idParamName: 'accountNum',
+                actions: {
+                    excelExport: true,
+                    search: true,
+                    refresh: true,
+                    add: true,
+                    edit: true,
+                    delete: true
                 },
-
-                showColumnMenu: true,
-                gridLines: 'Horizontal',
-
-                columns: [
-                    {
-                        field: 'AccountNum',
-                        headerText: 'Account No.',
-                        isPrimaryKey: true,
-                        width: 130
-                    },
-                    {
-                        field: 'CustomerName',
-                        headerText: 'Full Name',
-                        width: 200
-                    },
-                    {
-                        field: 'IdentificationNumber',
-                        headerText: 'ID Number',
-                        width: 140
-                    },
-                    {
-                        field: 'MobilePhone',
-                        headerText: 'Phone',
-                        width: 130
-                    },
-                    {
-                        field: 'Email',
-                        headerText: 'Email',
-                        width: 180
-                    },
-                    {
-                        field: 'BirthDate',
-                        headerText: 'Birth Date',
-                        width: 110,
-                        textAlign: 'Center'
-                    },
-                    {
-                        field: 'CardCount',
-                        headerText: 'Cards',
-                        width: 80,
-                        textAlign: 'Center'
-                    },
-                    {
-                        field: 'Cards',
-                        headerText: 'Card Numbers',
-                        width: 280
-                    },
-                    {
-                        field: 'FullAddress',
-                        headerText: 'Address',
-                        width: 250
-                    }
-                ],
-
-                toolbar: ['ExcelExport', 'Search'],
-
-                toolbarClick: (args) => {
-                    if (args.item.id === 'Grid_excelexport') {
-                        grid.excelExport();
-                    }
-                },
-
-                actionFailure: (args) => {
-                    console.error('Grid error:', args);
-                }
-            });
-
-            grid.appendTo('#Grid');
-
-            document.getElementById('btnFilter').addEventListener('click', loadGrid);
-
-            document.getElementById('btnAll').addEventListener('click', function () {
-                document.getElementById('txtAccount').value = '';
-                document.getElementById('txtCard').value = '';
-                loadGrid();
+                enableCheckbox: true,
+                deleteUrl: '/Customers/CustomerLoyaltyList?handler=Delete',
+                onRefresh: function () { window.location.reload(); },
+                onDeleted: function () { window.location.reload(); },
+                openEditOnDoubleClick: true
             });
         });
-
-        function loadGrid() {
-            var account = document.getElementById('txtAccount').value.trim();
-            var card    = document.getElementById('txtCard').value.trim();
-
-            var params = new URLSearchParams();
-            params.append('handler', 'Customers');
-            if (account) params.append('AccountNumber', account);
-            if (card)    params.append('CardNumber', card);
-
-            var url = '/Customers/CustomerLoyaltyList?' + params.toString();
-
-            grid.showSpinner();
-
-            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                .then(r => r.json())
-                .then(data => {
-                    grid.dataSource = data;
-                    grid.hideSpinner();
-                })
-                .catch(err => {
-                    console.error('Load failed:', err);
-                    grid.hideSpinner();
-                });
-        }
     </script>
 }

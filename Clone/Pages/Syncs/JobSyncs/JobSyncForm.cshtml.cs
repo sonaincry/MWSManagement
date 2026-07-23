@@ -31,7 +31,6 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
 
         protected override async Task LoadLookupsAsync()
         {
-            // 1. Lấy danh sách Table từ TableSyncs
             var tableConfigs = await _tableConfigService.GetAllAsync();
             AvailableTables = tableConfigs
                 .Select(t => t.TableName)
@@ -39,7 +38,6 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
                 .Select(t => new SelectListItem { Value = t, Text = t })
                 .ToList();
 
-            // 2. Lấy danh sách Location từ SyncLocations
             var locs = await _locationService.GetAllAsync();
             LocationOptions = locs.Select(l => new SelectListItem { Value = l.RecId.ToString(), Text = l.Name }).ToList();
         }
@@ -59,7 +57,6 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
             if (_jobSyncService.IsCodeExistsAsync(Form.Code, Form.RecId).GetAwaiter().GetResult())
                 ModelState.AddModelError("Form.Code", "Job Code already exists.");
 
-            // Kiểm tra trực tiếp chuỗi text thuần được JS đẩy vào ẩn sau UI
             if (string.IsNullOrWhiteSpace(Form.SenderLocationIds))
                 ModelState.AddModelError("Form.SenderLocationIds", "The Senders field is required.");
 

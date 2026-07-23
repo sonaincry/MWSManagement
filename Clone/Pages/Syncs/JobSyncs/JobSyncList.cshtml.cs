@@ -165,9 +165,9 @@ namespace MWSManagement.Pages.Syncs.JobSyncs
                             {
                                 await conn.OpenAsync();
                                 var cmd = new SqlCommand(@"
-        SELECT COLUMN_NAME, NUMERIC_PRECISION, NUMERIC_SCALE
-        FROM INFORMATION_SCHEMA.COLUMNS
-        WHERE TABLE_NAME = @t AND DATA_TYPE IN ('decimal','numeric')", conn);
+                                    SELECT COLUMN_NAME, NUMERIC_PRECISION, NUMERIC_SCALE
+                                    FROM INFORMATION_SCHEMA.COLUMNS
+                                    WHERE TABLE_NAME = @t AND DATA_TYPE IN ('decimal','numeric')", conn);
                                 cmd.Parameters.AddWithValue("@t", tableName);
                                 using var reader = await cmd.ExecuteReaderAsync();
                                 while (await reader.ReadAsync())

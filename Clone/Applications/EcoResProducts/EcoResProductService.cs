@@ -19,7 +19,7 @@ namespace Indotalent.Applications.EcoResProducts
         public async Task<List<EcoResProductListDto>> GetAllAsync()
         {
             const string sql = @"
-                SELECT p.RECID AS RecId,
+                SELECT TOP 50000 p.RECID AS RecId,
                        p.DISPLAYPRODUCTNUMBER AS DisplayProductNumber,
                        p.SEARCHNAME AS SearchName,
                        p.PRODUCTTYPE AS ProductType,
@@ -58,10 +58,9 @@ namespace Indotalent.Applications.EcoResProducts
         FROM dbo.ECORESCATEGORY
         WHERE ISACTIVE = 1
         ORDER BY NESTEDSETLEFT";
-
+     
             return await _repo.QueryAsync<EcoResCategoryOptionDto>(sql);
-        }
-
+        }        
         public async Task<EcoResProductCreateResultDto?> CreateAsync(EcoResProductCreateDto input)
         {
             const string sql = @"

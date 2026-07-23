@@ -1,71 +1,41 @@
-﻿using Indotalent.Data;
-using Indotalent.DTOs;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
+﻿using Indotalent.Infrastructures.Repositories;
+using MWSManagement.DTOs.Customers;
 
 namespace Indotalent.Applications.Customers
 {
     public class CustomerService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IProcedureRepository _repo;
 
-        public CustomerService(ApplicationDbContext context)
+        public CustomerService(IProcedureRepository repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         public async Task<List<CustomerLoyaltyDto>> GetCustomersAsync(
             string? accountNumber = null,
             string? cardNumber = null)
         {
-            var rows = new List<(
-                string? AccountNum,
-                string? CustomerName,
-                string? IdentificationNumber,
-                string? MobilePhone,
-                string? Email,
-                string? BirthDate,
-                string? FullAddress,
-                string? CardNumber
-            )>();
+            const string sql = @"
+                EXEC [crt].[GETCUSTOMERLOYALTYCARDS]
+                    @nvc_CustomerAccountNumber = @AccountNum,
+                    @nvc_CardNumber = @CardNum";
 
-            using var command = _context.Database.GetDbConnection().CreateCommand();
-            command.CommandText = "[crt].[GETCUSTOMERLOYALTYCARDS]";
-            command.CommandType = CommandType.StoredProcedure;
+            var rawList = await _repo.QueryAsync<CustomerLoyaltyRawDto>(
+                sql,
+                SqlParam.NVarChar("@AccountNum", accountNumber, 30),
+                SqlParam.NVarChar("@CardNum", cardNumber, 50)
+            );
 
-            command.Parameters.Add(new SqlParameter("@nvc_CustomerAccountNumber",
-                string.IsNullOrEmpty(accountNumber) ? DBNull.Value : accountNumber));
-            command.Parameters.Add(new SqlParameter("@nvc_CardNumber",
-                string.IsNullOrEmpty(cardNumber) ? DBNull.Value : cardNumber));
-
-            if (command.Connection!.State != ConnectionState.Open)
-                await command.Connection.OpenAsync();
-
-            using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                rows.Add((
-                    AccountNum: SafeString(reader, "AccountNum"),
-                    CustomerName: SafeString(reader, "CustomerName"),
-                    IdentificationNumber: SafeString(reader, "IdentificationNumber"),
-                    MobilePhone: SafeString(reader, "MobilePhone"),
-                    Email: SafeString(reader, "Email"),
-                    BirthDate: SafeDate(reader, "BirthDate"),
-                    FullAddress: SafeString(reader, "FullAddress"),
-                    CardNumber: SafeString(reader, "CardNumber")
-                ));
-            }
-
-            var result = rows
-                .GroupBy(r => r.AccountNum)
-                .Where(g => !string.IsNullOrEmpty(g.Key))
+            return rawList
+                .Where(r => !string.IsNullOrEmpty(r.AccountNum))
+                .GroupBy(r => r.AccountNum!)
                 .Select(g =>
                 {
                     var first = g.First();
-                    var cards = g
+                    var cardList = g
                         .Where(r => !string.IsNullOrEmpty(r.CardNumber))
-                        .Select(r => r.CardNumber!)
+                        .Select(r => r.CardNumber!.Trim())
                         .Distinct()
                         .ToList();
 
@@ -76,31 +46,94 @@ namespace Indotalent.Applications.Customers
                         IdentificationNumber = first.IdentificationNumber,
                         MobilePhone = first.MobilePhone,
                         Email = first.Email,
-                        BirthDate = first.BirthDate,
+                        BirthDate = (first.BirthDate.HasValue && first.BirthDate.Value.Year > 1900)
+                            ? first.BirthDate.Value.ToString("yyyy-MM-dd")
+                            : null,
                         FullAddress = first.FullAddress,
-                        CardCount = cards.Count,
-                        Cards = string.Join(", ", cards)
+                        CardCount = cardList.Count,
+                        Cards = string.Join(", ", cardList)
                     };
                 })
                 .OrderBy(x => x.AccountNum)
                 .ToList();
-
-            return result;
         }
 
-        private static string? SafeString(IDataReader r, string col)
+        public async Task<CustomerLoyaltyCreateResultDto?> CreateCustomerLoyaltyCardAsync(CustomerLoyaltyCreateDto input)
         {
-            var i = r.GetOrdinal(col);
-            return r.IsDBNull(i) ? null : r.GetValue(i)?.ToString()?.Trim();
+            const string sql = @"
+                EXEC [crt].[USP_CreateCustomerLoyaltyCard]
+                    @CardNumber = @CardNumber,
+                    @CustomerAccountNum = @CustomerAccountNum,
+                    @CustomerName = @CustomerName,
+                    @IdentificationNumber = @IdentificationNumber,
+                    @MobilePhone = @MobilePhone,
+                    @Email = @Email,
+                    @BirthDate = @BirthDate,
+                    @FullAddress = @FullAddress,
+                    @CardTenderType = @CardTenderType";
+
+            return await _repo.QueryFirstOrDefaultAsync<CustomerLoyaltyCreateResultDto>(
+                sql,
+                SqlParam.NVarChar("@CardNumber", input.CardNumber, 50),
+                SqlParam.NVarChar("@CustomerAccountNum", input.CustomerAccountNum, 30),
+                SqlParam.NVarChar("@CustomerName", input.CustomerName, 100),
+                SqlParam.NVarChar("@IdentificationNumber", input.IdentificationNumber, 30),
+                SqlParam.NVarChar("@MobilePhone", input.MobilePhone, 30),
+                SqlParam.NVarChar("@Email", input.Email, 100),
+                SqlParam.DateTime("@BirthDate", input.BirthDate),
+                SqlParam.NVarChar("@FullAddress", input.FullAddress, 250),
+                SqlParam.Int("@CardTenderType", input.CardTenderType)
+            );
         }
 
-        private static string? SafeDate(IDataReader r, string col)
+        public async Task<CustomerLoyaltyDto?> GetCustomerByAccountNumAsync(string accountNum)
         {
-            var i = r.GetOrdinal(col);
-            if (r.IsDBNull(i)) return null;
-            var dt = Convert.ToDateTime(r.GetValue(i));
-            // 1900-01-01 means no birthdate set in AX
-            return dt.Year <= 1900 ? null : dt.ToString("yyyy-MM-dd");
+            var list = await GetCustomersAsync(accountNumber: accountNum);
+            return list.FirstOrDefault();
+        }
+
+        public async Task<bool> UpdateCustomerLoyaltyCardAsync(CustomerLoyaltyCreateDto input)
+        {
+            const string sql = @"
+                EXEC [crt].[USP_UpdateCustomerLoyaltyCard]
+                    @CustomerAccountNum = @CustomerAccountNum,
+                    @CardNumber = @CardNumber,
+                    @CustomerName = @CustomerName,
+                    @IdentificationNumber = @IdentificationNumber,
+                    @MobilePhone = @MobilePhone,
+                    @Email = @Email,
+                    @BirthDate = @BirthDate,
+                    @FullAddress = @FullAddress,
+                    @CardTenderType = @CardTenderType";
+
+            var rowsAffected = await _repo.ExecuteAsync(
+                sql,
+                SqlParam.NVarChar("@CustomerAccountNum", input.CustomerAccountNum, 30),
+                SqlParam.NVarChar("@CardNumber", input.CardNumber, 50),
+                SqlParam.NVarChar("@CustomerName", input.CustomerName, 100),
+                SqlParam.NVarChar("@IdentificationNumber", input.IdentificationNumber, 30),
+                SqlParam.NVarChar("@MobilePhone", input.MobilePhone, 30),
+                SqlParam.NVarChar("@Email", input.Email, 100),
+                SqlParam.DateTime("@BirthDate", input.BirthDate),
+                SqlParam.NVarChar("@FullAddress", input.FullAddress, 250),
+                SqlParam.Int("@CardTenderType", input.CardTenderType)
+            );
+
+            return rowsAffected >= 0;
+        }
+
+        public async Task<bool> DeleteCustomerLoyaltyCardAsync(string accountNum)
+        {
+            const string sql = @"
+                EXEC [crt].[USP_DeleteCustomerLoyaltyCard]
+                    @CustomerAccountNum = @CustomerAccountNum";
+
+            var rowsAffected = await _repo.ExecuteAsync(
+                sql,
+                SqlParam.NVarChar("@CustomerAccountNum", accountNum, 30)
+            );
+
+            return rowsAffected >= 0;
         }
     }
 }

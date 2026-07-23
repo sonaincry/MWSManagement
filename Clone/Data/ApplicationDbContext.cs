@@ -8,6 +8,7 @@ using Indotalent.Models.Entities.AX;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MWSManagement.DTOs;
+using MWSManagement.DTOs.Customers;
 using MWSManagement.Models;
 using MWSManagement.Models.DTOs;
 using MWSManagement.Models.Entities;
@@ -56,6 +57,12 @@ namespace Indotalent.Data
         public DbSet<EcoResProductCreateDto> EcoResProductCreateDto { get; set; } = default!;
         public DbSet<EcoResProductPriceResultDto> EcoResProductPriceResultDto { get; set; } = default!;
         public DbSet<EcoResProductPriceDto> EcoResProductPriceDto { get; set; } = default!;
+        public DbSet<CustomerLoyaltyRawDto> CustomerLoyaltyRawDto { get; set; } = default!;
+        
+        public DbSet<CustomerLoyaltyCreateResultDto> CustomerLoyaltyCreateResultDto { get; set; } = default!;
+        
+        public DbSet<CustomerLoyaltyCreateDto> CustomerLoyaltyCreateDto { get; set; } = default!;
+
 
         public DbSet<RecIdResultDto> RecIdResultDto { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -92,6 +99,10 @@ namespace Indotalent.Data
             modelBuilder.Entity<ProductDto>(entity => { entity.HasNoKey(); });
             modelBuilder.Entity<CategoryDTO>(entity => { entity.HasNoKey(); });
             modelBuilder.Entity<UnitOfMeasureDto>(entity => { entity.HasNoKey(); });
+
+            modelBuilder.Entity<CustomerLoyaltyRawDto>(entity => { entity.HasNoKey(); });
+            modelBuilder.Entity<CustomerLoyaltyCreateResultDto>(entity => { entity.HasNoKey(); });
+            modelBuilder.Entity<CustomerLoyaltyCreateDto>(entity => { entity.HasNoKey(); });
 
 
             //end
